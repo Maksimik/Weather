@@ -15,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static android.content.ContentValues.TAG;
@@ -60,8 +62,13 @@ public class MainPresenter implements Contract.Presenter {
         City city;
         int id=0;
         String name="";
+        String formattedDate="";
         try {
             dataJsonObj = new JSONObject(responce);
+            Date timeStampDate = new Date((long) (dataJsonObj.getLong("dt") * 1000));
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a");
+            formattedDate = dateFormat.format(timeStampDate);
+            System.out.println(formattedDate);
             JSONObject coord = dataJsonObj.getJSONObject("coord");
             JSONObject wind = dataJsonObj.getJSONObject("wind");
 
@@ -78,6 +85,7 @@ public class MainPresenter implements Contract.Presenter {
                 JSONObject weather = weathers.getJSONObject(i);
                 idWeather = weather.getInt("id");
             }
+
             System.out.println("cod: " + cod);
             System.out.println("lon: " + lon);
             System.out.println("lat: " + lat);
@@ -101,9 +109,9 @@ public class MainPresenter implements Contract.Presenter {
             public void run() {
                 view.showProgress(false);
                 //view.showData(response);
-                //City city=parseJsonOverJSONObject(response);
-                City city=parseJsonOverGson(response);
-                view.showData("Idi:"+city.setId()+"    Name city:"+city.setName());
+                City city=parseJsonOverJSONObject(response);
+                //City city=parseJsonOverGson(response);
+                view.showData("Id:"+city.setId()+"    Name city:"+city.setName());
             }
         });
     }
