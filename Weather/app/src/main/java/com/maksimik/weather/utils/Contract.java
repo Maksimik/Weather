@@ -1,4 +1,6 @@
-package com.maksimik.weather.ui;
+package com.maksimik.weather.utils;
+
+import com.maksimik.weather.Data.Forecast;
 
 /**
  * Created by 1 on 21.10.2016.
@@ -6,7 +8,7 @@ package com.maksimik.weather.ui;
 
 public interface Contract {
     interface View {
-        void showData(String data);
+        void showData(Forecast data);
 
         void showError(String message);
 

@@ -26,12 +26,16 @@ public class HttpClient {
             response = stringBuilder.toString();
 
             inputStream.close();
+            reader.close();
+            connection.disconnect();
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
         return response;
     }
 }

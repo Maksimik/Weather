@@ -1,4 +1,4 @@
-package com.maksimik.weather;
+package com.maksimik.weather.activites;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -12,14 +12,17 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.maksimik.weather.ui.Contract;
-import com.maksimik.weather.ui.MainPresenter;
+import com.maksimik.weather.Data.Forecast;
+import com.maksimik.weather.R;
+import com.maksimik.weather.utils.Contract;
+import com.maksimik.weather.utils.MainPresenter;
 
 public class MainActivity extends AppCompatActivity implements Contract.View {
 
     private Contract.Presenter presenter;
     private TextView responseView;
     private ProgressBar progressBar;
+    private Forecast forecast;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         responseView = (TextView) findViewById(R.id.responseView);
         progressBar = ((ProgressBar) findViewById(R.id.progressIndicator));
         presenter.onReady();
+        //responseView.setText("name city: "+forecast.getCity().getName()+"  temp:"+forecast.getWeatherHour(0).getMain().getTemp());
     }
 
     @Override
@@ -59,8 +63,10 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         startActivity(intent);
     }
     @Override
-    public void showData(String data) {
-        responseView.setText(data);
+    public void showData(Forecast forecast) {
+        //responseView.setText(data);
+        //this.forecast=forecast;
+        responseView.setText("name city: "+forecast.getCity().getName()+"  temp:"+forecast.getWeatherHour(0).getMain().getTemp());
     }
 
     @Override

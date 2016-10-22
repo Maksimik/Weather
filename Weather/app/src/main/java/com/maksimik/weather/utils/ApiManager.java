@@ -1,4 +1,4 @@
-package com.maksimik.weather.ui;
+package com.maksimik.weather.utils;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;

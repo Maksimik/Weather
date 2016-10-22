@@ -28,8 +28,10 @@ import javax.inject.Named;
 )
 public class MyEndpoint {
 
-    public static final String URL = "http://api.openweathermap.org/data/2.5/weather?q=London&APPID=57eac87bbf864b3de29a4c2274497ced";
-
+    //private static final String KEY="&APPID=57eac87bbf864b3de29a4c2274497ced";
+    //public static final String URL = "http://api.openweathermap.org/data/2.5/weather?q=London";
+    //public static final String URL = "http://api.openweathermap.org/data/2.5/forecast?q=London,us&APPID=57eac87bbf864b3de29a4c2274497ced";
+    public static final String URL = "http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID=57eac87bbf864b3de29a4c2274497ced";
     @ApiMethod(name = "GetContent")
     public MyBean getContent() throws IOException {;
         MyBean response = new MyBean();

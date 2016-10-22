@@ -1,13 +1,12 @@
-package com.maksimik.weather;
+package com.maksimik.weather.activites;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-/**
- * Created by 1 on 20.10.2016.
- */
+import com.maksimik.weather.R;
+
 public class SearchActivity extends AppCompatActivity {
 
     @Override
