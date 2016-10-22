@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         progressBar = ((ProgressBar) findViewById(R.id.progressIndicator));
         presenter.onReady();
         //responseView.setText("name city: "+forecast.getCity().getName()+"  temp:"+forecast.getWeatherHour(0).getMain().getTemp());
+
     }
 
     @Override
@@ -64,9 +65,9 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     }
     @Override
     public void showData(Forecast forecast) {
-        //responseView.setText(data);
-        //this.forecast=forecast;
-        responseView.setText("name city: "+forecast.getCity().getName()+"  temp:"+forecast.getWeatherHour(0).getMain().getTemp());
+
+        //responseView.setText("name city: "+forecast.getCity().getName()+"  temp:"+forecast.getWeatherHour(0).getMain().getTemp());
+        responseView.setText("name city: "+forecast.getCity().getName()+"  country:"+forecast.getCity().getCountry());
     }
 
     @Override

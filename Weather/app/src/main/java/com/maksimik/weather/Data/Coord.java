@@ -1,8 +1,12 @@
 package com.maksimik.weather.Data;
 
 
+import com.google.gson.annotations.SerializedName;
+
 public class Coord {
+    @SerializedName("lon")
     private double mLon;
+    @SerializedName("lat")
     private double mLat;
 
     public Coord(double lon, double lan) {

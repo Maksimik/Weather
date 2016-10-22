@@ -1,16 +1,24 @@
 package com.maksimik.weather.Data;
 
+
+import com.google.gson.annotations.SerializedName;
+
 public class City {
 
+    @SerializedName("id")
     private int mId;
+    @SerializedName("name")
     private String mName;
+    @SerializedName("country")
     private String mCountry;
-    private Coord mCcoord;
+    @SerializedName("coord")
+    private Coord mCoord;
 
-    /*public City(int id, String name, String country) {
-        this.id = id;
-        this.name = name;
-        this.country=country;
+    /*
+    public City(int id, String name, String country) {
+        this.mId = id;
+        this.mName = name;
+        this.mCountry = country;
     }*/
 
 
@@ -39,10 +47,10 @@ public class City {
     }
 
     public Coord getCoord() {
-        return mCcoord;
+        return mCoord;
     }
 
     public void setCoord(Coord coord) {
-        this.mCcoord = coord;
+        this.mCoord = coord;
     }
 }

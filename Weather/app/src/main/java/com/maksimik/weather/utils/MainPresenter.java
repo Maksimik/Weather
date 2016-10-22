@@ -59,6 +59,7 @@ public class MainPresenter implements Contract.Presenter {
             public void run() {
                 view.showProgress(false);
                 Forecast forecast = parseJsonOverJSONObject.parseJsonOverJSONObject(response);
+                //Forecast forecast = parseJsonOverGson.parseJsonOverGson(response);
                 view.showData(forecast);
              }
         });
