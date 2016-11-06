@@ -3,6 +3,7 @@ package com.maksimik.weather.utils;
 import com.maksimik.weather.Data.City;
 import com.maksimik.weather.Data.Clouds;
 import com.maksimik.weather.Data.Coord;
+import com.maksimik.weather.Data.DayWeather;
 import com.maksimik.weather.Data.Forecast;
 import com.maksimik.weather.Data.Main;
 import com.maksimik.weather.Data.Rain;
@@ -15,18 +16,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 
 class ParseJsonOverJSONObject {
+    public HashSet<String> listIcon;
+
     Forecast parseJsonOverJSONObject(String responce) {
 
         City mCity = new City();
-        Weather weather = new Weather();
+        Weather weather;
         Forecast forecast = new Forecast();
         JSONObject dataJsonObj;
         WeatherHour weatherHour;
+        listIcon = new HashSet<>();
+        DayWeather dayWeather = new DayWeather();
+
 
         try {
             dataJsonObj = new JSONObject(responce);
@@ -46,16 +51,15 @@ class ParseJsonOverJSONObject {
             Rain rain;
             Snow snow;
             Main mainWeather;
-            com.maksimik.weather.Data.Date date;
+            long date;
+            Date temp = new Date();
+            String icon = null;
+            //SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
             JSONArray list = dataJsonObj.getJSONArray("list");
             for (int i = 0; i < list.length(); i++) {
 
                 JSONObject listWeather = list.getJSONObject(i);
-                //Date
-                Date timeStampDate = new Date((long) (listWeather.getLong("dt") * 1000));
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a");
-                date = new com.maksimik.weather.Data.Date(dateFormat);
 
                 clouds = new Clouds(listWeather.getJSONObject("clouds").getDouble("all"));
 
@@ -63,37 +67,52 @@ class ParseJsonOverJSONObject {
 
                 rain = new Rain();
                 snow = new Snow();
-                if (listWeather.getJSONObject("rain").has("3h")) {
+                               /* if (listWeather.getJSONObject("rain").has("3h")) {
                     rain.setValue(listWeather.getJSONObject("rain").getDouble("3h"));
+                    System.out.println("rain:"+ listWeather.getJSONObject("rain").getDouble("3h"));
                 } else {
                     rain.setHas(false);
                 }
 
                 if (listWeather.getJSONObject("snow").has("3h")) {
                     snow.setValue(listWeather.getJSONObject("snow").getDouble("3h"));
+                    System.out.println("snow:"+ listWeather.getJSONObject("snow").getDouble("3h"));
 
                 } else {
                     snow.setHas(false);
-                }
-
-
+                }*/
                 JSONObject main = listWeather.getJSONObject("main");
                 mainWeather = new Main();
-                mainWeather.setTemp(main.getDouble("temp"));
-                mainWeather.setTempMin(main.getDouble("temp_min"));
-                mainWeather.setTempMax(main.getDouble("temp_max"));
+                mainWeather.setTemp((int) Math.round(main.getDouble("temp") - 273.15));
+                mainWeather.setTempMin(Math.round(main.getDouble("temp_min") - 273.15));
+                mainWeather.setTempMax(Math.round(main.getDouble("temp_max") - 273.15));
                 mainWeather.setPressure(main.getDouble("pressure"));
                 mainWeather.setHumidity(main.getDouble("humidity"));
 
+                weather = new Weather();
                 JSONArray weathers = listWeather.getJSONArray("weather");
                 for (int j = 0; j < weathers.length(); j++) {
+                    weather.setId(weathers.getJSONObject(j).getInt("id"));
                     weather.setMain(weathers.getJSONObject(j).getString("main"));
                     weather.setDescription(weathers.getJSONObject(j).getString("description"));
+                    weather.setIcon(weathers.getJSONObject(j).getString("icon"));
+                    listIcon.add(weather.getIcon());
                 }
-                weatherHour = new WeatherHour(date, mainWeather, weather, clouds, wind, rain, snow);
-                forecast.addWeatherHour(weatherHour);
 
+                date = listWeather.getLong("dt") * 1000;
+
+                //weatherHour = new WeatherHour(date, mainWeather, weather, clouds, wind, rain, snow);
+                weatherHour = new WeatherHour(date, mainWeather, weather, clouds, wind);
+
+                if ((new Date(date)).getDate() != temp.getDate()) {
+                    temp = new Date(date);
+                    forecast.add(dayWeather);
+                    dayWeather = new DayWeather();
+                }
+                dayWeather.add(weatherHour);
             }
+            forecast.add(dayWeather);
+
 
         } catch (JSONException e) {
             e.printStackTrace();

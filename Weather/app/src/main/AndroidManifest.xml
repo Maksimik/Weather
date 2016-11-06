@@ -18,6 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activites.SearchActivity" />
+        <activity android:name=".activites.SettingsActivity" />
+        <activity android:name=".activites.WeatherDetails" />
     </application>
 
 </manifest>

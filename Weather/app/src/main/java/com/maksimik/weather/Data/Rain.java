@@ -1,6 +1,6 @@
 package com.maksimik.weather.Data;
 
-
+//TODO check for proper operation
 public class Rain {
     private boolean mHas;
     private double mValue;

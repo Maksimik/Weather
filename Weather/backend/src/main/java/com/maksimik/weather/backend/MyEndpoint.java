@@ -11,6 +11,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 
 import java.io.IOException;
+import com.example.http.HttpClientWeather;
 
 import javax.inject.Named;
 
@@ -27,17 +28,31 @@ import javax.inject.Named;
         )
 )
 public class MyEndpoint {
+    private static final String ACCESS_KEY = "57eac87bbf864b3de29a4c2274497ced";
+    private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
+    private static final String IMG_URL = "http://openweathermap.org/img/w/";
 
-    //private static final String KEY="&APPID=57eac87bbf864b3de29a4c2274497ced";
-    //public static final String URL = "http://api.openweathermap.org/data/2.5/weather?q=London";
-    //public static final String URL = "http://api.openweathermap.org/data/2.5/forecast?q=London,us&APPID=57eac87bbf864b3de29a4c2274497ced";
-    public static final String URL = "http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID=57eac87bbf864b3de29a4c2274497ced";
     @ApiMethod(name = "GetContent")
-    public MyBean getContent() throws IOException {;
+    public MyBean getContent(@Named("id") String id) throws IOException {
+
         MyBean response = new MyBean();
-        String data = new HttpClient().get(URL);
+        String data = new HttpClientWeather().get(BASE_URL + "forecast?id=" + id + "&APPID=" + ACCESS_KEY);
         response.setData(data);
         return response;
     }
+    @ApiMethod(name = "GetIcon", path = "")
+    public IconBean getIcon() throws IOException{
 
+        IconBean res = new IconBean();
+        res.setIconBean(new HttpClientWeather().getIcon("http://openweathermap.org/img/w/10d.png"));
+        return res;
+    }
+
+    /*@ApiMethod(name = "GetIcon", path = "")
+    public IconBean getIcon(@Named("icon") String icon) throws IOException{
+
+        IconBean response = new IconBean();
+        response.setIconBean(new HttpClientWeather().getIcon(IMG_URL + icon + ".png"));
+        return response;
+    }*/
 }

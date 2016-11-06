@@ -3,11 +3,13 @@ package com.maksimik.weather.Data;
 import java.util.ArrayList;
 
 public class Forecast {
+
     private City mCity;
-    private ArrayList<WeatherHour> mListWeatherHours;
+
+    private ArrayList<DayWeather> mListWeatherHours;
 
     public Forecast() {
-        mListWeatherHours = new ArrayList<WeatherHour>();
+        mListWeatherHours = new ArrayList<>();
     }
 
     public City getCity() {
@@ -18,11 +20,11 @@ public class Forecast {
         this.mCity = city;
     }
 
-    public void addWeatherHour(WeatherHour weatherHour) {
-        mListWeatherHours.add(weatherHour);
+    public void add(DayWeather dayWeather) {
+        mListWeatherHours.add(dayWeather);
     }
 
-    public WeatherHour getWeatherHour(int i) {
+    public DayWeather getDayWeather(int i) {
         return mListWeatherHours.get(i);
     }
 }

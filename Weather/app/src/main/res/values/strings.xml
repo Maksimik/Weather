@@ -2,4 +2,13 @@
     <string name="app_name">Weather</string>
     <string name="settings">Settings</string>
     <string name="weather_update">Weather update</string>
+    <string name="wind">Ветер</string>
+    <string name="rain">Дождь</string>
+    <string name="snow">Снег</string>
+    <string name="wind_speed">Скорость ветра</string>
+    <string name="humidity">Влажность</string>
+    <string name="wind_guest">Порывы ветра</string>
+    <string name="clouds">Осадки</string>
+
+
 </resources>

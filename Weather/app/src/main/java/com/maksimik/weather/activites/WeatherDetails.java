@@ -1,27 +1,37 @@
 package com.maksimik.weather.activites;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.TextView;
 
+import com.maksimik.weather.Data.WeatherHour;
 import com.maksimik.weather.R;
 
-public class SearchActivity extends AppCompatActivity {
+public class WeatherDetails extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.weather_details);
         toolbarInitialize();
+        WeatherHour weatherHour = getIntent().getParcelableExtra("weather");
+        TextView tvTemp = (TextView) findViewById(R.id.tvTemp);
+        TextView tvCloudValues = (TextView) findViewById(R.id.tvCloudValues);
+        TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
+        tvTemp.setText(weatherHour.getMain().getTemp() + "°");
+        tvCloudValues.setText(weatherHour.getClouds().getAll() + "%");
+        tvDescription.setText(weatherHour.getWeather().getDescription());
+
+
     }
 
     private void toolbarInitialize() {
         Toolbar toolBar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolBar);
-        setTitle("Search");
+        setTitle("Weather details");
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

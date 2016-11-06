@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -8,36 +9,42 @@
 
     <include layout="@layout/toolbar" />
 
-    <ImageButton
-        android:layout_width="@dimen/default_icon_size"
-        android:layout_height="@dimen/default_icon_size"
-        android:layout_gravity="left"
-        android:background="?attr/selectableItemBackground"
-        android:onClick="onClickSearch"
-        android:src="@drawable/ic_search_white_24dp" />
-
-    <ImageButton
-        android:id="@+id/menu"
-        android:layout_width="@dimen/default_icon_size"
-        android:layout_height="@dimen/default_icon_size"
-        android:layout_gravity="right"
-        android:background="?attr/selectableItemBackground"
-        android:onClick="showPopup"
-        android:src="@drawable/ic_more_vert_white_24dp" />
-    <ScrollView
-        android:layout_marginTop="@dimen/default_icon_size"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:layout_width="@dimen/default_icon_size"
+            android:layout_height="@dimen/default_icon_size"
+            android:layout_gravity="left"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="onClickSearch"
+            android:src="@drawable/ic_search_white_24dp" />
+    </FrameLayout>
 
-        <TextView
-            android:id="@+id/responseView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </ScrollView>
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/toolbar_height"
+        android:background="@color/colorPrimary">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabGravity="fill"
+            app:tabMode="scrollable"
+            app:tabTextColor="#FFFFFFFF" />
+    </android.support.design.widget.AppBarLayout>
 
     <ProgressBar
         android:id="@+id/progressIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
-</FrameLayout>
+        android:layout_gravity="center" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+</android.support.design.widget.CoordinatorLayout>

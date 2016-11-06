@@ -9,9 +9,6 @@ import com.maksimik.weather.backend.myApi.MyApi;
 
 import java.io.IOException;
 
-/**
- * Created by 1 on 21.10.2016.
- */
 
 public class ApiManager {
     public static final String APP_ENGINE_BASE_URL = "https://show-weather-forecast-app.appspot.com/_ah/api/";

@@ -19,15 +19,15 @@ public class Coord {
         return mLon;
     }
 
-    public void setLon(double mLon) {
-        this.mLon = mLon;
+    public void setLon(double lon) {
+        this.mLon = lon;
     }
 
     public double getLan() {
         return mLat;
     }
 
-    public void setLan(double mLan) {
-        this.mLat = mLan;
+    public void setLan(double lan) {
+        this.mLat = lan;
     }
 }

@@ -1,14 +1,11 @@
 package com.maksimik.weather.utils;
 
 import com.maksimik.weather.Data.Forecast;
-
-/**
- * Created by 1 on 21.10.2016.
- */
+import com.maksimik.weather.Data.ListIcon;
 
 public interface Contract {
     interface View {
-        void showData(Forecast data);
+        void showData(Forecast forecastData, ListIcon iconData);
 
         void showError(String message);
 
