@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
             case R.id.Settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
+
                 return true;
             case R.id.weatherUpdate:
                 progressBar.setVisibility(View.VISIBLE);
@@ -144,7 +145,10 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     }
 
     public void onClickSearch(View view) {
-        Intent intent = new Intent(this, SearchActivity.class);
+        Intent intent = new Intent(this, ChangeLocation.class);
+        if(forecast!=null) {
+            intent.putExtra("city", forecast.getCity().getName());
+        }
         startActivity(intent);
     }
 

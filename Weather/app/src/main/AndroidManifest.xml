@@ -3,6 +3,9 @@
     package="com.maksimik.weather">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 
     <application
         android:allowBackup="true"
@@ -17,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activites.SearchActivity" />
+        <activity android:name=".activites.ChangeLocation" />
         <activity android:name=".activites.SettingsActivity" />
         <activity android:name=".activites.WeatherDetails" />
     </application>

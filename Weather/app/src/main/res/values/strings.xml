@@ -9,6 +9,8 @@
     <string name="humidity">Влажность</string>
     <string name="wind_guest">Порывы ветра</string>
     <string name="clouds">Осадки</string>
+    <string name="change_location">Изменить местоположение</string>
+    <string name="current_location">Текущее местоположение</string>
 
 
 </resources>

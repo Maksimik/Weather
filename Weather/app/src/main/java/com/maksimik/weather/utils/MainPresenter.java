@@ -69,15 +69,8 @@ public class MainPresenter implements Contract.Presenter {
         listIcon = new ListIcon();
         for (String temp : listCodeIcon) {
             byte[] bytes = loadIcon(temp);
-            //listIcon.add(temp, BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//            if (bitmap == null) {
-//                System.out.println("i stupid");
-//            } else {
-//                System.out.println("dadada");
-//            }
             listIcon.add(temp, bitmap);
-            //System.out.println(temp);
         }
     }
 
