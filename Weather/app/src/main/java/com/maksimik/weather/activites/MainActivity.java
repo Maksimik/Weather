@@ -1,13 +1,16 @@
 package com.maksimik.weather.activites;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,9 +21,18 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 
-import com.maksimik.weather.Data.Forecast;
-import com.maksimik.weather.Data.ListIcon;
 import com.maksimik.weather.R;
+import com.maksimik.weather.data.Clouds;
+import com.maksimik.weather.data.DayWeather;
+import com.maksimik.weather.data.Forecast;
+import com.maksimik.weather.data.ListIcon;
+import com.maksimik.weather.data.Main;
+import com.maksimik.weather.data.Weather;
+import com.maksimik.weather.data.WeatherHour;
+import com.maksimik.weather.data.Wind;
+import com.maksimik.weather.db.DbHelper;
+import com.maksimik.weather.db.IDbOperations;
+import com.maksimik.weather.db.WeatherTable;
 import com.maksimik.weather.fragments.FiveFragment;
 import com.maksimik.weather.fragments.FoureFragment;
 import com.maksimik.weather.fragments.OneFragment;
@@ -34,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -44,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     private Forecast forecast;
     private ViewPager viewPager;
     private ListIcon listIcon;
+    private IDbOperations operations;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +71,10 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         setupViewPager(viewPager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
+        operations = new DbHelper(this, 1);
         presenter = new MainPresenter(this);
         toolbarInitialize();
+        GetDataBD();
     }
 
     private void toolbarInitialize() {
@@ -95,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     public void showData(Forecast forecast, ListIcon icons) {
         this.forecast = forecast;
         this.listIcon = icons;
+
+        //FillingDB();
+
         FillingViewPage(viewPager.getCurrentItem());
     }
 
@@ -146,12 +165,11 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     public void onClickSearch(View view) {
         Intent intent = new Intent(this, ChangeLocation.class);
-        if(forecast!=null) {
+        if (forecast != null) {
             intent.putExtra("city", forecast.getCity().getName());
         }
         startActivity(intent);
     }
-
 
     public void FillingViewPage(final int position) {
 //TODO remake
@@ -208,6 +226,81 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         }
     }
 
+    public void FillingDB() {
+        List<ContentValues> listContantValues = new ArrayList<>();
+        ContentValues values = new ContentValues();
+        for (DayWeather dayWeather : forecast.getListWeatherHours()) {
+            for (WeatherHour weatherHour : dayWeather.getDayWeather()) {
+                values.clear();
+
+                values.put(WeatherTable.DATE, weatherHour.getDate());
+                values.put(WeatherTable.TEMP, weatherHour.getMain().getTemp());
+                values.put(WeatherTable.TEMP_MIN, weatherHour.getMain().getTempMin());
+                values.put(WeatherTable.TEMP_MAX, weatherHour.getMain().getTempMax());
+                values.put(WeatherTable.PRESSURE, weatherHour.getMain().getPressure());
+                values.put(WeatherTable.HUMIDITY, weatherHour.getMain().getHumidity());
+                values.put(WeatherTable.WEATHER_ID, weatherHour.getWeather().getId());
+                values.put(WeatherTable.Main, weatherHour.getWeather().getMain());
+                values.put(WeatherTable.DESCRIPTION, weatherHour.getWeather().getDescription());
+                values.put(WeatherTable.ICON, weatherHour.getWeather().getIcon());
+                values.put(WeatherTable.CLOUDS, weatherHour.getClouds().getAll());
+                values.put(WeatherTable.SPEED, weatherHour.getWind().getSpeed());
+                values.put(WeatherTable.DEG, weatherHour.getWind().getDeg());
+
+                listContantValues.add(values);
+            }
+        }
+        int rowID = operations.bulkInsert(WeatherTable.class, listContantValues);
+
+        //Log.i("TAG", "row inserted, ID = " + rowID);
+    }
+
+    private void GetDataBD() {
+
+        Date temp = new Date();
+        forecast = new Forecast();
+        Cursor cursor = operations.query("SELECT * FROM " + DbHelper.getTableName(WeatherTable.class));
+        if (cursor.moveToFirst()) {
+
+            WeatherHour weatherHour;
+
+            DayWeather dayWeather = new DayWeather();
+            do {
+                long date = cursor.getLong(cursor.getColumnIndex(WeatherTable.DATE));
+                Main main = new Main(cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP)),
+                        cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP_MIN)),
+                        cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP_MAX)),
+                        cursor.getDouble(cursor.getColumnIndex(WeatherTable.PRESSURE)),
+                        cursor.getDouble(cursor.getColumnIndex(WeatherTable.HUMIDITY)));
+
+                Weather weather = new Weather(cursor.getInt(cursor.getColumnIndex(WeatherTable.WEATHER_ID)),
+                        cursor.getString(cursor.getColumnIndex(WeatherTable.Main)),
+                        cursor.getString(cursor.getColumnIndex(WeatherTable.DESCRIPTION)),
+                        cursor.getString(cursor.getColumnIndex(WeatherTable.ICON)));
+
+
+                weatherHour = new WeatherHour(date, main, weather, new Clouds(cursor.getDouble(cursor.getColumnIndex(WeatherTable.CLOUDS))),
+                        new Wind(cursor.getDouble(cursor.getColumnIndex(WeatherTable.SPEED)),
+                                cursor.getDouble(cursor.getColumnIndex(WeatherTable.DEG))));
+
+                if ((new Date(date)).getDate() != temp.getDate()) {
+                    temp = new Date(date);
+                    forecast.add(dayWeather);
+                    dayWeather = new DayWeather();
+                }
+                dayWeather.add(weatherHour);
+                forecast.add(dayWeather);
+//                Log.i("TAG",
+//                        "ID = " + cursor.getInt(idColIndex) +
+//                                ", name = " + cursor.getString(nameColIndex) +
+//                                ", email = " + cursor.getLong(emailColIndex));
+
+            } while (cursor.moveToNext());
+        } else
+            Log.i("TAG", "0 rows");
+        cursor.close();
+    }
+
     class MyViewBinder implements SimpleAdapter.ViewBinder {
 
         @Override
@@ -227,5 +320,12 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
             }
             return false;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        operations.delete(WeatherTable.class, null);
+        FillingDB();
+        super.onDestroy();
     }
 }

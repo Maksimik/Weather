@@ -8,8 +8,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.http.HttpClientWeather;
-import com.maksimik.weather.Data.Forecast;
-import com.maksimik.weather.Data.ListIcon;
+import com.maksimik.weather.data.Forecast;
+import com.maksimik.weather.data.ListIcon;
 import com.maksimik.weather.backend.myApi.MyApi;
 import com.maksimik.weather.backend.myApi.model.MyBean;
 

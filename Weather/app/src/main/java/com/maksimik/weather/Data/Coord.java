@@ -1,4 +1,4 @@
-package com.maksimik.weather.Data;
+package com.maksimik.weather.data;
 
 
 import com.google.gson.annotations.SerializedName;

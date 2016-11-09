@@ -47,14 +47,6 @@ public class MyEndpoint {
         res.setIconBean(new HttpClientWeather().getIcon("http://openweathermap.org/img/w/10d.png"));
         return res;
     }
-    @ApiMethod(name = "GetLocation", path = "")
-    public MyBean gLocation(@Named("adres") String adres) throws IOException {
-
-        MyBean response = new MyBean();
-        String data = new HttpClientWeather().get(adres);
-        response.setData(data);
-        return response;
-    }
 
     /*@ApiMethod(name = "GetIcon", path = "")
     public IconBean getIcon(@Named("icon") String icon) throws IOException{

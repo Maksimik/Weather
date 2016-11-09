@@ -1,4 +1,4 @@
-package com.maksimik.weather.Data;
+package com.maksimik.weather.data;
 
 import java.util.ArrayList;
 
@@ -26,5 +26,13 @@ public class Forecast {
 
     public DayWeather getDayWeather(int i) {
         return mListWeatherHours.get(i);
+    }
+
+    public ArrayList<DayWeather> getListWeatherHours() {
+        return mListWeatherHours;
+    }
+
+    public int size(){
+        return mListWeatherHours.size();
     }
 }

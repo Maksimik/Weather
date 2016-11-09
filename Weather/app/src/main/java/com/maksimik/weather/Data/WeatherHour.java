@@ -1,4 +1,4 @@
-package com.maksimik.weather.Data;
+package com.maksimik.weather.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

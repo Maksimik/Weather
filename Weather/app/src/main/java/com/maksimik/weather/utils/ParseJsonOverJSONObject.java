@@ -1,16 +1,16 @@
 package com.maksimik.weather.utils;
 
-import com.maksimik.weather.Data.City;
-import com.maksimik.weather.Data.Clouds;
-import com.maksimik.weather.Data.Coord;
-import com.maksimik.weather.Data.DayWeather;
-import com.maksimik.weather.Data.Forecast;
-import com.maksimik.weather.Data.Main;
-import com.maksimik.weather.Data.Rain;
-import com.maksimik.weather.Data.Snow;
-import com.maksimik.weather.Data.Weather;
-import com.maksimik.weather.Data.WeatherHour;
-import com.maksimik.weather.Data.Wind;
+import com.maksimik.weather.data.City;
+import com.maksimik.weather.data.Clouds;
+import com.maksimik.weather.data.Coord;
+import com.maksimik.weather.data.DayWeather;
+import com.maksimik.weather.data.Forecast;
+import com.maksimik.weather.data.Main;
+import com.maksimik.weather.data.Rain;
+import com.maksimik.weather.data.Snow;
+import com.maksimik.weather.data.Weather;
+import com.maksimik.weather.data.WeatherHour;
+import com.maksimik.weather.data.Wind;
 
 import org.json.JSONArray;
 import org.json.JSONException;

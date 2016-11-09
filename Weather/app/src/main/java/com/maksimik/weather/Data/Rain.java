@@ -1,4 +1,4 @@
-package com.maksimik.weather.Data;
+package com.maksimik.weather.data;
 
 //TODO check for proper operation
 public class Rain {

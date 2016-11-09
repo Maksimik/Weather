@@ -1,8 +1,8 @@
 package com.maksimik.weather.utils;
 
 import com.google.gson.Gson;
-import com.maksimik.weather.Data.City;
-import com.maksimik.weather.Data.Forecast;
+import com.maksimik.weather.data.City;
+import com.maksimik.weather.data.Forecast;
 
 
 public class ParseJsonOverGson {

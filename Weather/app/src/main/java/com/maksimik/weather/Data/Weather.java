@@ -1,4 +1,4 @@
-package com.maksimik.weather.Data;
+package com.maksimik.weather.data;
 
 
 import android.os.Parcel;
@@ -11,6 +11,12 @@ public class Weather implements Parcelable {
     private String mDescription;
     private String mIcon;
 
+    public Weather(int id,String main,String description, String icon){
+        this.mId=id;
+        this.mMain=main;
+        this.mDescription=description;
+        this.mIcon=icon;
+    }
     public Weather() {
     }
 

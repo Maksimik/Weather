@@ -1,16 +1,23 @@
-package com.maksimik.weather.Data;
+package com.maksimik.weather.data;
 
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Main implements Parcelable {
-    private int mTemp;
+    private double mTemp;
     private double mTempMin;
     private double mTempMax;
     private double mPressure;
     private double mHumidity;
 
+    public Main(double temp,double tempMin, double tempMax,double pressure, double humidity){
+        this.mTemp=temp;
+        this.mTempMin=tempMin;
+        this.mTempMax=tempMax;
+        this.mPressure=pressure;
+        this.mHumidity=humidity;
+    }
     public Main(){
 
     }
@@ -82,7 +89,7 @@ public class Main implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mTemp);
+        dest.writeDouble(mTemp);
         dest.writeDouble(mTempMin);
         dest.writeDouble(mTempMax);
         dest.writeDouble(mPressure);

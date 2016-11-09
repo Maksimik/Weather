@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.maksimik.weather.Data.WeatherHour;
+import com.maksimik.weather.data.WeatherHour;
 import com.maksimik.weather.R;
 
 public class WeatherDetails extends AppCompatActivity {
