@@ -71,10 +71,10 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         setupViewPager(viewPager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        operations = new DbHelper(this, 1);
+        //operations = new DbHelper(this, 1);
         presenter = new MainPresenter(this);
         toolbarInitialize();
-        GetDataBD();
+        //GetDataBD();
     }
 
     private void toolbarInitialize() {
@@ -108,10 +108,8 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     }
 
     @Override
-    public void showData(Forecast forecast, ListIcon icons) {
+    public void showData(Forecast forecast) {
         this.forecast = forecast;
-        this.listIcon = icons;
-
         //FillingDB();
 
         FillingViewPage(viewPager.getCurrentItem());
@@ -198,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
             for (int i = 0; i < forecast.getDayWeather(position).size(); i++) {
                 m = new HashMap<>();
                 m.put(ATTRIBUTE_TIME, dateFormat.format(forecast.getDayWeather(position).getWeatherHour(i).getDate()));
-                m.put(ATTRIBUTE_ICON, listIcon.getIcon(forecast.getDayWeather(position).getWeatherHour(i).getWeather().getIcon()));
+                m.put(ATTRIBUTE_ICON, forecast.getDayWeather(position).getWeatherHour(i).getWeather().getIcon());
                 m.put(ATTRIBUTE_TEMP, forecast.getDayWeather(position).getWeatherHour(i).getMain().getTemp() + "°");
                 data.add(m);
             }
@@ -315,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 //       }
             if (view.getId() == R.id.imageView) {
                 ImageView iv = (ImageView) view;
-                iv.setImageBitmap((Bitmap) data);
+                iv.setImageResource(getResources().getIdentifier("image"+data.toString(),"drawable",getPackageName()));
                 return true;
             }
             return false;
@@ -324,8 +322,8 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     @Override
     public void onDestroy() {
-        operations.delete(WeatherTable.class, null);
-        FillingDB();
+//        operations.delete(WeatherTable.class, null);
+//        FillingDB();
         super.onDestroy();
     }
 }

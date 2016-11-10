@@ -5,7 +5,8 @@ import com.maksimik.weather.data.ListIcon;
 
 public interface Contract {
     interface View {
-        void showData(Forecast forecastData, ListIcon iconData);
+
+        void showData(Forecast forecastData);
 
         void showError(String message);
 
