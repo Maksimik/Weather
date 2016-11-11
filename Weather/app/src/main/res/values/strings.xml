@@ -11,6 +11,25 @@
     <string name="clouds">Осадки</string>
     <string name="change_location">Изменить местоположение</string>
     <string name="current_location">Текущее местоположение</string>
+    <string name="dew_point">Точка росы</string>
 
+    <string name="forecast_01d">ясно</string>
+    <string name="forecast_01n">ясно</string>
+    <string name="forecast_02d">облачно с прояснениями</string>
+    <string name="forecast_02n">облачно с прояснениями</string>
+    <string name="forecast_03d">облачно</string>
+    <string name="forecast_03n">облачно</string>
+    <string name="forecast_04d">пасмурно</string>
+    <string name="forecast_04n">пасмурно</string>
+    <string name="forecast_09d">ливень</string>
+    <string name="forecast_09n">ливень</string>
+    <string name="forecast_10d">дождь</string>
+    <string name="forecast_10n">дождь</string>
+    <string name="forecast_11d">гроза</string>
+    <string name="forecast_11n">гроза</string>
+    <string name="forecast_13d">снег</string>
+    <string name="forecast_13n">снег</string>
+    <string name="forecast_50d">туман</string>
+    <string name="forecast_50n">туман</string>
 
 </resources>

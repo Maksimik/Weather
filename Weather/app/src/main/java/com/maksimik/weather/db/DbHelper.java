@@ -79,6 +79,7 @@ public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
 
                 //TODO // FIXME: 09.11.2016
                 if (type != null) {
+
                     builder.append(String.format(Locale.US, SQL_TABLE_CREATE_FIELD_TEMPLATE, value, type));
                     if (i < fields.length - 2) {
                         builder.append(",");

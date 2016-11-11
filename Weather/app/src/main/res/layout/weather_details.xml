@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,8 +11,7 @@
     <FrameLayout
         android:id="@+id/fameLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/my_toolbar">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imageIcon"
@@ -25,14 +24,12 @@
         android:id="@+id/linerLayoutTemp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/fameLayout"
-        android:layout_centerHorizontal="true">
+        android:layout_gravity="center">
 
         <TextView
             android:id="@+id/tvTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="7°"
             android:textAlignment="center"
             android:textSize="25sp" />
 
@@ -48,7 +45,6 @@
             android:id="@+id/tvCloudValues"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="51%"
             android:textAlignment="center"
             android:textSize="25sp" />
     </LinearLayout>
@@ -57,16 +53,13 @@
         android:id="@+id/tvDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/linerLayoutTemp"
         android:text="Ливни"
         android:textAlignment="center"
         android:textSize="25sp" />
 
     <LinearLayout
-        android:id="@+id/liner1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvDescription"
         android:layout_marginTop="@dimen/activity_vertical_margin">
 
         <TextView
@@ -89,16 +82,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Точка росы"
+            android:text="@string/dew_point"
             android:textAlignment="center"
             android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/liner2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/liner1">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvRainValue"
@@ -129,10 +120,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/liner3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/liner2"
         android:layout_marginTop="@dimen/activity_vertical_margin">
 
         <TextView
@@ -161,10 +150,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/liner4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/liner3">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvSnowValue"
@@ -195,10 +182,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/liner5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/liner4"
         android:layout_marginTop="@dimen/activity_vertical_margin">
 
         <TextView
@@ -229,8 +214,7 @@
     <LinearLayout
 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/liner5">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvRimeValue"
@@ -259,4 +243,4 @@
             android:textAlignment="center"
             android:textSize="20sp" />
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

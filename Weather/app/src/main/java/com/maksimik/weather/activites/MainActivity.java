@@ -4,8 +4,9 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +26,6 @@ import com.maksimik.weather.R;
 import com.maksimik.weather.data.Clouds;
 import com.maksimik.weather.data.DayWeather;
 import com.maksimik.weather.data.Forecast;
-import com.maksimik.weather.data.ListIcon;
 import com.maksimik.weather.data.Main;
 import com.maksimik.weather.data.Weather;
 import com.maksimik.weather.data.WeatherHour;
@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     private ProgressBar progressBar;
     private Forecast forecast;
     private ViewPager viewPager;
-    private ListIcon listIcon;
     private IDbOperations operations;
 
 
@@ -71,10 +70,10 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         setupViewPager(viewPager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        //operations = new DbHelper(this, 1);
+        operations = new DbHelper(this, 1);
         presenter = new MainPresenter(this);
         toolbarInitialize();
-        //GetDataBD();
+        new DbTask().execute();
     }
 
     private void toolbarInitialize() {
@@ -109,9 +108,10 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     @Override
     public void showData(Forecast forecast) {
-        this.forecast = forecast;
-        //FillingDB();
 
+        this.forecast = forecast;
+        operations.delete(WeatherTable.class, null);
+        FillingDB();
         FillingViewPage(viewPager.getCurrentItem());
     }
 
@@ -164,13 +164,16 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     public void onClickSearch(View view) {
         Intent intent = new Intent(this, ChangeLocation.class);
         if (forecast != null) {
-            intent.putExtra("city", forecast.getCity().getName());
+            if (forecast.getCity() != null) {
+                intent.putExtra("city", forecast.getCity().getName());
+            }
         }
         startActivity(intent);
     }
 
     public void FillingViewPage(final int position) {
-//TODO remake
+
+//TODO remake and flies when there is no data
         if (forecast != null) {
             int idList;
             if (position == 0) {
@@ -184,9 +187,11 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
             } else {
                 idList = R.id.list5;
             }
+
             final String ATTRIBUTE_TIME = "time";
             final String ATTRIBUTE_TEMP = "temp";
             final String ATTRIBUTE_ICON = "icon";
+            final String ATTRIBUTE_DESCRIPTION = "description";
             Map<String, Object> m;
             ListView lvSimple;
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -197,24 +202,27 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
                 m = new HashMap<>();
                 m.put(ATTRIBUTE_TIME, dateFormat.format(forecast.getDayWeather(position).getWeatherHour(i).getDate()));
                 m.put(ATTRIBUTE_ICON, forecast.getDayWeather(position).getWeatherHour(i).getWeather().getIcon());
-                m.put(ATTRIBUTE_TEMP, forecast.getDayWeather(position).getWeatherHour(i).getMain().getTemp() + "°");
+                m.put(ATTRIBUTE_DESCRIPTION, getString(getResources().getIdentifier("forecast_" + forecast.getDayWeather(position).getWeatherHour(i).getWeather().getIcon(), "string", getPackageName())));
+                m.put(ATTRIBUTE_TEMP, (int) forecast.getDayWeather(position).getWeatherHour(i).getMain().getTemp() + "°");
                 data.add(m);
             }
 
 
-            String[] from = {ATTRIBUTE_TIME, ATTRIBUTE_ICON, ATTRIBUTE_TEMP};
-            int[] to = {R.id.textViewTime, R.id.imageView, R.id.textViewTemp};
+            String[] from = {ATTRIBUTE_TIME, ATTRIBUTE_ICON, ATTRIBUTE_DESCRIPTION, ATTRIBUTE_TEMP};
+            int[] to = {R.id.textViewTime, R.id.imageView, R.id.textViewDescription, R.id.textViewTemp};
             SimpleAdapter sAdapter = new SimpleAdapter(getBaseContext(), data, R.layout.list_item, from, to);
-
             sAdapter.setViewBinder(new MyViewBinder());
             lvSimple = (ListView) findViewById(idList);
+
             lvSimple.setAdapter(sAdapter);
+            System.out.println("pposition: " + position);
             lvSimple.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
                     Intent intent = new Intent(getBaseContext(), WeatherDetails.class);
                     intent.putExtra("weather", forecast.getDayWeather(position).getWeatherHour(pos));
+
                     startActivity(intent);
 
 
@@ -226,10 +234,11 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     public void FillingDB() {
         List<ContentValues> listContantValues = new ArrayList<>();
-        ContentValues values = new ContentValues();
+        //ContentValues values = new ContentValues();
+        ContentValues values;
         for (DayWeather dayWeather : forecast.getListWeatherHours()) {
             for (WeatherHour weatherHour : dayWeather.getDayWeather()) {
-                values.clear();
+                values = new ContentValues();
 
                 values.put(WeatherTable.DATE, weatherHour.getDate());
                 values.put(WeatherTable.TEMP, weatherHour.getMain().getTemp());
@@ -245,32 +254,41 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
                 values.put(WeatherTable.SPEED, weatherHour.getWind().getSpeed());
                 values.put(WeatherTable.DEG, weatherHour.getWind().getDeg());
 
+
                 listContantValues.add(values);
             }
         }
         int rowID = operations.bulkInsert(WeatherTable.class, listContantValues);
 
-        //Log.i("TAG", "row inserted, ID = " + rowID);
+        Log.i("TAG", "row inserted, ID = " + rowID);
     }
 
-    private void GetDataBD() {
+    @Nullable
+    private Forecast GetDataDB() {
 
-        Date temp = new Date();
-        forecast = new Forecast();
+
         Cursor cursor = operations.query("SELECT * FROM " + DbHelper.getTableName(WeatherTable.class));
         if (cursor.moveToFirst()) {
 
+            Date temp = new Date();
+            Forecast f = new Forecast();
             WeatherHour weatherHour;
 
             DayWeather dayWeather = new DayWeather();
+            int i = 0;
             do {
                 long date = cursor.getLong(cursor.getColumnIndex(WeatherTable.DATE));
+                if (i == 0) {
+                    temp = new Date(date);
+                    i++;
+                }
                 Main main = new Main(cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP)),
                         cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP_MIN)),
                         cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP_MAX)),
                         cursor.getDouble(cursor.getColumnIndex(WeatherTable.PRESSURE)),
                         cursor.getDouble(cursor.getColumnIndex(WeatherTable.HUMIDITY)));
 
+                System.out.println(cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP)));
                 Weather weather = new Weather(cursor.getInt(cursor.getColumnIndex(WeatherTable.WEATHER_ID)),
                         cursor.getString(cursor.getColumnIndex(WeatherTable.Main)),
                         cursor.getString(cursor.getColumnIndex(WeatherTable.DESCRIPTION)),
@@ -280,23 +298,20 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
                 weatherHour = new WeatherHour(date, main, weather, new Clouds(cursor.getDouble(cursor.getColumnIndex(WeatherTable.CLOUDS))),
                         new Wind(cursor.getDouble(cursor.getColumnIndex(WeatherTable.SPEED)),
                                 cursor.getDouble(cursor.getColumnIndex(WeatherTable.DEG))));
-
+//TODO // FIXME: 10.11.2016
                 if ((new Date(date)).getDate() != temp.getDate()) {
                     temp = new Date(date);
-                    forecast.add(dayWeather);
+                    f.add(dayWeather);
                     dayWeather = new DayWeather();
                 }
                 dayWeather.add(weatherHour);
-                forecast.add(dayWeather);
-//                Log.i("TAG",
-//                        "ID = " + cursor.getInt(idColIndex) +
-//                                ", name = " + cursor.getString(nameColIndex) +
-//                                ", email = " + cursor.getLong(emailColIndex));
 
             } while (cursor.moveToNext());
-        } else
-            Log.i("TAG", "0 rows");
+
+            return f;
+        }
         cursor.close();
+        return null;
     }
 
     class MyViewBinder implements SimpleAdapter.ViewBinder {
@@ -313,17 +328,25 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 //       }
             if (view.getId() == R.id.imageView) {
                 ImageView iv = (ImageView) view;
-                iv.setImageResource(getResources().getIdentifier("image"+data.toString(),"drawable",getPackageName()));
+                iv.setImageResource(getResources().getIdentifier("image" + data.toString(), "drawable", getPackageName()));
                 return true;
             }
             return false;
         }
     }
 
-    @Override
-    public void onDestroy() {
-//        operations.delete(WeatherTable.class, null);
-//        FillingDB();
-        super.onDestroy();
+    private class DbTask extends AsyncTask<Void, Void, Forecast> {
+
+        @Override
+        protected Forecast doInBackground(Void... params) {
+            return GetDataDB();
+        }
+
+        @Override
+        protected void onPostExecute(Forecast f) {
+            super.onPostExecute(f);
+            forecast = f;
+            FillingViewPage(viewPager.getCurrentItem());
+        }
     }
 }

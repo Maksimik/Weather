@@ -23,7 +23,7 @@ public class Main implements Parcelable {
     }
 
     protected Main(Parcel in) {
-        mTemp = in.readInt();
+        mTemp = in.readDouble();
         mTempMin = in.readDouble();
         mTempMax = in.readDouble();
         mPressure = in.readDouble();

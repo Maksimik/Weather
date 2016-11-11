@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.HashSet;
 
 class ParseJsonOverJSONObject {
-    public HashSet<String> listIcon;
+   // public HashSet<String> listIcon;
 
     Forecast parseJsonOverJSONObject(String responce) {
 
@@ -29,7 +29,7 @@ class ParseJsonOverJSONObject {
         Forecast forecast = new Forecast();
         JSONObject dataJsonObj;
         WeatherHour weatherHour;
-        listIcon = new HashSet<>();
+        //listIcon = new HashSet<>();
         DayWeather dayWeather = new DayWeather();
 
 
@@ -53,7 +53,7 @@ class ParseJsonOverJSONObject {
             Main mainWeather;
             long date;
             Date temp = new Date();
-            String icon = null;
+            //String icon = null;
             //SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
             JSONArray list = dataJsonObj.getJSONArray("list");
@@ -96,7 +96,7 @@ class ParseJsonOverJSONObject {
                     weather.setMain(weathers.getJSONObject(j).getString("main"));
                     weather.setDescription(weathers.getJSONObject(j).getString("description"));
                     weather.setIcon(weathers.getJSONObject(j).getString("icon"));
-                    listIcon.add(weather.getIcon());
+                    //listIcon.add(weather.getIcon());
                 }
 
                 date = listWeather.getLong("dt") * 1000;

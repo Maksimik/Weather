@@ -1,7 +1,6 @@
 package com.maksimik.weather.utils;
 
 import com.maksimik.weather.data.Forecast;
-import com.maksimik.weather.data.ListIcon;
 
 public interface Contract {
     interface View {

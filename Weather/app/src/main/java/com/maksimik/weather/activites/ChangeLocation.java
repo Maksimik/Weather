@@ -23,7 +23,12 @@ public class ChangeLocation extends AppCompatActivity implements CompoundButton.
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id.switch_compat);
         switchCompat.setOnCheckedChangeListener(this);
         TextView textView = (TextView) findViewById(R.id.cityName);
-        textView.setText(getIntent().getStringExtra("city"));
+
+        try {
+            textView.setText(getIntent().getStringExtra("city"));
+        }catch (Exception e){
+
+        }
         tvCurrentLocation = (TextView) findViewById(R.id.tvCurrentLocation);
 
         tvLocation = (TextView) findViewById(R.id.tvLocation);
