@@ -1,9 +1,10 @@
-package com.maksimik.weather.data;
+package com.maksimik.weather.model;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class DayWeather {
+public class DayWeather implements Serializable {
 
     private ArrayList<WeatherHour> mDayWeather;
 

@@ -1,6 +1,6 @@
 package com.maksimik.weather.utils;
 
-import com.maksimik.weather.data.Forecast;
+import com.maksimik.weather.model.Forecast;
 
 public interface Contract {
     interface View {
@@ -13,6 +13,9 @@ public interface Contract {
     }
 
     interface Presenter {
-        void onReady();
+
+        void getWeather();
+
+        void getWeatherFromDb();
     }
 }

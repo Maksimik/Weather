@@ -10,13 +10,13 @@ import com.maksimik.weather.backend.myApi.MyApi;
 import java.io.IOException;
 
 
-public class ApiManager {
-    public static final String APP_ENGINE_BASE_URL = "https://show-weather-forecast-app.appspot.com/_ah/api/";
+class ApiManager {
+    private static final String APP_ENGINE_BASE_URL = "https://show-weather-forecast-app.appspot.com/_ah/api/";
 
     private static ApiManager sInstance;
     private MyApi appEngineApi;
 
-    public static ApiManager get() {
+    static ApiManager get() {
         if (sInstance == null) {
             sInstance = new ApiManager();
         }
@@ -26,7 +26,7 @@ public class ApiManager {
     private ApiManager() {
     }
 
-    public MyApi myApi() {
+    MyApi myApi() {
         if (appEngineApi == null) {
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     JacksonFactory.getDefaultInstance(), null)

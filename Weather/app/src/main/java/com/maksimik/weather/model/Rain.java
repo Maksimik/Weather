@@ -1,11 +1,13 @@
-package com.maksimik.weather.data;
+package com.maksimik.weather.model;
+
+import java.io.Serializable;
 
 //TODO check for proper operation
-public class Snow {
+public class Rain implements Serializable {
     private boolean mHas;
     private double mValue;
 
-    /*public Snow(double value) {
+    /*public Rain(double value) {
         this.mValue = value;
     }*/
 
@@ -16,7 +18,6 @@ public class Snow {
     public void setValue(double value) {
         this.mValue = value;
     }
-
     public boolean isHas() {
         return mHas;
     }

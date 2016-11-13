@@ -1,23 +1,22 @@
 package com.maksimik.weather.utils;
 
-import com.maksimik.weather.data.City;
-import com.maksimik.weather.data.Clouds;
-import com.maksimik.weather.data.Coord;
-import com.maksimik.weather.data.DayWeather;
-import com.maksimik.weather.data.Forecast;
-import com.maksimik.weather.data.Main;
-import com.maksimik.weather.data.Rain;
-import com.maksimik.weather.data.Snow;
-import com.maksimik.weather.data.Weather;
-import com.maksimik.weather.data.WeatherHour;
-import com.maksimik.weather.data.Wind;
+import com.maksimik.weather.model.City;
+import com.maksimik.weather.model.Clouds;
+import com.maksimik.weather.model.Coord;
+import com.maksimik.weather.model.DayWeather;
+import com.maksimik.weather.model.Forecast;
+import com.maksimik.weather.model.Main;
+import com.maksimik.weather.model.Rain;
+import com.maksimik.weather.model.Snow;
+import com.maksimik.weather.model.Weather;
+import com.maksimik.weather.model.WeatherHour;
+import com.maksimik.weather.model.Wind;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
-import java.util.HashSet;
 
 class ParseJsonOverJSONObject {
    // public HashSet<String> listIcon;

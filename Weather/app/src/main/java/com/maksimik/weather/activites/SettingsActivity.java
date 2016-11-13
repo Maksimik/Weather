@@ -13,16 +13,18 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        toolbarInitialize();
+        initToolbar();
     }
 
-    private void toolbarInitialize() {
+    private void initToolbar() {
         Toolbar toolBar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolBar);
         setTitle("Settings");
 
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override

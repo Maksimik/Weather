@@ -19,14 +19,14 @@ public class ChangeLocation extends AppCompatActivity implements CompoundButton.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_location);
-        toolbarInitialize();
+        initToolbar();
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id.switch_compat);
         switchCompat.setOnCheckedChangeListener(this);
         TextView textView = (TextView) findViewById(R.id.cityName);
 
         try {
             textView.setText(getIntent().getStringExtra("city"));
-        }catch (Exception e){
+        } catch (Exception ignored) {
 
         }
         tvCurrentLocation = (TextView) findViewById(R.id.tvCurrentLocation);
@@ -34,13 +34,15 @@ public class ChangeLocation extends AppCompatActivity implements CompoundButton.
         tvLocation = (TextView) findViewById(R.id.tvLocation);
     }
 
-    private void toolbarInitialize() {
+    private void initToolbar() {
         Toolbar toolBar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolBar);
         setTitle(getString(R.string.change_location));
 
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
 
@@ -59,7 +61,7 @@ public class ChangeLocation extends AppCompatActivity implements CompoundButton.
 
         if (isChecked) {
             MyLocationListener.SetUpLocationListener(this);
-
+            //TODO // FIXME: 14.11.2016
             tvCurrentLocation.setTextColor(getResources().getColor(R.color.item_selected));
 
             tvLocation.setText(String.format("Coordinates: lat = %1$.4f, lon = %2$.4f",

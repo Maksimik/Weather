@@ -28,7 +28,7 @@ public class MyEndpoint {
     private static final String ACCESS_KEY = "57eac87bbf864b3de29a4c2274497ced";
     private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
 
-    @ApiMethod(name = "GetContent")
+    @ApiMethod(name = "getContent")
     public MyBean getContent(@Named("id") String id) throws IOException {
 
         MyBean response = new MyBean();

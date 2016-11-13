@@ -1,9 +1,8 @@
-package com.maksimik.weather.data;
+package com.maksimik.weather.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-public class WeatherHour implements Parcelable {
+public class WeatherHour implements Serializable{
 
     private long mDate;
     private Main mMain;
@@ -13,26 +12,6 @@ public class WeatherHour implements Parcelable {
     //private Rain mRain;
     //private Snow mSnow;
 
-
-    protected WeatherHour(Parcel in) {
-        mDate = in.readLong();
-        mMain = in.readParcelable(Main.class.getClassLoader());
-        mWeather = in.readParcelable(Weather.class.getClassLoader());
-        mClouds = in.readParcelable(Clouds.class.getClassLoader());
-        mWind = in.readParcelable(Wind.class.getClassLoader());
-    }
-
-    public static final Creator<WeatherHour> CREATOR = new Creator<WeatherHour>() {
-        @Override
-        public WeatherHour createFromParcel(Parcel in) {
-            return new WeatherHour(in);
-        }
-
-        @Override
-        public WeatherHour[] newArray(int size) {
-            return new WeatherHour[size];
-        }
-    };
 
     public long getDate() {
         return mDate;
@@ -83,20 +62,6 @@ public class WeatherHour implements Parcelable {
 
     public void setWind(Wind wind) {
         this.mWind = wind;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(mDate);
-        dest.writeParcelable(mMain, flags);
-        dest.writeParcelable(mWeather, flags);
-        dest.writeParcelable(mClouds, flags);
-        dest.writeParcelable(mWind, flags);
     }
 
     /*public Rain getRain() {

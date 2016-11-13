@@ -1,10 +1,9 @@
-package com.maksimik.weather.data;
+package com.maksimik.weather.model;
 
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-public class Weather implements Parcelable {
+public class Weather implements Serializable {
 
     private int mId;
     private String mMain;
@@ -19,24 +18,6 @@ public class Weather implements Parcelable {
     }
     public Weather() {
     }
-
-    protected Weather(Parcel in) {
-        mMain = in.readString();
-        mDescription = in.readString();
-        mIcon = in.readString();
-    }
-
-    public static final Creator<Weather> CREATOR = new Creator<Weather>() {
-        @Override
-        public Weather createFromParcel(Parcel in) {
-            return new Weather(in);
-        }
-
-        @Override
-        public Weather[] newArray(int size) {
-            return new Weather[size];
-        }
-    };
 
     public String getDescription() {
         return mDescription;
@@ -60,18 +41,6 @@ public class Weather implements Parcelable {
 
     public void setIcon(String icon) {
         this.mIcon = icon;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mMain);
-        dest.writeString(mDescription);
-        dest.writeString(mIcon);
     }
 
     public int getId() {

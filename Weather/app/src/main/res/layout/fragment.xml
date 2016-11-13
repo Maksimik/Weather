@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.maksimik.weather.fragments.TwoFragment">
+    tools:context="com.maksimik.weather.activites.PageFragment">
 
     <ListView
-        android:id="@+id/list2"
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
