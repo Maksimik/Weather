@@ -1,4 +1,4 @@
-package com.maksimik.weather.activites;
+package com.maksimik.weather.utils;
 
 import android.Manifest;
 import android.content.Context;
@@ -12,7 +12,7 @@ import android.support.v4.app.ActivityCompat;
 
 public class MyLocationListener implements LocationListener {
 
-    static Location imHere;
+    public static Location imHere;
 
     public static void SetUpLocationListener(Context context) {
         LocationManager locationManager = (LocationManager)

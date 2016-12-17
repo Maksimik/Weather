@@ -1,4 +1,4 @@
-package com.maksimik.weather.activites;
+package com.maksimik.weather.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.maksimik.weather.R;
+import com.maksimik.weather.activites.WeatherDetails;
+import com.maksimik.weather.constants.Constants;
 import com.maksimik.weather.model.DayWeather;
 
 import java.text.SimpleDateFormat;
@@ -32,7 +34,6 @@ public class PageFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         dayWeather = (DayWeather) getArguments().getSerializable(ARGUMENT_DAY_WEATHER);
-
     }
 
     @Override
@@ -40,7 +41,6 @@ public class PageFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment, container, false);
         fillingViewPage(dayWeather);
-
         return view;
     }
 
@@ -54,7 +54,6 @@ public class PageFragment extends Fragment {
 
     public void fillingViewPage(final DayWeather dayWeather) {
 
-//TODO remake and flies when there is no data
         if (dayWeather != null) {
 
             final String ATTRIBUTE_TIME = "time";
@@ -69,7 +68,12 @@ public class PageFragment extends Fragment {
 
             for (int i = 0; i < dayWeather.size(); i++) {
                 m = new HashMap<>();
-                m.put(ATTRIBUTE_TIME, dateFormat.format(dayWeather.getWeatherHour(i).getDate()));
+
+                if((i==dayWeather.size()-1 && i!=0) ||(dayWeather.size()==1)) {
+                    m.put(ATTRIBUTE_TIME, "24:00");
+                }else{
+                    m.put(ATTRIBUTE_TIME, dateFormat.format(dayWeather.getWeatherHour(i).getDate()));
+                }
                 m.put(ATTRIBUTE_ICON, dayWeather.getWeatherHour(i).getWeather().getIcon());
                 m.put(ATTRIBUTE_DESCRIPTION, getString(getResources().getIdentifier("forecast_" + dayWeather.getWeatherHour(i).getWeather().getIcon(),
                         "string", getActivity().getPackageName())));
@@ -80,7 +84,7 @@ public class PageFragment extends Fragment {
 
             String[] from = {ATTRIBUTE_TIME, ATTRIBUTE_ICON, ATTRIBUTE_DESCRIPTION, ATTRIBUTE_TEMP};
             int[] to = {R.id.textViewTime, R.id.imageView, R.id.textViewDescription, R.id.textViewTemp};
-            SimpleAdapter sAdapter = new SimpleAdapter(getActivity().getBaseContext(), data, R.layout.list_item, from, to);
+            SimpleAdapter sAdapter = new SimpleAdapter(getActivity().getBaseContext(), data, R.layout.list_item_weather, from, to);
             sAdapter.setViewBinder(new MyViewBinder());
             lvSimple = (ListView) view.findViewById(R.id.list);
 
@@ -90,7 +94,7 @@ public class PageFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
                     Intent intent = new Intent(getActivity().getBaseContext(), WeatherDetails.class);
-                    intent.putExtra("weather", dayWeather.getWeatherHour(pos));
+                    intent.putExtra(Constants.WEATHER_KEY, dayWeather.getWeatherHour(pos));
                     startActivity(intent);
                 }
             });
@@ -102,17 +106,10 @@ public class PageFragment extends Fragment {
 
         @Override
         public boolean setViewValue(View view, Object data, String textRepresentation) {
-//            if ((view instanceof ImageView) & (data instanceof Bitmap)) {
-//                ImageView iv = (ImageView) view;
-//                Bitmap bm = (Bitmap) data;
-//                iv.setImageBitmap(bm);
-//                return true;
-//            }
-//            return false;
-//       }
+
             if (view.getId() == R.id.imageView) {
                 ImageView iv = (ImageView) view;
-                iv.setImageResource(getResources().getIdentifier("image" + data.toString(), "drawable", getActivity().getPackageName()));
+                iv.setImageResource(getResources().getIdentifier(Constants.IMAGE + data.toString(), "drawable", getActivity().getPackageName()));
                 return true;
             }
             return false;

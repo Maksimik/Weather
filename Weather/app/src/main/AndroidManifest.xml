@@ -9,11 +9,12 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activites.MainActivity">
+        <activity android:name=".activites.MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,6 +24,8 @@
         <activity android:name=".activites.ChangeLocation" />
         <activity android:name=".activites.SettingsActivity" />
         <activity android:name=".activites.WeatherDetails" />
+        <activity android:name=".activites.SearchActivity" />
+        <activity android:name=".activites.AboutTheProgram" />
     </application>
 
 </manifest>

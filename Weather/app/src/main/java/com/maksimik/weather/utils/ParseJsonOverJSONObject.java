@@ -2,7 +2,6 @@ package com.maksimik.weather.utils;
 
 import com.maksimik.weather.model.City;
 import com.maksimik.weather.model.Clouds;
-import com.maksimik.weather.model.Coord;
 import com.maksimik.weather.model.DayWeather;
 import com.maksimik.weather.model.Forecast;
 import com.maksimik.weather.model.Main;
@@ -19,16 +18,14 @@ import org.json.JSONObject;
 import java.util.Date;
 
 class ParseJsonOverJSONObject {
-   // public HashSet<String> listIcon;
 
     Forecast parseJsonOverJSONObject(String responce) {
 
-        City mCity = new City();
+        City mCity;
         Weather weather;
         Forecast forecast = new Forecast();
         JSONObject dataJsonObj;
         WeatherHour weatherHour;
-        //listIcon = new HashSet<>();
         DayWeather dayWeather = new DayWeather();
 
 
@@ -36,13 +33,11 @@ class ParseJsonOverJSONObject {
             dataJsonObj = new JSONObject(responce);
 
             JSONObject city = dataJsonObj.getJSONObject("city");
-            mCity.setId(city.getInt("id"));
-            mCity.setName(city.getString("name"));
-            mCity.setCountry(city.getString("country"));
-
-            JSONObject coord = city.getJSONObject("coord");
-
-            mCity.setCoord(new Coord(coord.getDouble("lon"), coord.getDouble("lat")));
+            //TODO name city
+           // mCity = new City(city.getInt("id"), city.getString("name"));
+            mCity = new City(city.getInt("id"), "");
+//            mCity.setId(city.getInt("id"));
+//            mCity.setName(city.getString("name"));
             forecast.setCity(mCity);
 
             Clouds clouds;
@@ -52,8 +47,6 @@ class ParseJsonOverJSONObject {
             Main mainWeather;
             long date;
             Date temp = new Date();
-            //String icon = null;
-            //SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
             JSONArray list = dataJsonObj.getJSONArray("list");
             for (int i = 0; i < list.length(); i++) {
@@ -95,7 +88,6 @@ class ParseJsonOverJSONObject {
                     weather.setMain(weathers.getJSONObject(j).getString("main"));
                     weather.setDescription(weathers.getJSONObject(j).getString("description"));
                     weather.setIcon(weathers.getJSONObject(j).getString("icon"));
-                    //listIcon.add(weather.getIcon());
                 }
 
                 date = listWeather.getLong("dt") * 1000;
@@ -105,6 +97,7 @@ class ParseJsonOverJSONObject {
 
                 if ((new Date(date)).getDate() != temp.getDate()) {
                     temp = new Date(date);
+                    dayWeather.add(weatherHour);
                     forecast.add(dayWeather);
                     dayWeather = new DayWeather();
                 }

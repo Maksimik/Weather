@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.maksimik.weather.R;
+import com.maksimik.weather.constants.Constants;
 import com.maksimik.weather.model.WeatherHour;
 
 public class WeatherDetails extends AppCompatActivity {
@@ -20,23 +21,23 @@ public class WeatherDetails extends AppCompatActivity {
 
         initToolbar();
 
-        WeatherHour weatherHour=(WeatherHour) getIntent().getSerializableExtra("weather");
+        WeatherHour weatherHour = (WeatherHour) getIntent().getSerializableExtra(Constants.WEATHER_KEY);
 
         TextView tvTemp = (TextView) findViewById(R.id.tvTemp);
         TextView tvCloudValues = (TextView) findViewById(R.id.tvCloudValues);
         TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
         ImageView iv = (ImageView) findViewById(R.id.imageIcon);
 
-        iv.setImageResource(getResources().getIdentifier("image" + weatherHour.getWeather().getIcon(), "drawable", getPackageName()));
+        iv.setImageResource(getResources().getIdentifier(Constants.IMAGE + weatherHour.getWeather().getIcon(), "drawable", getPackageName()));
         tvTemp.setText(weatherHour.getMain().getTemp() + "°");
         tvCloudValues.setText(weatherHour.getClouds().getAll() + "%");
         tvDescription.setText(getString(getResources().getIdentifier("forecast_" + weatherHour.getWeather().getIcon(), "string", getPackageName())));
     }
 
     private void initToolbar() {
-        Toolbar toolBar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
-        setTitle("Weather details");
+        setTitle(getString(R.string.additionally));
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setHomeButtonEnabled(true);

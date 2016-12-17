@@ -17,20 +17,29 @@ import com.maksimik.weather.db.annotations.type.dbIntegerPrimaryKeyAutoincrement
 import com.maksimik.weather.db.annotations.type.dbLong;
 import com.maksimik.weather.db.annotations.type.dbString;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
+import com.maksimik.weather.R;
 
+public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
+    //TODO if not exist
     private static final String SQL_TABLE_CREATE_TEMPLATE = "CREATE TABLE %s (%s);";
     private static final String SQL_TABLE_CREATE_FIELD_TEMPLATE = "%s %s";
     private static final String SQL_NAME = "weatherForecast.db";
+    private Context context;
 
     public DbHelper(Context context, int version) {
         super(context, SQL_NAME, null, version);
+        this.context = context;
     }
 
     @Override
@@ -41,6 +50,9 @@ public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
             if (sql != null) {
                 Log.i("TAG", "--- onCreate database ---");
                 db.execSQL(sql);
+                if (clazz == CitesTable.class) {
+                    setCitesTable(db);
+                }
             }
         }
     }
@@ -154,11 +166,9 @@ public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
     @Override
     public int bulkInsert(final Class<?> table, final List<ContentValues> values) {
         final String name = getTableName(table);
-
         if (name != null) {
             final SQLiteDatabase database = getWritableDatabase();
             int count = 0;
-
             try {
                 database.beginTransaction();
 
@@ -167,7 +177,6 @@ public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
 
                     count++;
                 }
-
                 database.setTransactionSuccessful();
             } finally {
                 database.endTransaction();
@@ -179,7 +188,6 @@ public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
         }
     }
 
-
     @Nullable
     public static String getTableName(final AnnotatedElement clazz) {
         final Table table = clazz.getAnnotation(Table.class);
@@ -188,6 +196,43 @@ public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
             return table.name();
         } else {
             return null;
+        }
+    }
+
+    private void setCitesTable(SQLiteDatabase db) {
+
+        InputStream inputStream = context.getResources().openRawResource(R.raw.city);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+        ContentValues values;
+        String line;
+        String[] words;
+
+        try {
+            while ((line = reader.readLine()) != null) {
+                words = line.split(" ", 2);
+
+                values = new ContentValues();
+
+                values.put(CitesTable.ID, words[0]);
+                values.put(CitesTable.NAME, words[1]);
+                values.put(CitesTable.NAME_UPPER, words[1].toUpperCase());
+
+                db.insert(getTableName(CitesTable.class), null, values);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

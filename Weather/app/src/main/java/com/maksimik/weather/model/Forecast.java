@@ -35,4 +35,8 @@ public class Forecast {
     public int size(){
         return mListWeatherHours.size();
     }
+
+    public void setListWeatherHours(ArrayList<DayWeather> listWeatherHours) {
+        this.mListWeatherHours=listWeatherHours;
+    }
 }

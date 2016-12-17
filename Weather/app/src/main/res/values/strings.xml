@@ -1,7 +1,15 @@
 <resources>
     <string name="app_name">Weather</string>
-    <string name="settings">Settings</string>
-    <string name="weather_update">Weather update</string>
+
+    <string name="settings">Настройки</string>
+    <string name="about_the_program">О программе</string>
+
+
+    <string name="search_city">Поиск Города</string>
+    <string name="delete">Удалить</string>
+    <string name="this_is_my_house">Это мой дом</string>
+    <string name="additionally">Дополнительно</string>
+
     <string name="wind">Ветер</string>
     <string name="rain">Дождь</string>
     <string name="snow">Снег</string>

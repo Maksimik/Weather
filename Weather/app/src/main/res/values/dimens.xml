@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="default_icon_size">52dp</dimen>
     <dimen name="toolbar_height">52dp</dimen>
+    <dimen name="layout_marginLeftAndRight">16dp</dimen>
+    <dimen name="paddingTop">8dp</dimen>
 </resources>

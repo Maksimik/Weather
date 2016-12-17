@@ -13,6 +13,9 @@ public final class WeatherTable {
     @dbIntegerPrimaryKeyAutoincrement
     public static final String ID = "_id";
 
+    @dbInteger
+    public static final String CITY_ID = "city_id";
+
     @dbLong
     public static final String DATE = "date";
 

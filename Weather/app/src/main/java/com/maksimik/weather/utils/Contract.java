@@ -14,8 +14,8 @@ public interface Contract {
 
     interface Presenter {
 
-        void getWeather();
+        void getWeather(int id);
 
-        void getWeatherFromDb();
+        void getWeatherFromDb(int id);
     }
 }

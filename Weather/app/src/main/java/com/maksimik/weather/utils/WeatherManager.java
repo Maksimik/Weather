@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.maksimik.weather.backend.myApi.MyApi;
 import com.maksimik.weather.backend.myApi.model.MyBean;
@@ -33,7 +32,7 @@ public class WeatherManager implements Contract.Presenter {
     private Contract.View view;
     private Handler handler;
     private Forecast forecast;
-    private String id = "627904";
+
 
     private IDbOperations operations;
     private static Contract.Presenter INSTANCE;
@@ -53,21 +52,21 @@ public class WeatherManager implements Contract.Presenter {
     }
 
     @Override
-    public void getWeather() {
+    public void getWeather(int id) {
 
         view.showProgress(true);
-        loadData();
+        loadData(String.valueOf(id));
 
     }
 
     @Override
-    public void getWeatherFromDb() {
+    public void getWeatherFromDb(int id) {
 
-        loadDataFromDb();
+        loadDataFromDb(id);
 
     }
 
-    private void loadData() {
+    private void loadData(final String id) {
 
         new Thread() {
             @Override
@@ -83,7 +82,11 @@ public class WeatherManager implements Contract.Presenter {
 
                     notifyResponse();
 
-                    operations.delete(WeatherTable.class, null);
+                    //operations.list_item(WeatherTable.class, null);
+
+                    String sql=WeatherTable.CITY_ID+"=?";
+                    operations.delete(WeatherTable.class, sql, id);
+
                     setDateDb(forecast);
 
                 } catch (IOException e) {
@@ -93,13 +96,13 @@ public class WeatherManager implements Contract.Presenter {
         }.start();
     }
 
-    private void loadDataFromDb() {
+    private void loadDataFromDb(final int id) {
 
         new Thread() {
             @Override
             public void run() {
 
-                forecast = getDataDb();
+                forecast = getDataDb(id);
                 notifyResponse();
 
             }
@@ -108,9 +111,6 @@ public class WeatherManager implements Contract.Presenter {
 
     private void notifyResponse() {
         handler.post(new Runnable() {
-            //ParseJsonOverJSONObject parseJsonOverJSONObject = new ParseJsonOverJSONObject();
-
-            //ParseJsonOverGson parseJsonOverGson = new ParseJsonOverGson();
             @Override
             public void run() {
                 view.showProgress(false);
@@ -132,11 +132,12 @@ public class WeatherManager implements Contract.Presenter {
     private void setDateDb(Forecast forecast) {
 
         List<ContentValues> listContantValues = new ArrayList<>();
-        //ContentValues values = new ContentValues();
         ContentValues values;
         for (DayWeather dayWeather : forecast.getListWeatherHours()) {
             for (WeatherHour weatherHour : dayWeather.getDayWeather()) {
                 values = new ContentValues();
+
+                values.put(WeatherTable.CITY_ID, forecast.getCity().getId());
 
                 values.put(WeatherTable.DATE, weatherHour.getDate());
                 values.put(WeatherTable.TEMP, weatherHour.getMain().getTemp());
@@ -152,31 +153,29 @@ public class WeatherManager implements Contract.Presenter {
                 values.put(WeatherTable.SPEED, weatherHour.getWind().getSpeed());
                 values.put(WeatherTable.DEG, weatherHour.getWind().getDeg());
 
-
                 listContantValues.add(values);
             }
         }
-        int rowID = operations.bulkInsert(WeatherTable.class, listContantValues);
-
-        Log.i("TAG", "row inserted, ID = " + rowID);
+        operations.bulkInsert(WeatherTable.class, listContantValues);
     }
 
     @Nullable
-    private Forecast getDataDb() {
+    private Forecast getDataDb(int id) {
 
         Date temp = new Date();
 
+        String[] arg={Long.toString(temp.getTime()), Integer.toString(id)};
         Cursor cursor = operations.query("SELECT * FROM "
                         + DbHelper.getTableName(WeatherTable.class)
-                        + " WHERE " + WeatherTable.DATE + ">=?",
-                Long.toString(temp.getTime()));
-
+                        + " WHERE (" + WeatherTable.DATE + ">=?) AND ("
+                        + WeatherTable.CITY_ID
+                        + "=?)", arg);
         if (cursor.moveToFirst()) {
             Forecast f = new Forecast();
             WeatherHour weatherHour;
-
             DayWeather dayWeather = new DayWeather();
             int i = 0;
+
             do {
                 long date = cursor.getLong(cursor.getColumnIndex(WeatherTable.DATE));
                 if (i == 0) {
@@ -194,22 +193,23 @@ public class WeatherManager implements Contract.Presenter {
                         cursor.getString(cursor.getColumnIndex(WeatherTable.DESCRIPTION)),
                         cursor.getString(cursor.getColumnIndex(WeatherTable.ICON)));
 
-
                 weatherHour = new WeatherHour(date, main, weather, new Clouds(cursor.getDouble(cursor.getColumnIndex(WeatherTable.CLOUDS))),
                         new Wind(cursor.getDouble(cursor.getColumnIndex(WeatherTable.SPEED)),
                                 cursor.getDouble(cursor.getColumnIndex(WeatherTable.DEG))));
-                //TODO FIXME: 10.11.2016
+
                 if ((new Date(date)).getDate() != temp.getDate()) {
                     temp = new Date(date);
+                    dayWeather.add(weatherHour);
                     f.add(dayWeather);
                     dayWeather = new DayWeather();
+                    cursor.moveToNext();
                 }
                 dayWeather.add(weatherHour);
 
             } while (cursor.moveToNext());
-
             return f;
         }
+
         cursor.close();
         return null;
     }

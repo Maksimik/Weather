@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/delete"
+        android:title="@string/delete" />
+    <item
+        android:id="@+id/chooseMyHouse"
+        android:title="@string/this_is_my_house" />
+</menu>

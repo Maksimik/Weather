@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/searchToolbar"
+    style="@style/HeaderBar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/toolbar_height"
+    android:background="@color/colorPrimary"
+    android:textAlignment="center"
+
+    app:popupTheme="@style/ActionBarPopupThemeOverlay"
+    app:theme="@style/ActionBarThemeOverlay"
+    app:titleMarginStart="@dimen/toolbar_height">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_search_white_24dp"/>
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Поиск местоположения"
+        android:textColorHint="@color/colorBold"
+        android:layout_marginRight="@dimen/default_icon_size"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+    </EditText>
+    <ImageButton
+        android:id="@+id/btClear"
+        android:layout_width="@dimen/default_icon_size"
+        android:layout_height="@dimen/default_icon_size"
+        android:layout_gravity="center_horizontal|end"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="onClickClear"
+        android:src="@drawable/ic_clear_white_24dp" />
+
+</android.support.v7.widget.Toolbar>

@@ -1,10 +1,11 @@
-package com.maksimik.weather.activites;
+package com.maksimik.weather.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 
+import com.maksimik.weather.fragments.PageFragment;
 import com.maksimik.weather.model.DayWeather;
 
 import java.text.SimpleDateFormat;
@@ -43,19 +44,24 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public void setDayWeathers(ArrayList<DayWeather> dayWeathers) {
+
         this.dayWeathers = dayWeathers;
+
         mFragmentList.clear();
+
     }
 
     @Override
     public Fragment getItem(int position) {
 
         if (mFragmentList.get(position) == null) {
-            //TODO can check it does not exist
 
-            if (dayWeathers == null) {
+            if (dayWeathers == null || dayWeathers.size() <= position) {
+
                 mFragmentList.put(position, PageFragment.newInstance(null));
+
             } else {
+
                 mFragmentList.put(position, PageFragment.newInstance(dayWeathers.get(position)));
             }
         }

@@ -1,26 +1,19 @@
 package com.maksimik.weather.model;
 
+import java.io.Serializable;
 
-import com.google.gson.annotations.SerializedName;
+public class City implements Serializable {
 
-public class City {
 
-    @SerializedName("id")
     private int mId;
-    @SerializedName("name")
-    private String mName;
-    @SerializedName("country")
-    private String mCountry;
-    @SerializedName("coord")
-    private Coord mCoord;
 
-    /*
-    public City(int id, String name, String country) {
+    private String mName;
+
+    public City(int id, String name) {
         this.mId = id;
         this.mName = name;
-        this.mCountry = country;
-    }*/
 
+    }
 
     public int getId() {
         return mId;
@@ -38,19 +31,4 @@ public class City {
         this.mName = name;
     }
 
-    public String getCountry() {
-        return mCountry;
-    }
-
-    public void setCountry(String country) {
-        this.mCountry = country;
-    }
-
-    public Coord getCoord() {
-        return mCoord;
-    }
-
-    public void setCoord(Coord coord) {
-        this.mCoord = coord;
-    }
 }
