@@ -20,6 +20,8 @@ import com.maksimik.weather.model.Main;
 import com.maksimik.weather.model.Weather;
 import com.maksimik.weather.model.WeatherHour;
 import com.maksimik.weather.model.Wind;
+import com.maksimik.weather.parser.ParseJsonCities;
+import com.maksimik.weather.parser.ParseJsonForecast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +46,8 @@ public class WeatherManager implements Contract.Presenter {
         return INSTANCE;
     }
 
-    private WeatherManager(Context context, @NonNull Contract.View view) {
+    //TODO переделать
+    public WeatherManager(Context context, @NonNull Contract.View view) {
         this.view = view;
         operations = new DbHelper(context, 1);
         handler = new Handler(Looper.getMainLooper());
@@ -60,10 +63,50 @@ public class WeatherManager implements Contract.Presenter {
     }
 
     @Override
+    public void getWeather(double lat, double lon) {
+        view.showProgress(true);
+        loadData(String.valueOf(lat), String.valueOf(lon));
+    }
+
+    @Override
     public void getWeatherFromDb(int id) {
 
         loadDataFromDb(id);
 
+    }
+
+    private void loadData(final String lat, final String lon) {
+
+        new Thread() {
+            @Override
+            public void run() {
+
+                try {
+                    MyApi.GetWeatherGeographicCoordinates call = ApiManager.get().myApi().getWeatherGeographicCoordinates(lat, lon);
+                    MyBean bean = call.execute();
+                    String response = bean.getData();
+                    ParseJsonForecast parseJsonForecast = new ParseJsonForecast();
+                    forecast = parseJsonForecast.parseJsonForecast(response);
+                    MyApi.GetCity callCity = ApiManager.get().myApi().getCity(String.valueOf(forecast.getCity().getId()));
+                    bean = callCity.execute();
+                    response = bean.getData();
+                    ParseJsonCities parseJsonCities = new ParseJsonCities();
+                    String name = parseJsonCities.parseJsonCity(response);
+                    if (name != null) {
+                        forecast.getCity().setName(name);
+                    }
+                    notifyResponse();
+
+                    String sql = WeatherTable.CITY_ID + "=?";
+                    operations.delete(WeatherTable.class, sql, String.valueOf(forecast.getCity().getId()));
+
+                    setDateDb(forecast);
+
+                } catch (IOException e) {
+                    notifyError("Нет подключения к интернету");
+                }
+            }
+        }.start();
     }
 
     private void loadData(final String id) {
@@ -73,18 +116,16 @@ public class WeatherManager implements Contract.Presenter {
             public void run() {
 
                 try {
-                    MyApi.GetContent call = ApiManager.get().myApi().getContent(id);
+                    MyApi.GetWeather call = ApiManager.get().myApi().getWeather(id);
                     MyBean bean = call.execute();
                     String response = bean.getData();
 
-                    ParseJsonOverJSONObject parseJsonOverJSONObject = new ParseJsonOverJSONObject();
-                    forecast = parseJsonOverJSONObject.parseJsonOverJSONObject(response);
+                    ParseJsonForecast parseJsonForecast = new ParseJsonForecast();
+                    forecast = parseJsonForecast.parseJsonForecast(response);
 
                     notifyResponse();
 
-                    //operations.list_item(WeatherTable.class, null);
-
-                    String sql=WeatherTable.CITY_ID+"=?";
+                    String sql = WeatherTable.CITY_ID + "=?";
                     operations.delete(WeatherTable.class, sql, id);
 
                     setDateDb(forecast);
@@ -164,12 +205,12 @@ public class WeatherManager implements Contract.Presenter {
 
         Date temp = new Date();
 
-        String[] arg={Long.toString(temp.getTime()), Integer.toString(id)};
+        String[] arg = {Long.toString(temp.getTime()), Integer.toString(id)};
         Cursor cursor = operations.query("SELECT * FROM "
-                        + DbHelper.getTableName(WeatherTable.class)
-                        + " WHERE (" + WeatherTable.DATE + ">=?) AND ("
-                        + WeatherTable.CITY_ID
-                        + "=?)", arg);
+                + DbHelper.getTableName(WeatherTable.class)
+                + " WHERE (" + WeatherTable.DATE + ">=?) AND ("
+                + WeatherTable.CITY_ID
+                + "=?)", arg);
         if (cursor.moveToFirst()) {
             Forecast f = new Forecast();
             WeatherHour weatherHour;

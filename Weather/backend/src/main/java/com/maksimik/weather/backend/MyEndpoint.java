@@ -6,12 +6,12 @@
 
 package com.maksimik.weather.backend;
 
+import com.example.http.HttpClient;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 
 import java.io.IOException;
-import com.example.http.HttpClientWeather;
 
 import javax.inject.Named;
 
@@ -26,13 +26,41 @@ import javax.inject.Named;
 )
 public class MyEndpoint {
     private static final String ACCESS_KEY = "57eac87bbf864b3de29a4c2274497ced";
-    private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
+    private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/forecast?";
+    private static final String BASE_CITIES_URL = "http://weather.cody.by/api/cities/";
 
-    @ApiMethod(name = "getContent")
-    public MyBean getContent(@Named("id") String id) throws IOException {
+    @ApiMethod(name = "getWeather")
+    public MyBean getWeather(@Named("id") String id) throws IOException {
 
         MyBean response = new MyBean();
-        String data = new HttpClientWeather().get(BASE_URL + "forecast?id=" + id + "&APPID=" + ACCESS_KEY);
+        String data = new HttpClient().get(BASE_URL + "id=" + id + "&APPID=" + ACCESS_KEY);
+        response.setData(data);
+        return response;
+    }
+
+    @ApiMethod(name = "getWeatherGeographicCoordinates")
+    public MyBean getWeatherGeographicCoordinates(@Named("lat") String lat, @Named("lon") String lon) throws IOException {
+
+        MyBean response = new MyBean();
+        String data = new HttpClient().get(BASE_URL + "lat=" + lat + "&lon=" + lon + "&APPID=" + ACCESS_KEY);
+        response.setData(data);
+        return response;
+    }
+
+    @ApiMethod(name = "getCities")
+    public MyBean GetCities(@Named("text") String text) throws IOException {
+
+        MyBean response = new MyBean();
+        String data = new HttpClient().get(BASE_CITIES_URL + "search/" + text);
+        response.setData(data);
+        return response;
+    }
+
+    @ApiMethod(name = "getCity")
+    public MyBean GetCity(@Named("id") String id) throws IOException {
+
+        MyBean response = new MyBean();
+        String data = new HttpClient().get(BASE_CITIES_URL + "id/" + id);
         response.setData(data);
         return response;
     }

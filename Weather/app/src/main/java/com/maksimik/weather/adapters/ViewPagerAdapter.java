@@ -7,6 +7,7 @@ import android.util.SparseArray;
 
 import com.maksimik.weather.fragments.PageFragment;
 import com.maksimik.weather.model.DayWeather;
+import com.maksimik.weather.model.WeatherHour;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

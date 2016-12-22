@@ -2,16 +2,18 @@ package com.maksimik.weather.utils;
 
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import com.maksimik.weather.db.CitesTable;
+import com.maksimik.weather.backend.myApi.MyApi;
+import com.maksimik.weather.backend.myApi.model.MyBean;
 import com.maksimik.weather.db.DbHelper;
 import com.maksimik.weather.db.IDbOperations;
+import com.maksimik.weather.parser.ParseJsonCities;
 
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 
 public class PresenterCites implements ContractCites.Presenter {
@@ -28,18 +30,25 @@ public class PresenterCites implements ContractCites.Presenter {
 
     }
 
-    @Override
-    public void getListCitesFromDb(final String str) {
 
+    @Override
+    public void getListCites(final String str) {
         new Thread() {
             @Override
             public void run() {
 
-                notifyResponse(getCitesListDb(str));
+                try {
+                    MyApi.GetCities call = ApiManager.get().myApi().getCities(URLEncoder.encode(str, "UTF-8"));
+                    MyBean bean = call.execute();
+                    String response = bean.getData();
+                    ParseJsonCities parseJsonCities = new ParseJsonCities();
+                    notifyResponse(parseJsonCities.parseJsonCites(response));
 
+                } catch (IOException e) {
+//                    notifyError("Нет подключения к интернету");
+                }
             }
         }.start();
-
     }
 
     private void notifyResponse(final HashMap<String, Integer> data) {
@@ -51,36 +60,6 @@ public class PresenterCites implements ContractCites.Presenter {
 
             }
         });
-    }
-
-
-    @Nullable
-    private HashMap<String, Integer> getCitesListDb(String str) {
-
-        Cursor cursor = operations.query("SELECT * FROM "
-                + DbHelper.getTableName(CitesTable.class)
-                + " WHERE " + CitesTable.NAME_UPPER
-                + " like ?", str.toUpperCase() + "%");
-
-        if (cursor.moveToFirst()) {
-            //ArrayList<String> list = new ArrayList<>();
-            HashMap<String, Integer> list = new HashMap<>();
-
-            do {
-                String name = cursor.getString(cursor.getColumnIndex(CitesTable.NAME));
-                int id = cursor.getInt(cursor.getColumnIndex(CitesTable.ID));
-
-                //System.out.println("id: " + id + " name: " + name);
-
-                list.put(name, id);
-                //list.add(name);
-            } while (cursor.moveToNext());
-
-            return list;
-        }
-
-        cursor.close();
-        return null;
     }
 
 }

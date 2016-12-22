@@ -16,6 +16,8 @@ public interface Contract {
 
         void getWeather(int id);
 
+        void getWeather(double lat, double lon);
+
         void getWeatherFromDb(int id);
     }
 }

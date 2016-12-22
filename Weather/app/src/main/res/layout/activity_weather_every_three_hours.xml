@@ -9,19 +9,6 @@
 
     <include layout="@layout/toolbar" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageButton
-            android:layout_width="@dimen/default_icon_size"
-            android:layout_height="@dimen/default_icon_size"
-            android:layout_gravity="left"
-            android:background="?attr/selectableItemBackground"
-            android:onClick="onClickSearch"
-            android:src="@drawable/ic_search_white_24dp" />
-    </FrameLayout>
-
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

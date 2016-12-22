@@ -29,7 +29,6 @@ import java.util.Map;
 public class ChangeLocation extends AppCompatActivity implements ContractViewedCites.View, CompoundButton.OnCheckedChangeListener {
 
     private TextView tvCurrentLocation;
-    private TextView tvLocation;
     private PresenterViewedCites presenterViewedCites;
     private SharedPreferences sPref;
     private ListView lvSimple;
@@ -66,55 +65,10 @@ public class ChangeLocation extends AppCompatActivity implements ContractViewedC
         }
 
         tvCurrentLocation = (TextView) findViewById(R.id.tvCurrentLocation);
+        if(sPref.getBoolean(Constants.DETERMINE_CURRENT_LOCATION_KEY, false)){
+            switchCompat.setChecked(true);
+        }
 
-        tvLocation = (TextView) findViewById(R.id.tvLocation);
-  /*      mAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String str = mAutoCompleteTextView.getText().toString();
-                if (mAutoCompleteTextView.getText().toString().length() == 1) {
-                    presenterCites.getListCitesFromDb(str);
-                }
-            }
-        });
-
-
-        mAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-                String name = parent.getItemAtPosition(position).toString();
-                int idCites = list.get(name);
-                //TODO add to if or if(sh.name!=name)
-                if(textView.getText()==""){
-                    sPref.edit().putInt(Constants.HOME_CITY_ID_KEY, idCites).apply();
-                    sPref.edit().putString(Constants.HOME_CITY_NAME_KEY, name).apply();
-                }else {
-                    sPref.edit().putInt(Constants.CITY_ID_KEY, idCites).apply();
-                    sPref.edit().putString(Constants.CITY_NAME_KEY, name).apply();
-                }
-                if (listId == null || !listId.contains(idCites)) {
-
-                    presenterViewedCites.addCites(idCites, name);
-
-                } else {
-                    finish();
-                }
-            }
-        });
-*/
     }
 
     private void initToolbar() {
@@ -145,14 +99,14 @@ public class ChangeLocation extends AppCompatActivity implements ContractViewedC
 
         if (isChecked) {
 
-            MyLocationListener.SetUpLocationListener(this);
-            //TODO // FIXME: 14.11.2016
+            sPref.edit().putBoolean(Constants.DETERMINE_CURRENT_LOCATION_KEY, true).apply();
+
             tvCurrentLocation.setTextColor(getResources().getColor(R.color.item_selected));
 
-            tvLocation.setText(String.format("Coordinates: lat = %1$.4f, lon = %2$.4f",
-                    MyLocationListener.imHere.getLatitude(), MyLocationListener.imHere.getLongitude()));
         } else {
-            tvLocation.setText("");
+
+            sPref.edit().putBoolean(Constants.DETERMINE_CURRENT_LOCATION_KEY, false).apply();
+
             tvCurrentLocation.setTextColor(getResources().getColor(R.color.colorBold));
         }
     }

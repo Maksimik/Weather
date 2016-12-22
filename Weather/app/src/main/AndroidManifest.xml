@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activites.MainActivity"
+        <activity android:name=".activites.HomeActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,6 +26,7 @@
         <activity android:name=".activites.WeatherDetails" />
         <activity android:name=".activites.SearchActivity" />
         <activity android:name=".activites.AboutTheProgram" />
+        <activity android:name=".activites.WeatherEveryThreeHours" />
     </application>
 
 </manifest>

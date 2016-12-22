@@ -21,7 +21,7 @@ public class WeatherDetails extends AppCompatActivity {
 
         initToolbar();
 
-        WeatherHour weatherHour = (WeatherHour) getIntent().getSerializableExtra(Constants.WEATHER_KEY);
+        WeatherHour weatherHour = (WeatherHour) getIntent().getSerializableExtra(Constants.WEATHER_DETAILS_KEY);
 
         TextView tvTemp = (TextView) findViewById(R.id.tvTemp);
         TextView tvCloudValues = (TextView) findViewById(R.id.tvCloudValues);

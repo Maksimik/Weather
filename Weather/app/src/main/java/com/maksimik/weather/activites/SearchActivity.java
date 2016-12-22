@@ -54,7 +54,7 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
         toolbarInitialize();
 
         editText = (EditText) findViewById(R.id.search);
-        presenterCites = new PresenterCites(this, (ContractCites.View) this);
+        presenterCites = new PresenterCites(this, this);
 
         lvSimple = (ListView) findViewById(R.id.lv);
 
@@ -84,7 +84,9 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
                     linearLayout.setVisibility(View.INVISIBLE);
 
                     if (text.length() == 1) {
-                        presenterCites.getListCitesFromDb(text);
+//                        presenterCites.getListCitesFromDb(text);
+                        presenterCites.getListCites(text);
+
                     } else {
                         sAdapter.getFilter().filter(text);
                     }
@@ -185,8 +187,9 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
     @Override
     public void showFinish() {
 
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void onClickClear(View view) {

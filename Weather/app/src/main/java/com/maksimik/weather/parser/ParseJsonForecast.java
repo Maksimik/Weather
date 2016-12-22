@@ -1,4 +1,4 @@
-package com.maksimik.weather.utils;
+package com.maksimik.weather.parser;
 
 import com.maksimik.weather.model.City;
 import com.maksimik.weather.model.Clouds;
@@ -17,9 +17,9 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
-class ParseJsonOverJSONObject {
+public class ParseJsonForecast {
 
-    Forecast parseJsonOverJSONObject(String responce) {
+    public Forecast parseJsonForecast(String responce) {
 
         City mCity;
         Weather weather;

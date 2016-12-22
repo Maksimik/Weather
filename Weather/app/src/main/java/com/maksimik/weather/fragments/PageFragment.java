@@ -94,7 +94,7 @@ public class PageFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
                     Intent intent = new Intent(getActivity().getBaseContext(), WeatherDetails.class);
-                    intent.putExtra(Constants.WEATHER_KEY, dayWeather.getWeatherHour(pos));
+                    intent.putExtra(Constants.WEATHER_DETAILS_KEY, dayWeather.getWeatherHour(pos));
                     startActivity(intent);
                 }
             });

@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:paddingTop="@dimen/paddingTop"
+        android:layout_marginLeft="@dimen/layout_marginLeftAndRight"
         android:layout_marginRight="@dimen/layout_marginLeftAndRight"
-        android:layout_marginLeft="@dimen/layout_marginLeftAndRight">
+        android:paddingTop="@dimen/paddingTop">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -33,9 +33,9 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/paddingTop"
+        android:layout_marginLeft="@dimen/layout_marginLeftAndRight"
         android:layout_marginRight="@dimen/layout_marginLeftAndRight"
-        android:layout_marginLeft="@dimen/layout_marginLeftAndRight">
+        android:paddingTop="@dimen/paddingTop">
 
         <TextView
             android:id="@+id/tvCurrentLocation"
@@ -51,13 +51,6 @@
             android:layout_gravity="end"
             android:checked="false" />
     </FrameLayout>
-
-    <TextView
-        android:id="@+id/tvLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/paddingTop" />
-
 
     <ListView
         android:id="@+id/listCites"

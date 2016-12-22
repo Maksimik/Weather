@@ -2,7 +2,7 @@ package com.maksimik.weather.model;
 
 import java.io.Serializable;
 
-public class WeatherHour implements Serializable{
+public class WeatherHour implements Serializable {
 
     private long mDate;
     private Main mMain;

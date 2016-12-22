@@ -50,4 +50,5 @@ public class Weather implements Serializable {
     public void setId(int id) {
         this.mId = id;
     }
+
 }

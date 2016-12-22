@@ -1,8 +1,9 @@
 package com.maksimik.weather.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Forecast {
+public class Forecast implements Serializable {
 
     private City mCity;
 
@@ -39,4 +40,5 @@ public class Forecast {
     public void setListWeatherHours(ArrayList<DayWeather> listWeatherHours) {
         this.mListWeatherHours=listWeatherHours;
     }
+
 }

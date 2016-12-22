@@ -1,17 +1,15 @@
 package com.maksimik.weather.model;
 
 
-import com.google.gson.annotations.SerializedName;
-
 public class Coord {
-    @SerializedName("lon")
-    private double mLon;
-    @SerializedName("lat")
+
     private double mLat;
 
-    public Coord(double lon, double lan) {
+    private double mLon;
+
+    public Coord(double lat, double lon) {
         this.mLon = lon;
-        this.mLat = lan;
+        this.mLat = lat;
     }
 
 
@@ -23,11 +21,11 @@ public class Coord {
         this.mLon = lon;
     }
 
-    public double getLan() {
+    public double getLat() {
         return mLat;
     }
 
-    public void setLan(double lan) {
-        this.mLat = lan;
+    public void setLat(double lat) {
+        this.mLat = lat;
     }
 }

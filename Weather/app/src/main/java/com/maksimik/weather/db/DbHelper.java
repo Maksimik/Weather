@@ -17,18 +17,11 @@ import com.maksimik.weather.db.annotations.type.dbIntegerPrimaryKeyAutoincrement
 import com.maksimik.weather.db.annotations.type.dbLong;
 import com.maksimik.weather.db.annotations.type.dbString;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import com.maksimik.weather.R;
 
 public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
     //TODO if not exist
@@ -50,15 +43,12 @@ public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
             if (sql != null) {
                 Log.i("TAG", "--- onCreate database ---");
                 db.execSQL(sql);
-                if (clazz == CitesTable.class) {
-                    setCitesTable(db);
-                }
             }
         }
     }
 
     @Nullable
-    public static String getTableCreateQuery(final Class<?> clazz) {
+    private static String getTableCreateQuery(final Class<?> clazz) {
         final Table table = clazz.getAnnotation(Table.class);
 
         if (table != null) {
@@ -196,43 +186,6 @@ public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
             return table.name();
         } else {
             return null;
-        }
-    }
-
-    private void setCitesTable(SQLiteDatabase db) {
-
-        InputStream inputStream = context.getResources().openRawResource(R.raw.city);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-        ContentValues values;
-        String line;
-        String[] words;
-
-        try {
-            while ((line = reader.readLine()) != null) {
-                words = line.split(" ", 2);
-
-                values = new ContentValues();
-
-                values.put(CitesTable.ID, words[0]);
-                values.put(CitesTable.NAME, words[1]);
-                values.put(CitesTable.NAME_UPPER, words[1].toUpperCase());
-
-                db.insert(getTableName(CitesTable.class), null, values);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

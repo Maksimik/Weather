@@ -15,7 +15,7 @@ public interface ContractCites {
 
     interface Presenter {
 
-        void getListCitesFromDb(String str);
+        void getListCites(String str);
     }
 
 }

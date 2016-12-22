@@ -7,16 +7,13 @@ import android.database.Cursor;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import com.maksimik.weather.db.CitesTable;
 import com.maksimik.weather.db.DbHelper;
 import com.maksimik.weather.db.IDbOperations;
 import com.maksimik.weather.db.ViewedCitesTable;
 import com.maksimik.weather.db.WeatherTable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PresenterViewedCites implements ContractViewedCites.Presenter {
 
@@ -50,8 +47,8 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
                     id = new ArrayList<>();
 
                     do {
-                        name.add(cursor.getString(cursor.getColumnIndex(CitesTable.NAME)));
-                        id.add(cursor.getInt(cursor.getColumnIndex(CitesTable.ID)));
+                        name.add(cursor.getString(cursor.getColumnIndex(ViewedCitesTable.NAME)));
+                        id.add(cursor.getInt(cursor.getColumnIndex(ViewedCitesTable.ID)));
 
                     } while (cursor.moveToNext());
                 }
