@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import com.maksimik.weather.R;
 
-public class AboutTheProgram extends AppCompatActivity {
+public class AboutTheProgramActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

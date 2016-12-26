@@ -10,7 +10,7 @@ import com.maksimik.weather.backend.myApi.MyApi;
 import com.maksimik.weather.backend.myApi.model.MyBean;
 import com.maksimik.weather.db.DbHelper;
 import com.maksimik.weather.db.IDbOperations;
-import com.maksimik.weather.parser.ParseJsonCities;
+import com.maksimik.weather.parsers.ParseJsonCities;
 
 import java.io.IOException;
 import java.net.URLEncoder;

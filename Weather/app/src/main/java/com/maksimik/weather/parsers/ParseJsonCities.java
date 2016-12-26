@@ -1,4 +1,4 @@
-package com.maksimik.weather.parser;
+package com.maksimik.weather.parsers;
 
 
 import org.json.JSONArray;

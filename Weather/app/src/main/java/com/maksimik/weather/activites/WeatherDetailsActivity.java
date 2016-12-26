@@ -12,7 +12,7 @@ import com.maksimik.weather.R;
 import com.maksimik.weather.constants.Constants;
 import com.maksimik.weather.model.WeatherHour;
 
-public class WeatherDetails extends AppCompatActivity {
+public class WeatherDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

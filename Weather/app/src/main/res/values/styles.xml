@@ -1,12 +1,13 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">#ffffff</item>
+        <!--<item name="android:textColorPrimary">#ffffff</item>-->
+        <item name="android:textColorHint">@color/colorPrimaryDark</item>
     </style>
 
     <style name="ActionBarThemeOverlay" parent="">
@@ -33,17 +34,35 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="Autocomplete" parent="Widget.AppCompat.Light.AutoCompleteTextView">
-        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
-        <item name="android:paddingTop">@dimen/activity_vertical_margin</item>
+    <!--New-->
+    <style name="PrintText">
         <item name="android:textColor">@color/colorWhite</item>
-        <item name="android:textColorHint">@color/colorBold</item>
-        <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
-        <item name="android:layout_marginLeft">52dp</item>
-        <item name="android:background">#00000000</item>
+        <item name="android:shadowColor">@color/mask</item>
+        <item name="android:shadowRadius">25</item>
     </style>
 
+    <style name="PrintTextDark">
+        <item name="android:textColor">@color/colorDarkGrey</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 
+    <style name="PrintTextGrey">
+        <item name="android:textColor">@color/colorGrey</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
+    <!--new-->
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
 
 </resources>

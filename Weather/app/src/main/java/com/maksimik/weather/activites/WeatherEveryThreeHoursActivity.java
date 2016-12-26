@@ -14,7 +14,7 @@ import com.maksimik.weather.model.Forecast;
 import com.maksimik.weather.utils.Contract;
 import com.maksimik.weather.utils.WeatherManager;
 
-public class WeatherEveryThreeHours extends AppCompatActivity implements Contract.View {
+public class WeatherEveryThreeHoursActivity extends AppCompatActivity implements Contract.View {
 
     private Forecast forecast;
     private ViewPager viewPager;
@@ -42,7 +42,7 @@ public class WeatherEveryThreeHours extends AppCompatActivity implements Contrac
         int id = getIntent().getIntExtra(Constants.CITY_ID_KEY, 0);
 
         if (id != 0) {
-            weatherManager.getWeatherFromDb(id);
+            weatherManager.getWeatherFromDb(id, false);
         }
     }
 

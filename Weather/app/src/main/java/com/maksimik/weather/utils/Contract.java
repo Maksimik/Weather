@@ -18,6 +18,6 @@ public interface Contract {
 
         void getWeather(double lat, double lon);
 
-        void getWeatherFromDb(int id);
+        void getWeatherFromDb(int id, boolean limit);
     }
 }

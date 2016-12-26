@@ -1,4 +1,4 @@
-package com.maksimik.weather.parser;
+package com.maksimik.weather.parsers;
 
 import com.maksimik.weather.model.City;
 import com.maksimik.weather.model.Clouds;
@@ -34,10 +34,8 @@ public class ParseJsonForecast {
 
             JSONObject city = dataJsonObj.getJSONObject("city");
             //TODO name city
-           // mCity = new City(city.getInt("id"), city.getString("name"));
             mCity = new City(city.getInt("id"), "");
-//            mCity.setId(city.getInt("id"));
-//            mCity.setName(city.getString("name"));
+
             forecast.setCity(mCity);
 
             Clouds clouds;
@@ -57,22 +55,21 @@ public class ParseJsonForecast {
 
                 wind = new Wind(listWeather.getJSONObject("wind").getDouble("speed"), listWeather.getJSONObject("wind").getDouble("deg"));
 
-                rain = new Rain();
-                snow = new Snow();
-                               /* if (listWeather.getJSONObject("rain").has("3h")) {
-                    rain.setValue(listWeather.getJSONObject("rain").getDouble("3h"));
-                    System.out.println("rain:"+ listWeather.getJSONObject("rain").getDouble("3h"));
-                } else {
-                    rain.setHas(false);
+                rain = new Rain(0);
+                snow = new Snow(0);
+
+                if (listWeather.has("rain")) {
+                    if (listWeather.getJSONObject("rain").has("3h")) {
+                        rain.setValue(listWeather.getJSONObject("rain").getDouble("3h"));
+                    }
                 }
 
-                if (listWeather.getJSONObject("snow").has("3h")) {
-                    snow.setValue(listWeather.getJSONObject("snow").getDouble("3h"));
-                    System.out.println("snow:"+ listWeather.getJSONObject("snow").getDouble("3h"));
+                if (listWeather.has("snow")) {
+                    if (listWeather.getJSONObject("snow").has("3h")) {
+                        snow.setValue(listWeather.getJSONObject("snow").getDouble("3h"));
+                    }
+                }
 
-                } else {
-                    snow.setHas(false);
-                }*/
                 JSONObject main = listWeather.getJSONObject("main");
                 mainWeather = new Main();
                 mainWeather.setTemp((int) Math.round(main.getDouble("temp") - 273.15));
@@ -92,9 +89,8 @@ public class ParseJsonForecast {
 
                 date = listWeather.getLong("dt") * 1000;
 
-                //weatherHour = new WeatherHour(date, mainWeather, weather, clouds, wind, rain, snow);
-                weatherHour = new WeatherHour(date, mainWeather, weather, clouds, wind);
-
+                weatherHour = new WeatherHour(date, mainWeather, weather, clouds, wind, rain, snow);
+//TODO deprecate
                 if ((new Date(date)).getDate() != temp.getDate()) {
                     temp = new Date(date);
                     dayWeather.add(weatherHour);

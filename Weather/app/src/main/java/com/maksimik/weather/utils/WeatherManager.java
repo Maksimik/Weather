@@ -17,11 +17,13 @@ import com.maksimik.weather.model.Clouds;
 import com.maksimik.weather.model.DayWeather;
 import com.maksimik.weather.model.Forecast;
 import com.maksimik.weather.model.Main;
+import com.maksimik.weather.model.Rain;
+import com.maksimik.weather.model.Snow;
 import com.maksimik.weather.model.Weather;
 import com.maksimik.weather.model.WeatherHour;
 import com.maksimik.weather.model.Wind;
-import com.maksimik.weather.parser.ParseJsonCities;
-import com.maksimik.weather.parser.ParseJsonForecast;
+import com.maksimik.weather.parsers.ParseJsonCities;
+import com.maksimik.weather.parsers.ParseJsonForecast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,9 +71,9 @@ public class WeatherManager implements Contract.Presenter {
     }
 
     @Override
-    public void getWeatherFromDb(int id) {
+    public void getWeatherFromDb(int id, boolean limit) {
 
-        loadDataFromDb(id);
+        loadDataFromDb(id, limit);
 
     }
 
@@ -137,13 +139,13 @@ public class WeatherManager implements Contract.Presenter {
         }.start();
     }
 
-    private void loadDataFromDb(final int id) {
+    private void loadDataFromDb(final int id, final boolean limit) {
 
         new Thread() {
             @Override
             public void run() {
 
-                forecast = getDataDb(id);
+                forecast = getDataDb(id, limit);
                 notifyResponse();
 
             }
@@ -201,27 +203,30 @@ public class WeatherManager implements Contract.Presenter {
     }
 
     @Nullable
-    private Forecast getDataDb(int id) {
+    private Forecast getDataDb(int id, boolean limit) {
 
         Date temp = new Date();
 
         String[] arg = {Long.toString(temp.getTime()), Integer.toString(id)};
-        Cursor cursor = operations.query("SELECT * FROM "
+        String sql = "SELECT * FROM "
                 + DbHelper.getTableName(WeatherTable.class)
                 + " WHERE (" + WeatherTable.DATE + ">=?) AND ("
                 + WeatherTable.CITY_ID
-                + "=?)", arg);
+                + "=?)";
+        if (limit) {
+            sql=sql+" LIMIT 1";
+        }
+        Cursor cursor = operations.query(sql, arg);
+
         if (cursor.moveToFirst()) {
             Forecast f = new Forecast();
             WeatherHour weatherHour;
             DayWeather dayWeather = new DayWeather();
             int i = 0;
-
             do {
                 long date = cursor.getLong(cursor.getColumnIndex(WeatherTable.DATE));
                 if (i == 0) {
                     temp = new Date(date);
-                    i++;
                 }
                 Main main = new Main(cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP)),
                         cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP_MIN)),
@@ -233,21 +238,21 @@ public class WeatherManager implements Contract.Presenter {
                         cursor.getString(cursor.getColumnIndex(WeatherTable.Main)),
                         cursor.getString(cursor.getColumnIndex(WeatherTable.DESCRIPTION)),
                         cursor.getString(cursor.getColumnIndex(WeatherTable.ICON)));
-
+//TODO Rain, Snow
                 weatherHour = new WeatherHour(date, main, weather, new Clouds(cursor.getDouble(cursor.getColumnIndex(WeatherTable.CLOUDS))),
                         new Wind(cursor.getDouble(cursor.getColumnIndex(WeatherTable.SPEED)),
-                                cursor.getDouble(cursor.getColumnIndex(WeatherTable.DEG))));
+                                cursor.getDouble(cursor.getColumnIndex(WeatherTable.DEG))),new Rain(0), new Snow(0));
 
-                if ((new Date(date)).getDate() != temp.getDate()) {
-                    temp = new Date(date);
-                    dayWeather.add(weatherHour);
-                    f.add(dayWeather);
-                    dayWeather = new DayWeather();
-                    cursor.moveToNext();
-                }
                 dayWeather.add(weatherHour);
 
+                if ((new Date(date)).getDate() != temp.getDate() ||((new Date(date)).getDate() == temp.getDate() && i==0)) {
+                    temp = new Date(date);
+                    f.add(dayWeather);
+                    dayWeather = new DayWeather();
+                }
+                i++;
             } while (cursor.moveToNext());
+            f.add(dayWeather);
             return f;
         }
 

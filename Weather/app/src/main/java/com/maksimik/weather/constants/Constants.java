@@ -19,4 +19,5 @@ public class Constants {
 
     public static final String DETERMINE_CURRENT_LOCATION_KEY = "determine_current_location";
 
+    public static final String IMG = "img";
 }

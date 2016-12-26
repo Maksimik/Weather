@@ -6,4 +6,29 @@
     <dimen name="toolbar_height">52dp</dimen>
     <dimen name="layout_marginLeftAndRight">16dp</dimen>
     <dimen name="paddingTop">8dp</dimen>
+
+
+    <dimen name="city_image_size">400dp</dimen>
+
+    <dimen name="item_width">300dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
+    <dimen name="headline_text_size">20sp</dimen>
+    <dimen name="primary_text_size">16sp</dimen>
+    <dimen name="primary_text_top_padding">12dp</dimen>
+    <dimen name="primary_text_margin">16dp</dimen>
+    <dimen name="title_margin">42dp</dimen>
+    <dimen name="subtext_size">14sp</dimen>
+    <dimen name="subtext_size_bottom_padding">10dp</dimen>
+    <dimen name="image_left_margin">16dp</dimen>
+    <dimen name="image_right_margin">16dp</dimen>
+    <dimen name="image_width">46dp</dimen>
+    <dimen name="image_height">46dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+
+    <!--new-->
+
+
+
 </resources>

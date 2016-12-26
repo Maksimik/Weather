@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.maksimik.weather.R;
-import com.maksimik.weather.activites.WeatherDetails;
+import com.maksimik.weather.activites.WeatherDetailsActivity;
 import com.maksimik.weather.constants.Constants;
 import com.maksimik.weather.model.DayWeather;
 
@@ -93,7 +93,7 @@ public class PageFragment extends Fragment {
 
                 @Override
                 public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-                    Intent intent = new Intent(getActivity().getBaseContext(), WeatherDetails.class);
+                    Intent intent = new Intent(getActivity().getBaseContext(), WeatherDetailsActivity.class);
                     intent.putExtra(Constants.WEATHER_DETAILS_KEY, dayWeather.getWeatherHour(pos));
                     startActivity(intent);
                 }

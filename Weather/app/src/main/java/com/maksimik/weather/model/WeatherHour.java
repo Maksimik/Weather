@@ -9,8 +9,8 @@ public class WeatherHour implements Serializable {
     private Weather mWeather;
     private Clouds mClouds;
     private Wind mWind;
-    //private Rain mRain;
-    //private Snow mSnow;
+    private Rain mRain;
+    private Snow mSnow;
 
 
     public long getDate() {
@@ -25,15 +25,14 @@ public class WeatherHour implements Serializable {
         return mMain;
     }
 
-    //public WeatherHour(long date, Main main, Weather weather, Clouds clouds, Wind wind, Rain rain, Snow snow) {
-    public WeatherHour(long date, Main main, Weather weather, Clouds clouds, Wind wind) {
+    public WeatherHour(long date, Main main, Weather weather, Clouds clouds, Wind wind, Rain rain, Snow snow) {
         this.mDate = date;
         this.mMain = main;
         this.mWeather = weather;
         this.mClouds = clouds;
         this.mWind = wind;
-        //this.mRain = rain;
-        //this.mSnow = snow;
+        this.mRain = rain;
+        this.mSnow = snow;
     }
 
     public void setMain(Main main) {

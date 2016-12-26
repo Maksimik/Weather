@@ -18,15 +18,15 @@ import android.widget.TextView;
 
 import com.maksimik.weather.R;
 import com.maksimik.weather.constants.Constants;
+import com.maksimik.weather.model.CityWithWeatherHour;
 import com.maksimik.weather.utils.ContractViewedCites;
-import com.maksimik.weather.utils.MyLocationListener;
 import com.maksimik.weather.utils.PresenterViewedCites;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChangeLocation extends AppCompatActivity implements ContractViewedCites.View, CompoundButton.OnCheckedChangeListener {
+public class NewChangeLocationActivity extends AppCompatActivity implements ContractViewedCites.View, CompoundButton.OnCheckedChangeListener {
 
     private TextView tvCurrentLocation;
     private PresenterViewedCites presenterViewedCites;
@@ -40,7 +40,7 @@ public class ChangeLocation extends AppCompatActivity implements ContractViewedC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.change_location);
+        setContentView(R.layout.new_change_location);
 
         sPref = getSharedPreferences(Constants.PREF, MODE_PRIVATE);
 
@@ -156,6 +156,12 @@ public class ChangeLocation extends AppCompatActivity implements ContractViewedC
         }
 
     }
+
+    @Override
+    public void showListCitesWithWeather(ArrayList<CityWithWeatherHour> list, String image) {
+
+    }
+
 
     @Override
     public void showError(String message) {

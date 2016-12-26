@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="210dp"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/cityImageRecycler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp" />
+
+    </FrameLayout>
+    <!--android:onClick="showPopup"-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/frameLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="false"
+        android:background="@color/mask"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/cityNameRecycler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
+                android:layout_marginLeft="@dimen/primary_text_margin"
+                android:layout_marginRight="@dimen/primary_text_margin"
+                android:layout_marginTop="@dimen/primary_text_top_padding"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/headline_text_size" />
+
+            <TextView
+                android:id="@+id/cityTempRecycler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/primary_text_margin"
+                android:layout_marginRight="@dimen/primary_text_margin"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/subtext_size" />
+
+            <TextView
+                android:id="@+id/cityWindRecycler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/primary_text_margin"
+                android:layout_marginRight="@dimen/primary_text_margin"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/subtext_size" />
+
+
+            <TextView
+                android:id="@+id/cityHumidityRecycler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/primary_text_margin"
+                android:layout_marginRight="@dimen/primary_text_margin"
+                android:paddingBottom="@dimen/subtext_size_bottom_padding"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/subtext_size" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btMenu"
+            android:layout_width="@dimen/default_icon_size"
+            android:layout_height="@dimen/default_icon_size"
+            android:layout_gravity="bottom|right"
+
+
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/ic_more_vert_black_24dp" />
+
+    </FrameLayout>
+
+</RelativeLayout>

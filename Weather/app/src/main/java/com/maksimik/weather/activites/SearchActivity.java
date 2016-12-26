@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.maksimik.weather.R;
 import com.maksimik.weather.constants.Constants;
+import com.maksimik.weather.model.CityWithWeatherHour;
 import com.maksimik.weather.utils.ContractCites;
 import com.maksimik.weather.utils.ContractViewedCites;
 import com.maksimik.weather.utils.PresenterCites;
@@ -41,6 +42,7 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
     private ImageButton btClear;
     private LinearLayout linearLayout;
     private PresenterViewedCites presenterViewedCites;
+    private String text;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,7 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String text = editText.getText().toString();
+                text = editText.getText().toString();
 
                 if (text.length() != 0) {
                     lvSimple.setVisibility(View.VISIBLE);
@@ -84,11 +86,16 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
                     linearLayout.setVisibility(View.INVISIBLE);
 
                     if (text.length() == 1) {
-//                        presenterCites.getListCitesFromDb(text);
                         presenterCites.getListCites(text);
 
                     } else {
-                        sAdapter.getFilter().filter(text);
+
+                        if (sAdapter == null) {
+
+                            presenterCites.getListCites(text.substring(0, 1));
+                        } else {
+                            sAdapter.getFilter().filter(text);
+                        }
                     }
 
                 } else {
@@ -170,12 +177,17 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
 //                    System.out.println("_f___" + name);
 
             });
-
+            sAdapter.getFilter().filter(text);
         }
     }
 
     @Override
     public void showListCites(ArrayList<Integer> id, ArrayList<String> name) {
+
+    }
+
+    @Override
+    public void showListCitesWithWeather(ArrayList<CityWithWeatherHour> list, String image) {
 
     }
 

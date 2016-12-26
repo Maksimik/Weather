@@ -7,13 +7,29 @@ import android.database.Cursor;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.maksimik.weather.db.DbHelper;
 import com.maksimik.weather.db.IDbOperations;
 import com.maksimik.weather.db.ViewedCitesTable;
 import com.maksimik.weather.db.WeatherTable;
+import com.maksimik.weather.model.City;
+import com.maksimik.weather.model.CityWithWeatherHour;
+import com.maksimik.weather.model.Clouds;
+import com.maksimik.weather.model.DayWeather;
+import com.maksimik.weather.model.Forecast;
+import com.maksimik.weather.model.Main;
+import com.maksimik.weather.model.Rain;
+import com.maksimik.weather.model.Snow;
+import com.maksimik.weather.model.Weather;
+import com.maksimik.weather.model.WeatherHour;
+import com.maksimik.weather.model.Wind;
 
 import java.util.ArrayList;
+import java.util.Date;
+
+import static android.R.attr.id;
+import static android.R.attr.name;
 
 public class PresenterViewedCites implements ContractViewedCites.Presenter {
 
@@ -30,6 +46,46 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
     }
 
     @Override
+    public void getListViewedCities(final int idCity) {
+        new Thread() {
+            @Override
+            public void run() {
+
+                Cursor cursor = operations.query("SELECT * FROM "
+                        + DbHelper.getTableName(ViewedCitesTable.class)
+                        + " ORDER BY " + ViewedCitesTable.NAME);
+
+                ArrayList<CityWithWeatherHour> list = null;
+                String image = null;
+                if (cursor.moveToFirst()) {
+
+
+                    list = new ArrayList<>();
+                    City city;
+                    WeatherHour weatherHour;
+                    do {
+                        String name = cursor.getString(cursor.getColumnIndex(ViewedCitesTable.NAME));
+                        Integer id = cursor.getInt(cursor.getColumnIndex(ViewedCitesTable.ID));
+                        city = new City(id, name);
+                        weatherHour = getDataDb(cursor.getInt(cursor.getColumnIndex(ViewedCitesTable.ID)));
+                        if(idCity==id){
+                            image=weatherHour.getWeather().getIcon();
+                        } else {
+                            list.add(new CityWithWeatherHour(city, weatherHour));
+                        }
+
+                    } while (cursor.moveToNext());
+                }
+
+                cursor.close();
+                notifyResponse(list, image);
+
+            }
+        }.start();
+
+    }
+
+    @Override
     public void getListViewedCitesFromDb() {
 
         new Thread() {
@@ -39,11 +95,11 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
                 Cursor cursor = operations.query("SELECT * FROM "
                         + DbHelper.getTableName(ViewedCitesTable.class));
 
-                ArrayList<String> name=null;
-                ArrayList<Integer> id=null;
+                ArrayList<String> name = null;
+                ArrayList<Integer> id = null;
                 if (cursor.moveToFirst()) {
 
-                    name=new ArrayList<>();
+                    name = new ArrayList<>();
                     id = new ArrayList<>();
 
                     do {
@@ -54,11 +110,50 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
                 }
 
                 cursor.close();
-                notifyResponse(id,name);
+                notifyResponse(id, name);
 
             }
         }.start();
 
+    }
+
+    @Nullable
+    private WeatherHour getDataDb(int id) {
+
+        Date temp = new Date();
+
+        String[] arg = {Long.toString(temp.getTime()), Integer.toString(id)};
+        Cursor cursor = operations.query("SELECT * FROM "
+                + DbHelper.getTableName(WeatherTable.class)
+                + " WHERE (" + WeatherTable.DATE + ">=?) AND ("
+                + WeatherTable.CITY_ID
+                + "=?)", arg);
+        if (cursor.moveToFirst()) {
+            WeatherHour weatherHour;
+            int i = 0;
+
+            long date = cursor.getLong(cursor.getColumnIndex(WeatherTable.DATE));
+
+            Main main = new Main(cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP)),
+                    cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP_MIN)),
+                    cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP_MAX)),
+                    cursor.getDouble(cursor.getColumnIndex(WeatherTable.PRESSURE)),
+                    cursor.getDouble(cursor.getColumnIndex(WeatherTable.HUMIDITY)));
+
+            Weather weather = new Weather(cursor.getInt(cursor.getColumnIndex(WeatherTable.WEATHER_ID)),
+                    cursor.getString(cursor.getColumnIndex(WeatherTable.Main)),
+                    cursor.getString(cursor.getColumnIndex(WeatherTable.DESCRIPTION)),
+                    cursor.getString(cursor.getColumnIndex(WeatherTable.ICON)));
+//TODO Rain, Snow
+            weatherHour = new WeatherHour(date, main, weather, new Clouds(cursor.getDouble(cursor.getColumnIndex(WeatherTable.CLOUDS))),
+                    new Wind(cursor.getDouble(cursor.getColumnIndex(WeatherTable.SPEED)),
+                            cursor.getDouble(cursor.getColumnIndex(WeatherTable.DEG))),new Rain(0), new Snow(0));
+
+            return weatherHour;
+        }
+
+        cursor.close();
+        return null;
     }
 
     @Override
@@ -98,10 +193,12 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
             @Override
             public void run() {
 
-                operations.delete(ViewedCitesTable.class, ViewedCitesTable.ID+"=?", String.valueOf(id));
+                operations.delete(ViewedCitesTable.class, ViewedCitesTable.ID + "=?", String.valueOf(id));
 
-                operations.delete(WeatherTable.class, WeatherTable.ID+"=?", String.valueOf(id));
+                operations.delete(WeatherTable.class, WeatherTable.ID + "=?", String.valueOf(id));
 
+
+                notifyResponse();
             }
         }.start();
     }
@@ -126,4 +223,16 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
             }
         });
     }
+
+    private void notifyResponse(final ArrayList<CityWithWeatherHour> list, final String image) {
+        handler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                view.showListCitesWithWeather(list, image);
+
+            }
+        });
+    }
+
 }
