@@ -6,7 +6,7 @@ public class Rain implements Serializable {
 
     private double mValue;
 
-    public Rain(double value) {
+    public Rain(final double value) {
         this.mValue = value;
     }
 
@@ -14,7 +14,7 @@ public class Rain implements Serializable {
         return mValue;
     }
 
-    public void setValue(double value) {
+    public void setValue(final double value) {
         this.mValue = value;
     }
 

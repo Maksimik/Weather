@@ -19,12 +19,12 @@ import java.util.concurrent.Executors;
 
 public class ImageLoader {
 
-    private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
-    private MemoryCache memoryCache = new MemoryCache();
-    private ExecutorService executorService;
-    private Map<String, ArrayList<ImageView>> waitingImages = new HashMap<>();
+    private final Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
+    private final MemoryCache memoryCache = new MemoryCache();
+    private final ExecutorService executorService;
+    private final Map<String, ArrayList<ImageView>> waitingImages = new HashMap<>();
     private final Handler handler = new Handler();
-    private Context context;
+    private final Context context;
 
     public ImageLoader() {
         executorService = Executors.newCachedThreadPool();
@@ -32,12 +32,12 @@ public class ImageLoader {
 
     }
 
-    public void displayImage(String url, ImageView imageView) {
+    public void displayImage(final String url, final ImageView imageView) {
 
         imageView.setScaleType(ImageView.ScaleType.CENTER);
 
         imageViews.put(imageView, url);
-        Bitmap bitmap = memoryCache.getBitmap(url);
+        final Bitmap bitmap = memoryCache.getBitmap(url);
 
         if (bitmap != null) {
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -47,26 +47,26 @@ public class ImageLoader {
         } else {
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-            ArrayList<ImageView> temp = new ArrayList<>();
+            final ArrayList<ImageView> temp = new ArrayList<>();
             temp.add(imageView);
             waitingImages.put(url, temp);
             queueImage(url);
         }
     }
 
-    private void queueImage(String url) {
+    private void queueImage(final String url) {
 
         executorService.submit(new LoadingImage(url));
 
     }
 
-    private Bitmap getBitmap(String url) {
+    private Bitmap getBitmap(final String url) {
         try {
 
             return BitmapFactory.decodeResource(context.getResources(),
                     context.getResources().getIdentifier(Constants.IMG + url, "drawable", context.getPackageName()));
 
-        } catch (Throwable ex) {
+        } catch (final Throwable ex) {
             ex.printStackTrace();
             if (ex instanceof OutOfMemoryError) {
                 memoryCache.clear();
@@ -77,9 +77,9 @@ public class ImageLoader {
 
     private class LoadingImage implements Runnable {
 
-        private String url;
+        private final String url;
 
-        LoadingImage(String url) {
+        LoadingImage(final String url) {
             this.url = url;
         }
 
@@ -87,27 +87,28 @@ public class ImageLoader {
         public void run() {
             try {
 
-                Bitmap bmp = getBitmap(url);
+                final Bitmap bmp = getBitmap(url);
                 if (bmp == null) {
                     return;
                 }
 
                 memoryCache.putBitmap(url, bmp);
 
-                BitmapDisplayer bd = new BitmapDisplayer(bmp, url);
+                final Runnable bd = new BitmapDisplayer(bmp, url);
                 handler.post(bd);
 
-            } catch (Throwable th) {
+            } catch (final Throwable th) {
                 th.printStackTrace();
             }
         }
     }
 
     private class BitmapDisplayer implements Runnable {
-        private Bitmap bitmap;
-        private String url;
 
-        BitmapDisplayer(Bitmap b, String p) {
+        private final Bitmap bitmap;
+        private final String url;
+
+        BitmapDisplayer(final Bitmap b, final String p) {
             bitmap = b;
             url = p;
         }
@@ -116,7 +117,7 @@ public class ImageLoader {
 
             if (bitmap != null) {
 
-                for (ImageView iv : waitingImages.get(url)) {
+                for (final ImageView iv : waitingImages.get(url)) {
 
                     iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     iv.setImageBitmap(bitmap);

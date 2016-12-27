@@ -25,7 +25,6 @@ import com.maksimik.weather.utils.Contract;
 import com.maksimik.weather.utils.MyLocationListener;
 import com.maksimik.weather.utils.WeatherManager;
 
-
 public class HomeActivity extends AppCompatActivity implements Contract.View, SwipeRefreshLayout.OnRefreshListener {
 
     private SharedPreferences sPref;
@@ -48,7 +47,7 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
     private LinearLayout imageWeather;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
@@ -73,7 +72,6 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
         tvHumidity.setText("-");
         tvTemp.setText("-");
 
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
@@ -81,8 +79,8 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
 
         sPref = getSharedPreferences(Constants.PREF, MODE_PRIVATE);
 
-        int id = sPref.getInt(Constants.HOME_CITY_ID_KEY, 0);
-        String name = sPref.getString(Constants.HOME_CITY_NAME_KEY, "");
+        final int id = sPref.getInt(Constants.HOME_CITY_ID_KEY, 0);
+        final String name = sPref.getString(Constants.HOME_CITY_NAME_KEY, "");
 
         sPref.edit().remove(Constants.CITY_ID_KEY).apply();
         sPref.edit().remove(Constants.CITY_NAME_KEY).apply();
@@ -90,7 +88,7 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
         tvCityName = (TextView) findViewById(R.id.cityNameHome);
         btnHome = (ImageView) findViewById(R.id.btnHome);
 
-        weatherManager = new WeatherManager(HomeActivity.this, this);
+        weatherManager = new WeatherManager(this, this);
 
         if (id != 0) {
             cityWithWeatherHour.setCity(new City(id, name));
@@ -105,21 +103,21 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
     }
 
     private void initToolbar() {
-        Toolbar toolBar = (Toolbar) findViewById(R.id.homeToolbar);
+        final Toolbar toolBar = (Toolbar) findViewById(R.id.homeToolbar);
         setSupportActionBar(toolBar);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
 
-        Intent intent;
+        final Intent intent;
         switch (item.getItemId()) {
             case R.id.Settings:
                 intent = new Intent(this, SettingsActivity.class);
@@ -134,21 +132,21 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
         }
     }
 
-    public void onClickSearch(View view) {
+    public void onClickSearch(final View view) {
 
-        Intent intent = new Intent(this, SearchActivity.class);
+        final Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
 
     }
 
-    public void onClickOtherCities(View view) {
-        Intent intent = new Intent(this, ChangeLocationActivity.class);
+    public void onClickOtherCities(final View view) {
+        final Intent intent = new Intent(this, ChangeLocationActivity.class);
         startActivity(intent);
     }
 
-    public void onClickDetails(View view) {
+    public void onClickDetails(final View view) {
 
-        Intent intent = new Intent(this, WeatherEveryThreeHoursActivity.class);
+        final Intent intent = new Intent(this, WeatherEveryThreeHoursActivity.class);
         intent.putExtra(Constants.CITY_ID_KEY, cityWithWeatherHour.getCity().getId());
         startActivity(intent);
     }
@@ -164,7 +162,7 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
     }
 
     @Override
-    public void showData(Forecast forecast) {
+    public void showData(final Forecast forecast) {
         if (forecast != null) {
             if (forecast.getCity() != null && cityWithWeatherHour.getCity().getId() != forecast.getCity().getId()) {
 
@@ -190,13 +188,13 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
                 tvTempMinMax.setText(cityWithWeatherHour.getWeatherHour().getMain().getTempMin() + "/" + cityWithWeatherHour.getWeatherHour().getMain().getTempMax());
                 tvCloudStart.setText(String.valueOf(cityWithWeatherHour.getWeatherHour().getClouds().getAll() + "%"));
 
-                double value = cityWithWeatherHour.getWeatherHour().getRain().getValue();
+                final double value = cityWithWeatherHour.getWeatherHour().getRain().getValue();
                 if (value != 0) {
                     tvRain.setText(String.format(getString(R.string.rain_or_snow_home), value));
                 }
-                value = cityWithWeatherHour.getWeatherHour().getSnow().getValue();
-                if (value != 0) {
-                    tvSnow.setText(String.format(getString(R.string.rain_or_snow_home), value));
+                final double v = cityWithWeatherHour.getWeatherHour().getSnow().getValue();
+                if (v != 0) {
+                    tvSnow.setText(String.format(getString(R.string.rain_or_snow_home), v));
                 }
             }
 
@@ -204,14 +202,14 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
     }
 
     @Override
-    public void showError(String message) {
+    public void showError(final String message) {
         new AlertDialog.Builder(this).setMessage(message).create().show();
 //        WeatherManager.getInstance(HomeActivity.this, this).getWeatherFromDb(forecast.getCity().getId());
         weatherManager.getWeatherFromDb(cityWithWeatherHour.getCity().getId(), true);
     }
 
     @Override
-    public void showProgress(boolean isInProgress) {
+    public void showProgress(final boolean isInProgress) {
 
         mSwipeRefreshLayout.setRefreshing(isInProgress);
     }
@@ -225,12 +223,12 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
             weatherManager.getWeather(coord.getLat(), coord.getLon());
 
         } else {
-            int homeCityId = sPref.getInt(Constants.HOME_CITY_ID_KEY, 0);
-            String homeCityName = sPref.getString(Constants.HOME_CITY_NAME_KEY, "");
+            final int homeCityId = sPref.getInt(Constants.HOME_CITY_ID_KEY, 0);
+            final String homeCityName = sPref.getString(Constants.HOME_CITY_NAME_KEY, "");
             int id = 0;
             String name = "";
-            int cityId = sPref.getInt(Constants.CITY_ID_KEY, 0);
-            String cityName = sPref.getString(Constants.CITY_NAME_KEY, "");
+            final int cityId = sPref.getInt(Constants.CITY_ID_KEY, 0);
+            final String cityName = sPref.getString(Constants.CITY_NAME_KEY, "");
             if (cityId != 0) {
                 id = cityId;
                 name = cityName;

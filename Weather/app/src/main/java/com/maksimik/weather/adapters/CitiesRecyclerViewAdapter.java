@@ -1,6 +1,5 @@
 package com.maksimik.weather.adapters;
 
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.PopupMenu;
@@ -20,19 +19,18 @@ import com.maksimik.weather.model.City;
 import com.maksimik.weather.model.CityWithWeatherHour;
 import com.maksimik.weather.utils.ContextHolder;
 
-import java.util.ArrayList;
-
+import java.util.List;
 
 public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecyclerViewAdapter.ViewHolder> {
 
-    private OnItemClickListener listener;
+    private final OnItemClickListener listener;
 
-    private ArrayList<CityWithWeatherHour> cityWithWeatherHours;
+    private final List<CityWithWeatherHour> cityWithWeatherHours;
 
-    private ImageLoader imageLoader;
-    private Context context;
-    private Context c;
-    private OnMenuItemClickListener lis;
+    private final ImageLoader imageLoader;
+    private final Context context;
+    private final Context c;
+    private final OnMenuItemClickListener lis;
 
     public interface OnItemClickListener {
 
@@ -45,7 +43,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         boolean onMenuItemClick(City city, int pos, MenuItem item);
     }
 
-    public CitiesRecyclerViewAdapter(ArrayList<CityWithWeatherHour> cityWithWeatherHours, Context context, ImageLoader imageLoader, OnItemClickListener listener, OnMenuItemClickListener lis) {
+    public CitiesRecyclerViewAdapter(final List<CityWithWeatherHour> cityWithWeatherHours, final Context context, final ImageLoader imageLoader, final OnItemClickListener listener, final OnMenuItemClickListener lis) {
         this.listener = listener;
         this.cityWithWeatherHours = cityWithWeatherHours;
         this.imageLoader = imageLoader;
@@ -56,8 +54,8 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
     }
 
     @Override
-    public CitiesRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View cityView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
+    public CitiesRecyclerViewAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+        final View cityView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
         return new ViewHolder(cityView);
     }
 
@@ -66,8 +64,9 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         holder.bind(cityWithWeatherHours.get(position));
 
         holder.iv.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
 
                 showPopup(holder.iv, position);
             }
@@ -75,13 +74,14 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
 
     }
 
-    public void showPopup(View v, final int position) {
+    private void showPopup(final View v, final int position) {
 
         final PopupMenu popup = new PopupMenu(c, v);
-        MenuInflater inflater = popup.getMenuInflater();
+        final MenuInflater inflater = popup.getMenuInflater();
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
+            public boolean onMenuItemClick(final MenuItem item) {
                 lis.onMenuItemClick(cityWithWeatherHours.get(position).getCity(), position, item);
 
                 return true;
@@ -96,7 +96,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         return cityWithWeatherHours.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final TextView cityName;
         private final ImageView cityImage;
@@ -105,8 +105,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         private final TextView cityHumidity;
         private final ImageButton iv;
 
-
-        public ViewHolder(View itemView) {
+        ViewHolder(final View itemView) {
             super(itemView);
 
             cityName = (TextView) itemView.findViewById(R.id.cityNameRecycler);
@@ -120,13 +119,13 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         }
 
         @Override
-        public void onClick(View view) {
-            int position = getAdapterPosition();
+        public void onClick(final View view) {
+            final int position = getAdapterPosition();
             listener.onItemClick(cityWithWeatherHours.get(position));
         }
 
         void bind(final CityWithWeatherHour cityWithWeatherHour) {
-            Resources res = context.getResources();
+            final Resources res = context.getResources();
             cityName.setText(cityWithWeatherHour.getCity().getName());
             if (cityWithWeatherHour.getWeatherHour() != null) {
 
@@ -136,7 +135,6 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
                 cityHumidity.setText(String.format(res.getString(R.string.humidity_recicler), cityWithWeatherHour.getWeatherHour().getMain().getHumidity()));
 
                 imageLoader.displayImage(cityWithWeatherHour.getWeatherHour().getWeather().getIcon(), cityImage);
-
 
             } else {
 

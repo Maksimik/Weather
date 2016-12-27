@@ -16,13 +16,13 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
     private SharedPreferences sPref;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         initToolbar();
         sPref = getSharedPreferences(Constants.PREF, MODE_PRIVATE);
 
-        SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id.switch_compat);
+        final SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id.switch_compat);
         switchCompat.setOnCheckedChangeListener(this);
 
         if(sPref.getBoolean(Constants.DETERMINE_CURRENT_LOCATION_KEY, false)){
@@ -31,7 +31,7 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
     }
 
     private void initToolbar() {
-        Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
         setTitle(R.string.settings);
 
@@ -42,7 +42,7 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
@@ -52,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+    public void onCheckedChanged(final CompoundButton compoundButton, final boolean isChecked) {
 
         if (isChecked) {
             sPref.edit().putBoolean(Constants.DETERMINE_CURRENT_LOCATION_KEY, true).apply();

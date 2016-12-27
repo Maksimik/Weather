@@ -1,6 +1,5 @@
 package com.maksimik.weather.activites;
 
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,14 +10,14 @@ import com.maksimik.weather.R;
 public class AboutTheProgramActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about_the_program);
         initToolbar();
     }
 
     private void initToolbar() {
-        Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
         setTitle(R.string.about_the_program);
 
@@ -29,7 +28,7 @@ public class AboutTheProgramActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();

@@ -9,33 +9,39 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
-
 public class MyLocationListener implements LocationListener {
 
+    private static final int MIN_TIME = 5000;
     public static Location imHere;
 
-    public static void SetUpLocationListener(Context context) {
-        LocationManager locationManager = (LocationManager)
+    public static void SetUpLocationListener(final Context context) {
+        final LocationManager locationManager = (LocationManager)
                 context.getSystemService(Context.LOCATION_SERVICE);
 
-        LocationListener locationListener = new MyLocationListener();
+        final LocationListener locationListener = new MyLocationListener();
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, 10, locationListener);
         imHere = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
     }
 
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(final Location location) {
         imHere = location;
     }
+
     @Override
-    public void onProviderDisabled(String provider) {}
+    public void onProviderDisabled(final String provider) {
+    }
+
     @Override
-    public void onProviderEnabled(String provider) {}
+    public void onProviderEnabled(final String provider) {
+    }
+
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {}
+    public void onStatusChanged(final String provider, final int status, final Bundle extras) {
+    }
 }

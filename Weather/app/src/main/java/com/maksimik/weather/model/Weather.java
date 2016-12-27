@@ -1,6 +1,5 @@
 package com.maksimik.weather.model;
 
-
 import java.io.Serializable;
 
 public class Weather implements Serializable {
@@ -10,12 +9,13 @@ public class Weather implements Serializable {
     private String mDescription;
     private String mIcon;
 
-    public Weather(int id,String main,String description, String icon){
-        this.mId=id;
-        this.mMain=main;
-        this.mDescription=description;
-        this.mIcon=icon;
+    public Weather(final int id, final String main, final String description, final String icon) {
+        this.mId = id;
+        this.mMain = main;
+        this.mDescription = description;
+        this.mIcon = icon;
     }
+
     public Weather() {
     }
 
@@ -23,7 +23,7 @@ public class Weather implements Serializable {
         return mDescription;
     }
 
-    public void setDescription(String Description) {
+    public void setDescription(final String Description) {
         this.mDescription = Description;
     }
 
@@ -31,7 +31,7 @@ public class Weather implements Serializable {
         return mMain;
     }
 
-    public void setMain(String main) {
+    public void setMain(final String main) {
         this.mMain = main;
     }
 
@@ -39,7 +39,7 @@ public class Weather implements Serializable {
         return mIcon;
     }
 
-    public void setIcon(String icon) {
+    public void setIcon(final String icon) {
         this.mIcon = icon;
     }
 
@@ -47,7 +47,7 @@ public class Weather implements Serializable {
         return mId;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.mId = id;
     }
 

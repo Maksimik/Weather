@@ -10,7 +10,7 @@ import com.maksimik.weather.backend.myApi.MyApi;
 import java.io.IOException;
 
 
-class ApiManager {
+final class ApiManager {
     private static final String APP_ENGINE_BASE_URL = "https://show-weather-forecast-app.appspot.com/_ah/api/";
 
     private static ApiManager sInstance;
@@ -28,13 +28,13 @@ class ApiManager {
 
     MyApi myApi() {
         if (appEngineApi == null) {
-            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
+            final MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     JacksonFactory.getDefaultInstance(), null)
                     .setApplicationName(BuildConfig.APPLICATION_ID)
                     .setRootUrl(APP_ENGINE_BASE_URL)
                     .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                         @Override
-                        public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
+                        public void initialize(final AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
                             abstractGoogleClientRequest.setDisableGZipContent(true);
                         }
                     });

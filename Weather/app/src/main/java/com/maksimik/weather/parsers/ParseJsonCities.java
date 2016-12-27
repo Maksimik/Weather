@@ -1,6 +1,5 @@
 package com.maksimik.weather.parsers;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,43 +8,42 @@ import java.util.HashMap;
 
 public class ParseJsonCities {
 
-    public HashMap<String, Integer> parseJsonCites(String responce) {
+    public HashMap<String, Integer> parseJsonCites(final String responce) {
 
-        HashMap<String, Integer> listCities;
+        final HashMap<String, Integer> listCities;
 
-        JSONObject dataJsonObj;
-
+        final JSONObject dataJsonObj;
 
         try {
             listCities = new HashMap<>();
             dataJsonObj = new JSONObject(responce);
-            JSONArray list = dataJsonObj.getJSONArray("cities");
+            final JSONArray list = dataJsonObj.getJSONArray("cities");
 
             for (int i = 0; i < list.length(); i++) {
 
-                JSONObject city = list.getJSONObject(i);
+                final JSONObject city = list.getJSONObject(i);
 
                 listCities.put(city.getString("cityName"), city.getInt("cityId"));
 
             }
             return listCities;
 
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public String parseJsonCity(String responce) {
+    public String parseJsonCity(final String responce) {
 
-        JSONObject dataJsonObj;
+        final JSONObject dataJsonObj;
 
         try {
             dataJsonObj = new JSONObject(responce);
 
             return dataJsonObj.getJSONObject("city").getString("cityName");
 
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             e.printStackTrace();
             return null;
         }

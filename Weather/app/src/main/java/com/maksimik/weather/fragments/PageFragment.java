@@ -16,12 +16,12 @@ import com.maksimik.weather.activites.WeatherDetailsActivity;
 import com.maksimik.weather.constants.Constants;
 import com.maksimik.weather.model.DayWeather;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
 
 public class PageFragment extends Fragment {
 
@@ -31,23 +31,23 @@ public class PageFragment extends Fragment {
     private View view;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         dayWeather = (DayWeather) getArguments().getSerializable(ARGUMENT_DAY_WEATHER);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment, container, false);
         fillingViewPage(dayWeather);
         return view;
     }
 
-    public static Fragment newInstance(DayWeather dayWeather) {
-        Fragment fragment = new PageFragment();
-        Bundle bundle = new Bundle();
+    public static Fragment newInstance(final Serializable dayWeather) {
+        final Fragment fragment = new PageFragment();
+        final Bundle bundle = new Bundle();
         bundle.putSerializable(ARGUMENT_DAY_WEATHER, dayWeather);
         fragment.setArguments(bundle);
         return fragment;
@@ -62,10 +62,10 @@ public class PageFragment extends Fragment {
             final String ATTRIBUTE_ICON = "icon";
             final String ATTRIBUTE_DESCRIPTION = "description";
             Map<String, Object> m;
-            ListView lvSimple;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            final ListView lvSimple;
+            final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
-            ArrayList<Map<String, Object>> data = new ArrayList<>();
+            final ArrayList<Map<String, Object>> data = new ArrayList<>();
 
             for (int i = 0; i < dayWeather.size(); i++) {
                 m = new HashMap<>();
@@ -82,10 +82,9 @@ public class PageFragment extends Fragment {
                 data.add(m);
             }
 
-
-            String[] from = {ATTRIBUTE_TIME, ATTRIBUTE_ICON, ATTRIBUTE_DESCRIPTION, ATTRIBUTE_TEMP};
-            int[] to = {R.id.textViewTime, R.id.imageView, R.id.textViewDescription, R.id.textViewTemp};
-            SimpleAdapter sAdapter = new SimpleAdapter(getActivity().getBaseContext(), data, R.layout.list_item_weather, from, to);
+            final String[] from = {ATTRIBUTE_TIME, ATTRIBUTE_ICON, ATTRIBUTE_DESCRIPTION, ATTRIBUTE_TEMP};
+            final int[] to = {R.id.textViewTime, R.id.imageView, R.id.textViewDescription, R.id.textViewTemp};
+            final SimpleAdapter sAdapter = new SimpleAdapter(getActivity().getBaseContext(), data, R.layout.list_item_weather, from, to);
             sAdapter.setViewBinder(new ViewBinder());
             lvSimple = (ListView) view.findViewById(R.id.list);
 
@@ -93,8 +92,8 @@ public class PageFragment extends Fragment {
             lvSimple.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
-                public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-                    Intent intent = new Intent(getActivity().getBaseContext(), WeatherDetailsActivity.class);
+                public void onItemClick(final AdapterView<?> arg0, final View arg1, final int pos, final long id) {
+                    final Intent intent = new Intent(getActivity().getBaseContext(), WeatherDetailsActivity.class);
                     intent.putExtra(Constants.WEATHER_DETAILS_KEY, dayWeather.getWeatherHour(pos));
                     startActivity(intent);
                 }
@@ -106,11 +105,11 @@ public class PageFragment extends Fragment {
     private class ViewBinder implements SimpleAdapter.ViewBinder {
 
         @Override
-        public boolean setViewValue(View view, Object data, String textRepresentation) {
+        public boolean setViewValue(final View view, final Object data, final String textRepresentation) {
 
             if (view.getId() == R.id.imageView) {
-                ImageView iv = (ImageView) view;
-                iv.setImageResource(getResources().getIdentifier(Constants.IMAGE + data.toString(), "drawable", getActivity().getPackageName()));
+                final ImageView iv = (ImageView) view;
+                iv.setImageResource(getResources().getIdentifier(Constants.IMAGE + data, "drawable", getActivity().getPackageName()));
                 return true;
             }
             return false;

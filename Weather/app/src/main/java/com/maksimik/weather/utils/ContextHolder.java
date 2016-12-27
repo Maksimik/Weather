@@ -2,7 +2,7 @@ package com.maksimik.weather.utils;
 
 import android.content.Context;
 
-public class ContextHolder {
+public final class ContextHolder {
 
     private static ContextHolder instance;
 

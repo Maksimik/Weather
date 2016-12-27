@@ -28,15 +28,13 @@ public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
     private static final String SQL_TABLE_CREATE_TEMPLATE = "CREATE TABLE %s (%s);";
     private static final String SQL_TABLE_CREATE_FIELD_TEMPLATE = "%s %s";
     private static final String SQL_NAME = "weatherForecast.db";
-    private Context context;
 
-    public DbHelper(Context context, int version) {
+    public DbHelper(final Context context, final int version) {
         super(context, SQL_NAME, null, version);
-        this.context = context;
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(final SQLiteDatabase db) {
 
         for (final Class<?> clazz : Contract.MODELS) {
             final String sql = getTableCreateQuery(clazz);
@@ -55,12 +53,12 @@ public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
             final Field[] fields = clazz.getFields();
             final StringBuilder builder = new StringBuilder();
             for (int i = 0; i < fields.length - 1; i++) {
-                Field field = fields[i];
+                final Field field = fields[i];
                 String value = null, type = null;
                 try {
                     value = (String) field.get(null);
 
-                } catch (IllegalAccessException e) {
+                } catch (final IllegalAccessException e) {
                     e.printStackTrace();
                 }
                 final Annotation[] annotations = field.getAnnotations();
@@ -94,7 +92,7 @@ public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
 
     }
 

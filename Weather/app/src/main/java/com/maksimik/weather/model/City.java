@@ -4,12 +4,11 @@ import java.io.Serializable;
 
 public class City implements Serializable {
 
-
     private int mId;
 
     private String mName;
 
-    public City(int id, String name) {
+    public City(final int id, final String name) {
         this.mId = id;
         this.mName = name;
 
@@ -19,7 +18,7 @@ public class City implements Serializable {
         return mId;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.mId = id;
     }
 
@@ -27,7 +26,7 @@ public class City implements Serializable {
         return mName;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.mName = name;
     }
 

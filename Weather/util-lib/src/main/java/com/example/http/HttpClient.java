@@ -10,16 +10,16 @@ import java.net.URL;
 
 public class HttpClient {
 
-    public String get(String url) {
+    public String get(final String url) {
         String response = null;
         try {
-            URL reqUrl = new URL(url);
-            HttpURLConnection connection = ((HttpURLConnection) reqUrl.openConnection());
+            final URL reqUrl = new URL(url);
+            final HttpURLConnection connection = ((HttpURLConnection) reqUrl.openConnection());
             connection.setRequestMethod("GET");
-            InputStream inputStream = connection.getInputStream();
+            final InputStream inputStream = connection.getInputStream();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
-            StringBuilder stringBuilder = new StringBuilder();
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
+            final StringBuilder stringBuilder = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 stringBuilder.append(line);
@@ -30,7 +30,7 @@ public class HttpClient {
             reader.close();
             connection.disconnect();
 
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
         return response;

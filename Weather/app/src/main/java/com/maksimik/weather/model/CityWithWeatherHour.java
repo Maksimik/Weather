@@ -5,7 +5,7 @@ public class CityWithWeatherHour {
     private City city;
     private WeatherHour weatherHour;
 
-    public CityWithWeatherHour(City city, WeatherHour weatherHour) {
+    public CityWithWeatherHour(final City city, final WeatherHour weatherHour) {
         this.city = city;
         this.weatherHour = weatherHour;
     }
@@ -14,12 +14,11 @@ public class CityWithWeatherHour {
 
     }
 
-
     public WeatherHour getWeatherHour() {
         return weatherHour;
     }
 
-    public void setWeatherHour(WeatherHour weatherHour) {
+    public void setWeatherHour(final WeatherHour weatherHour) {
         this.weatherHour = weatherHour;
     }
 
@@ -27,7 +26,7 @@ public class CityWithWeatherHour {
         return city;
     }
 
-    public void setCity(City city) {
+    public void setCity(final City city) {
         this.city = city;
     }
 }

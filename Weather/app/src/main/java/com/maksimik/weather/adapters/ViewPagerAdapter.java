@@ -20,18 +20,18 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
-    private ArrayList<DayWeather> dayWeathers;
+    private List<DayWeather> dayWeathers;
 
     private final SparseArray<Fragment> mFragmentList = new SparseArray<>();
 
-    public ViewPagerAdapter(FragmentManager manager, ArrayList<DayWeather> dayWeathers) {
+    public ViewPagerAdapter(final FragmentManager manager, final List<DayWeather> dayWeathers) {
         super(manager);
 
-        SimpleDateFormat format1 = new SimpleDateFormat("EEE MMM dd", Locale.getDefault());
-        SimpleDateFormat format2 = new SimpleDateFormat("EEE dd", Locale.getDefault());
+        final SimpleDateFormat format1 = new SimpleDateFormat("EEE MMM dd", Locale.getDefault());
+        final SimpleDateFormat format2 = new SimpleDateFormat("EEE dd", Locale.getDefault());
         //TODO make cycle
         mFragmentTitleList.add("Сегодня \n" + format1.format(new Date()));
-        Calendar c = Calendar.getInstance();
+        final Calendar c = Calendar.getInstance();
         c.add(Calendar.DAY_OF_MONTH, 1);
         mFragmentTitleList.add(format2.format(new Date(c.getTimeInMillis())));
         c.add(Calendar.DAY_OF_MONTH, 1);
@@ -44,7 +44,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         this.dayWeathers = dayWeathers;
     }
 
-    public void setDayWeathers(ArrayList<DayWeather> dayWeathers) {
+    public void setDayWeathers(final List<DayWeather> dayWeathers) {
 
         this.dayWeathers = dayWeathers;
 
@@ -53,7 +53,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public Fragment getItem(final int position) {
 
         if (mFragmentList.get(position) == null) {
 
@@ -77,7 +77,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
+    public CharSequence getPageTitle(final int position) {
 
         return mFragmentTitleList.get(position);
 

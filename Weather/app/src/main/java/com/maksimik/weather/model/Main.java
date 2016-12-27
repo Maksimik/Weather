@@ -1,23 +1,24 @@
 package com.maksimik.weather.model;
 
-
 import java.io.Serializable;
 
 public class Main implements Serializable {
+
     private double mTemp;
     private double mTempMin;
     private double mTempMax;
     private double mPressure;
     private double mHumidity;
 
-    public Main(double temp,double tempMin, double tempMax,double pressure, double humidity){
-        this.mTemp=temp;
-        this.mTempMin=tempMin;
-        this.mTempMax=tempMax;
-        this.mPressure=pressure;
-        this.mHumidity=humidity;
+    public Main(final double temp, final double tempMin, final double tempMax, final double pressure, final double humidity) {
+        this.mTemp = temp;
+        this.mTempMin = tempMin;
+        this.mTempMax = tempMax;
+        this.mPressure = pressure;
+        this.mHumidity = humidity;
     }
-    public Main(){
+
+    public Main() {
 
     }
 
@@ -25,7 +26,7 @@ public class Main implements Serializable {
         return mTemp;
     }
 
-    public void setTemp(int mTemp) {
+    public void setTemp(final int mTemp) {
         this.mTemp = mTemp;
     }
 
@@ -33,7 +34,7 @@ public class Main implements Serializable {
         return mTempMin;
     }
 
-    public void setTempMin(double mTempMin) {
+    public void setTempMin(final double mTempMin) {
         this.mTempMin = mTempMin;
     }
 
@@ -41,7 +42,7 @@ public class Main implements Serializable {
         return mTempMax;
     }
 
-    public void setTempMax(double mTempaMax) {
+    public void setTempMax(final double mTempaMax) {
         this.mTempMax = mTempaMax;
     }
 
@@ -49,7 +50,7 @@ public class Main implements Serializable {
         return mPressure;
     }
 
-    public void setPressure(double mPressure) {
+    public void setPressure(final double mPressure) {
         this.mPressure = mPressure;
     }
 
@@ -57,7 +58,7 @@ public class Main implements Serializable {
         return mHumidity;
     }
 
-    public void setHumidity(double mHumidity) {
+    public void setHumidity(final double mHumidity) {
         this.mHumidity = mHumidity;
     }
 

@@ -1,32 +1,31 @@
 package com.maksimik.weather.model;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DayWeather implements Serializable {
 
-    private ArrayList<WeatherHour> mDayWeather;
+    private final List<WeatherHour> mDayWeather;
 
     public DayWeather() {
         this.mDayWeather = new ArrayList<>();
     }
 
-    public void add(WeatherHour weatherHour){
+    public void add(final WeatherHour weatherHour) {
         mDayWeather.add(weatherHour);
     }
 
-    public WeatherHour getWeatherHour(int i){
+    public WeatherHour getWeatherHour(final int i) {
         return mDayWeather.get(i);
     }
 
-    public ArrayList<WeatherHour> getDayWeather(){
+    public Iterable<WeatherHour> getDayWeather() {
         return mDayWeather;
     }
 
-    public int size(){
+    public int size() {
         return mDayWeather.size();
     }
-
 
 }

@@ -17,15 +17,15 @@ public class Forecast implements Serializable {
         return mCity;
     }
 
-    public void setCity(City city) {
+    public void setCity(final City city) {
         this.mCity = city;
     }
 
-    public void add(DayWeather dayWeather) {
+    public void add(final DayWeather dayWeather) {
         mListWeatherHours.add(dayWeather);
     }
 
-    public DayWeather getDayWeather(int i) {
+    public DayWeather getDayWeather(final int i) {
         return mListWeatherHours.get(i);
     }
 
@@ -33,12 +33,8 @@ public class Forecast implements Serializable {
         return mListWeatherHours;
     }
 
-    public int size(){
-        return mListWeatherHours.size();
-    }
-
-    public void setListWeatherHours(ArrayList<DayWeather> listWeatherHours) {
-        this.mListWeatherHours=listWeatherHours;
+    public void setListWeatherHours(final ArrayList<DayWeather> listWeatherHours) {
+        this.mListWeatherHours = listWeatherHours;
     }
 
 }

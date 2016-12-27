@@ -1,6 +1,5 @@
 package com.maksimik.weather.activites;
 
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,7 +33,7 @@ public class ChangeLocationActivity extends AppCompatActivity implements Contrac
     private RecyclerView.Adapter mAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_location);
 
@@ -44,9 +43,9 @@ public class ChangeLocationActivity extends AppCompatActivity implements Contrac
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         sPref = getSharedPreferences(Constants.PREF, MODE_PRIVATE);
-        String name = sPref.getString(Constants.HOME_CITY_NAME_KEY, "");
-        int id = sPref.getInt(Constants.HOME_CITY_ID_KEY, 0);
-        TextView cityName = (TextView) findViewById(R.id.cityName);
+        final String name = sPref.getString(Constants.HOME_CITY_NAME_KEY, "");
+        final int id = sPref.getInt(Constants.HOME_CITY_ID_KEY, 0);
+        final TextView cityName = (TextView) findViewById(R.id.cityName);
         cityImage = (ImageView) findViewById(R.id.cityImage);
 
         if (id != 0) {
@@ -55,7 +54,7 @@ public class ChangeLocationActivity extends AppCompatActivity implements Contrac
 
         }
 
-        presenterViewedCites = new PresenterViewedCites(ChangeLocationActivity.this, this);
+        presenterViewedCites = new PresenterViewedCites(this, this);
         presenterViewedCites.getListViewedCities(id);
 
         imageLoader = new ImageLoader();
@@ -65,7 +64,7 @@ public class ChangeLocationActivity extends AppCompatActivity implements Contrac
     }
 
     private void initToolbar() {
-        Toolbar toolBar = (Toolbar) findViewById(R.id.change_locattion_toolbar);
+        final Toolbar toolBar = (Toolbar) findViewById(R.id.change_locattion_toolbar);
         setSupportActionBar(toolBar);
 
         setTitle("");
@@ -77,13 +76,13 @@ public class ChangeLocationActivity extends AppCompatActivity implements Contrac
         }
     }
 
-    public void onClickAddCites(View view) {
-        Intent intent = new Intent(this, SearchActivity.class);
+    public void onClickAddCites(final View view) {
+        final Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
@@ -93,23 +92,23 @@ public class ChangeLocationActivity extends AppCompatActivity implements Contrac
     }
 
     @Override
-    public void showListCitesWithWeather(final ArrayList<CityWithWeatherHour> list, String image) {
+    public void showListCitesWithWeather(final ArrayList<CityWithWeatherHour> list, final String image) {
 
         imageLoader.displayImage(image, cityImage);
 
         if (list != null) {
             mAdapter = new CitiesRecyclerViewAdapter(list, this, imageLoader, new CitiesRecyclerViewAdapter.OnItemClickListener() {
+
                 @Override
-                public void onItemClick(CityWithWeatherHour cityWithWeatherHour) {
+                public void onItemClick(final CityWithWeatherHour cityWithWeatherHour) {
                     sPref.edit().putInt(Constants.CITY_ID_KEY, cityWithWeatherHour.getCity().getId()).apply();
                     sPref.edit().putString(Constants.CITY_NAME_KEY, cityWithWeatherHour.getCity().getName()).apply();
                     finish();
                 }
             }, new CitiesRecyclerViewAdapter.OnMenuItemClickListener() {
 
-
                 @Override
-                public boolean onMenuItemClick(City city, int pos, MenuItem item) {
+                public boolean onMenuItemClick(final City city, final int pos, final MenuItem item) {
 
                     switch (item.getItemId()) {
                         case R.id.delete:
@@ -133,7 +132,7 @@ public class ChangeLocationActivity extends AppCompatActivity implements Contrac
     }
 
     @Override
-    public void showError(String message) {
+    public void showError(final String message) {
 
     }
 
@@ -142,7 +141,7 @@ public class ChangeLocationActivity extends AppCompatActivity implements Contrac
         mAdapter.notifyDataSetChanged();
     }
 
-    public void onClickSelectionCity(View view) {
+    public void onClickSelectionCity(final View view) {
         sPref.edit().remove(Constants.CITY_ID_KEY).apply();
         sPref.edit().remove(Constants.CITY_NAME_KEY).apply();
         finish();

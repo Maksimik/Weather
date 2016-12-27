@@ -22,7 +22,7 @@ public class WeatherEveryThreeHoursActivity extends AppCompatActivity implements
     private TabLayout tabLayout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_weather_every_three_hours);
@@ -37,9 +37,9 @@ public class WeatherEveryThreeHoursActivity extends AppCompatActivity implements
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        WeatherManager weatherManager = new WeatherManager(WeatherEveryThreeHoursActivity.this, this);
+        final Contract.Presenter weatherManager = new WeatherManager(this, this);
         forecast = new Forecast();
-        int id = getIntent().getIntExtra(Constants.CITY_ID_KEY, 0);
+        final int id = getIntent().getIntExtra(Constants.CITY_ID_KEY, 0);
 
         if (id != 0) {
             weatherManager.getWeatherFromDb(id, false);
@@ -47,7 +47,7 @@ public class WeatherEveryThreeHoursActivity extends AppCompatActivity implements
     }
 
     private void initToolbar() {
-        Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
         setTitle("Подробно");
 
@@ -58,7 +58,7 @@ public class WeatherEveryThreeHoursActivity extends AppCompatActivity implements
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
@@ -68,7 +68,7 @@ public class WeatherEveryThreeHoursActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void showData(Forecast forecast) {
+    public void showData(final Forecast forecast) {
         if (forecast != null) {
 
             this.forecast.setListWeatherHours(forecast.getListWeatherHours());
@@ -80,12 +80,12 @@ public class WeatherEveryThreeHoursActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void showError(String message) {
+    public void showError(final String message) {
 
     }
 
     @Override
-    public void showProgress(boolean isInProgress) {
+    public void showProgress(final boolean isInProgress) {
 
     }
 }

@@ -6,7 +6,7 @@ public class Snow implements Serializable {
 
     private double mValue;
 
-    public Snow(double value) {
+    public Snow(final double value) {
         this.mValue = value;
     }
 
@@ -14,7 +14,7 @@ public class Snow implements Serializable {
         return mValue;
     }
 
-    public void setValue(double value) {
+    public void setValue(final double value) {
         this.mValue = value;
     }
 

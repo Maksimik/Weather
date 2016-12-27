@@ -1,14 +1,10 @@
 package com.maksimik.weather;
 
-
 import android.app.Application;
 
-import com.maksimik.weather.loader.ImageLoader;
 import com.maksimik.weather.utils.ContextHolder;
 
 public class App extends Application {
-
-
 
     @Override
     public void onCreate() {

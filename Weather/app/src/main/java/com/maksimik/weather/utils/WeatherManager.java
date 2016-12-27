@@ -30,18 +30,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 public class WeatherManager implements Contract.Presenter {
 
-    private Contract.View view;
-    private Handler handler;
+    private final Contract.View view;
+    private final Handler handler;
     private Forecast forecast;
 
-
-    private IDbOperations operations;
+    private final IDbOperations operations;
     private static Contract.Presenter INSTANCE;
 
-    public static Contract.Presenter getInstance(Context context, Contract.View view) {
+    public static Contract.Presenter getInstance(final Context context, final Contract.View view) {
         if (INSTANCE == null) {
             INSTANCE = new WeatherManager(context, view);
         }
@@ -49,7 +47,7 @@ public class WeatherManager implements Contract.Presenter {
     }
 
     //TODO переделать
-    public WeatherManager(Context context, @NonNull Contract.View view) {
+    public WeatherManager(final Context context, @NonNull final Contract.View view) {
         this.view = view;
         operations = new DbHelper(context, 1);
         handler = new Handler(Looper.getMainLooper());
@@ -57,7 +55,7 @@ public class WeatherManager implements Contract.Presenter {
     }
 
     @Override
-    public void getWeather(int id) {
+    public void getWeather(final int id) {
 
         view.showProgress(true);
         loadData(String.valueOf(id));
@@ -65,13 +63,13 @@ public class WeatherManager implements Contract.Presenter {
     }
 
     @Override
-    public void getWeather(double lat, double lon) {
+    public void getWeather(final double lat, final double lon) {
         view.showProgress(true);
         loadData(String.valueOf(lat), String.valueOf(lon));
     }
 
     @Override
-    public void getWeatherFromDb(int id, boolean limit) {
+    public void getWeatherFromDb(final int id, final boolean limit) {
 
         loadDataFromDb(id, limit);
 
@@ -80,31 +78,33 @@ public class WeatherManager implements Contract.Presenter {
     private void loadData(final String lat, final String lon) {
 
         new Thread() {
+
             @Override
             public void run() {
 
                 try {
-                    MyApi.GetWeatherGeographicCoordinates call = ApiManager.get().myApi().getWeatherGeographicCoordinates(lat, lon);
-                    MyBean bean = call.execute();
-                    String response = bean.getData();
-                    ParseJsonForecast parseJsonForecast = new ParseJsonForecast();
+                    final MyApi.GetWeatherGeographicCoordinates call = ApiManager.get().myApi().getWeatherGeographicCoordinates(lat, lon);
+                    final MyBean bean = call.execute();
+                    final String response = bean.getData();
+                    final ParseJsonForecast parseJsonForecast = new ParseJsonForecast();
                     forecast = parseJsonForecast.parseJsonForecast(response);
-                    MyApi.GetCity callCity = ApiManager.get().myApi().getCity(String.valueOf(forecast.getCity().getId()));
-                    bean = callCity.execute();
-                    response = bean.getData();
-                    ParseJsonCities parseJsonCities = new ParseJsonCities();
-                    String name = parseJsonCities.parseJsonCity(response);
+
+                    final MyApi.GetCity callCity = ApiManager.get().myApi().getCity(String.valueOf(forecast.getCity().getId()));
+                    final MyBean myBeen = callCity.execute();
+                    final String myResponse = myBeen.getData();
+                    final ParseJsonCities parseJsonCities = new ParseJsonCities();
+                    final String name = parseJsonCities.parseJsonCity(myResponse);
                     if (name != null) {
                         forecast.getCity().setName(name);
                     }
                     notifyResponse();
 
-                    String sql = WeatherTable.CITY_ID + "=?";
+                    final String sql = WeatherTable.CITY_ID + "=?";
                     operations.delete(WeatherTable.class, sql, String.valueOf(forecast.getCity().getId()));
 
                     setDateDb(forecast);
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     notifyError("Нет подключения к интернету");
                 }
             }
@@ -114,25 +114,26 @@ public class WeatherManager implements Contract.Presenter {
     private void loadData(final String id) {
 
         new Thread() {
+
             @Override
             public void run() {
 
                 try {
-                    MyApi.GetWeather call = ApiManager.get().myApi().getWeather(id);
-                    MyBean bean = call.execute();
-                    String response = bean.getData();
+                    final MyApi.GetWeather call = ApiManager.get().myApi().getWeather(id);
+                    final MyBean bean = call.execute();
+                    final String response = bean.getData();
 
-                    ParseJsonForecast parseJsonForecast = new ParseJsonForecast();
+                    final ParseJsonForecast parseJsonForecast = new ParseJsonForecast();
                     forecast = parseJsonForecast.parseJsonForecast(response);
 
                     notifyResponse();
 
-                    String sql = WeatherTable.CITY_ID + "=?";
+                    final String sql = WeatherTable.CITY_ID + "=?";
                     operations.delete(WeatherTable.class, sql, id);
 
                     setDateDb(forecast);
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     notifyError("Нет подключения к интернету");
                 }
             }
@@ -142,6 +143,7 @@ public class WeatherManager implements Contract.Presenter {
     private void loadDataFromDb(final int id, final boolean limit) {
 
         new Thread() {
+
             @Override
             public void run() {
 
@@ -154,6 +156,7 @@ public class WeatherManager implements Contract.Presenter {
 
     private void notifyResponse() {
         handler.post(new Runnable() {
+
             @Override
             public void run() {
                 view.showProgress(false);
@@ -164,6 +167,7 @@ public class WeatherManager implements Contract.Presenter {
 
     private void notifyError(final String message) {
         handler.post(new Runnable() {
+
             @Override
             public void run() {
                 view.showProgress(false);
@@ -172,12 +176,12 @@ public class WeatherManager implements Contract.Presenter {
         });
     }
 
-    private void setDateDb(Forecast forecast) {
+    private void setDateDb(final Forecast forecast) {
 
-        List<ContentValues> listContantValues = new ArrayList<>();
+        final List<ContentValues> listContantValues = new ArrayList<>();
         ContentValues values;
-        for (DayWeather dayWeather : forecast.getListWeatherHours()) {
-            for (WeatherHour weatherHour : dayWeather.getDayWeather()) {
+        for (final DayWeather dayWeather : forecast.getListWeatherHours()) {
+            for (final WeatherHour weatherHour : dayWeather.getDayWeather()) {
                 values = new ContentValues();
 
                 values.put(WeatherTable.CITY_ID, forecast.getCity().getId());
@@ -205,11 +209,11 @@ public class WeatherManager implements Contract.Presenter {
     }
 
     @Nullable
-    private Forecast getDataDb(int id, boolean limit) {
+    private Forecast getDataDb(final int id, final boolean limit) {
 
         Date temp = new Date();
 
-        String[] arg = {Long.toString(temp.getTime()), Integer.toString(id)};
+        final String[] arg = {Long.toString(temp.getTime()), Integer.toString(id)};
 //        TODO
         String sql = "SELECT * FROM "
                 + DbHelper.getTableName(WeatherTable.class)
@@ -219,25 +223,25 @@ public class WeatherManager implements Contract.Presenter {
         if (limit) {
             sql = sql + " LIMIT 1";
         }
-        Cursor cursor = operations.query(sql, arg);
+        final Cursor cursor = operations.query(sql, arg);
 
         if (cursor.moveToFirst()) {
-            Forecast f = new Forecast();
+            final Forecast f = new Forecast();
             WeatherHour weatherHour;
             DayWeather dayWeather = new DayWeather();
             int i = 0;
             do {
-                long date = cursor.getLong(cursor.getColumnIndex(WeatherTable.DATE));
+                final long date = cursor.getLong(cursor.getColumnIndex(WeatherTable.DATE));
                 if (i == 0) {
                     temp = new Date(date);
                 }
-                Main main = new Main(cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP)),
+                final Main main = new Main(cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP)),
                         cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP_MIN)),
                         cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP_MAX)),
                         cursor.getDouble(cursor.getColumnIndex(WeatherTable.PRESSURE)),
                         cursor.getDouble(cursor.getColumnIndex(WeatherTable.HUMIDITY)));
 
-                Weather weather = new Weather(cursor.getInt(cursor.getColumnIndex(WeatherTable.WEATHER_ID)),
+                final Weather weather = new Weather(cursor.getInt(cursor.getColumnIndex(WeatherTable.WEATHER_ID)),
                         cursor.getString(cursor.getColumnIndex(WeatherTable.MAIN)),
                         cursor.getString(cursor.getColumnIndex(WeatherTable.DESCRIPTION)),
                         cursor.getString(cursor.getColumnIndex(WeatherTable.ICON)));

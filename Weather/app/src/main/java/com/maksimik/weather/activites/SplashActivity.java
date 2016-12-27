@@ -15,7 +15,7 @@ import java.util.Date;
 public class SplashActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         new CleaningDbAsyncTask().execute();
@@ -25,11 +25,11 @@ public class SplashActivity extends AppCompatActivity {
     private class CleaningDbAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Void doInBackground(final Void... voids) {
 
-            IDbOperations operations = new DbHelper(SplashActivity.this, 1);
+            final IDbOperations operations = new DbHelper(SplashActivity.this, 1);
 
-            String sql = WeatherTable.DATE + "<?";
+            final String sql = WeatherTable.DATE + "<?";
 
             operations.delete(WeatherTable.class, sql, Long.toString((new Date()).getTime()));
 
@@ -37,8 +37,8 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(Void v) {
-            Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+        protected void onPostExecute(final Void v) {
+            final Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
         }

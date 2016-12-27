@@ -19,20 +19,21 @@ import java.util.Date;
 
 public class ParseJsonForecast {
 
-    public Forecast parseJsonForecast(String responce) {
+    private static final double TEMP = 273.15;
 
-        City mCity;
+    public Forecast parseJsonForecast(final String responce) {
+
+        final City mCity;
         Weather weather;
-        Forecast forecast = new Forecast();
-        JSONObject dataJsonObj;
+        final Forecast forecast = new Forecast();
+        final JSONObject dataJsonObj;
         WeatherHour weatherHour;
         DayWeather dayWeather = new DayWeather();
-
 
         try {
             dataJsonObj = new JSONObject(responce);
 
-            JSONObject city = dataJsonObj.getJSONObject("city");
+            final JSONObject city = dataJsonObj.getJSONObject("city");
             //TODO name city
             mCity = new City(city.getInt("id"), "");
 
@@ -46,10 +47,10 @@ public class ParseJsonForecast {
             long date;
             Date temp = new Date();
 
-            JSONArray list = dataJsonObj.getJSONArray("list");
+            final JSONArray list = dataJsonObj.getJSONArray("list");
             for (int i = 0; i < list.length(); i++) {
 
-                JSONObject listWeather = list.getJSONObject(i);
+                final JSONObject listWeather = list.getJSONObject(i);
 
                 clouds = new Clouds(listWeather.getJSONObject("clouds").getDouble("all"));
 
@@ -70,16 +71,16 @@ public class ParseJsonForecast {
                     }
                 }
 
-                JSONObject main = listWeather.getJSONObject("main");
+                final JSONObject main = listWeather.getJSONObject("main");
                 mainWeather = new Main();
-                mainWeather.setTemp((int) Math.round(main.getDouble("temp") - 273.15));
-                mainWeather.setTempMin(Math.round(main.getDouble("temp_min") - 273.15));
-                mainWeather.setTempMax(Math.round(main.getDouble("temp_max") - 273.15));
+                mainWeather.setTemp((int) Math.round(main.getDouble("temp") - TEMP));
+                mainWeather.setTempMin(Math.round(main.getDouble("temp_min") - TEMP));
+                mainWeather.setTempMax(Math.round(main.getDouble("temp_max") - TEMP));
                 mainWeather.setPressure(main.getDouble("pressure"));
                 mainWeather.setHumidity(main.getDouble("humidity"));
 
                 weather = new Weather();
-                JSONArray weathers = listWeather.getJSONArray("weather");
+                final JSONArray weathers = listWeather.getJSONArray("weather");
                 for (int j = 0; j < weathers.length(); j++) {
                     weather.setId(weathers.getJSONObject(j).getInt("id"));
                     weather.setMain(weathers.getJSONObject(j).getString("main"));
@@ -101,8 +102,7 @@ public class ParseJsonForecast {
             }
             forecast.add(dayWeather);
 
-
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             e.printStackTrace();
         }
         return forecast;

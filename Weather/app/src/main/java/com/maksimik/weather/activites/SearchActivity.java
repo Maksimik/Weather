@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -20,7 +19,6 @@ import android.widget.TextView;
 
 import com.maksimik.weather.R;
 import com.maksimik.weather.constants.Constants;
-import com.maksimik.weather.fragments.PageFragment;
 import com.maksimik.weather.model.CityWithWeatherHour;
 import com.maksimik.weather.utils.ContractCites;
 import com.maksimik.weather.utils.ContractViewedCites;
@@ -30,8 +28,6 @@ import com.maksimik.weather.utils.PresenterViewedCites;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-
 
 public class SearchActivity extends AppCompatActivity implements ContractCites.View, ContractViewedCites.View {
 
@@ -48,10 +44,9 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
     private String text;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
 
         presenterViewedCites = new PresenterViewedCites(this, this);
         sPref = getSharedPreferences(Constants.PREF, MODE_PRIVATE);
@@ -68,21 +63,22 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
         btClear = (ImageButton) findViewById(R.id.btClear);
         btClear.setVisibility(View.INVISIBLE);
         editText.addTextChangedListener(new TextWatcher() {
+
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(final Editable s) {
 
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
                 text = editText.getText().toString();
 
-                if (text.length() != 0) {
+                if (!text.isEmpty()) {
                     lvSimple.setVisibility(View.VISIBLE);
                     btClear.setVisibility(View.VISIBLE);
 
@@ -112,7 +108,7 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
     }
 
     private void toolbarInitialize() {
-        Toolbar toolBar = (Toolbar) findViewById(R.id.searchToolbar);
+        final Toolbar toolBar = (Toolbar) findViewById(R.id.searchToolbar);
         setSupportActionBar(toolBar);
 
         if (getSupportActionBar() != null) {
@@ -122,7 +118,7 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
@@ -140,7 +136,7 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
             Map<String, Object> m;
 
             final ArrayList<Map<String, Object>> list = new ArrayList<>();
-            for (String key : data.keySet()) {
+            for (final String key : data.keySet()) {
 
                 m = new HashMap<>();
                 m.put(ATTRIBUTE_NAME, key);
@@ -148,22 +144,21 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
                 list.add(m);
             }
 
-            String[] from = {ATTRIBUTE_NAME, ATTRIBUTE_ICON};
-            int[] to = {R.id.tv};
-
+            final String[] from = {ATTRIBUTE_NAME, ATTRIBUTE_ICON};
+            final int[] to = {R.id.tv};
 
             sAdapter = new SimpleAdapter(this, list, R.layout.list_item, from, to);
             lvSimple.setAdapter(sAdapter);
 
-
             lvSimple.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
                 @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                public void onItemClick(final AdapterView<?> adapterView, final View view, final int i, final long l) {
 
-                    TextView tv = (TextView) view.findViewById(R.id.tv);
-                    String name = tv.getText().toString();
+                    final TextView tv = (TextView) view.findViewById(R.id.tv);
+                    final String name = tv.getText().toString();
 
-                    int idCites = data.get(name);
+                    final int idCites = data.get(name);
                     //TODO add to if or if(sh.name!=name)
                     if (sPref.getInt(Constants.HOME_CITY_ID_KEY, 0) == 0) {
                         sPref.edit().putInt(Constants.HOME_CITY_ID_KEY, idCites).apply();
@@ -183,27 +178,26 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
     }
 
     @Override
-    public void showListCitesWithWeather(ArrayList<CityWithWeatherHour> list, String image) {
+    public void showListCitesWithWeather(final ArrayList<CityWithWeatherHour> list, final String image) {
 
     }
 
     @Override
-    public void showError(String message) {
+    public void showError(final String message) {
 
     }
 
     @Override
     public void showFinish() {
 
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        final Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
         finish();
     }
 
-    public void onClickClear(View view) {
+    public void onClickClear(final View view) {
         editText.setText("");
     }
-
 
 }
 

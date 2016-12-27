@@ -15,23 +15,23 @@ import com.maksimik.weather.model.WeatherHour;
 public class WeatherDetailsActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather_details);
 
         initToolbar();
 
-        WeatherHour weatherHour = (WeatherHour) getIntent().getSerializableExtra(Constants.WEATHER_DETAILS_KEY);
+        final WeatherHour weatherHour = (WeatherHour) getIntent().getSerializableExtra(Constants.WEATHER_DETAILS_KEY);
 
-        TextView tvTemp = (TextView) findViewById(R.id.tvTemp);
-        TextView tvCloud = (TextView) findViewById(R.id.tvCloudValues);
-        TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
-        ImageView iv = (ImageView) findViewById(R.id.imageIcon);
-        TextView tvRain = (TextView) findViewById(R.id.tvRainValue);
-        TextView tvSnow = (TextView) findViewById(R.id.tvSnowValue);
-        TextView tvPressure = (TextView) findViewById(R.id.tvPressureValue);
-        TextView tvHumidity = (TextView) findViewById(R.id.tvHumidityValue);
-        TextView tvWindSpeed = (TextView) findViewById(R.id.tvWindSpeedValue);
+        final TextView tvTemp = (TextView) findViewById(R.id.tvTemp);
+        final TextView tvCloud = (TextView) findViewById(R.id.tvCloudValues);
+        final TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
+        final ImageView iv = (ImageView) findViewById(R.id.imageIcon);
+        final TextView tvRain = (TextView) findViewById(R.id.tvRainValue);
+        final TextView tvSnow = (TextView) findViewById(R.id.tvSnowValue);
+        final TextView tvPressure = (TextView) findViewById(R.id.tvPressureValue);
+        final TextView tvHumidity = (TextView) findViewById(R.id.tvHumidityValue);
+        final TextView tvWindSpeed = (TextView) findViewById(R.id.tvWindSpeedValue);
 
 
         double value = weatherHour.getRain().getValue();
@@ -42,10 +42,10 @@ public class WeatherDetailsActivity extends AppCompatActivity {
             tvRain.setText("-");
         }
 
-        value = weatherHour.getSnow().getValue();
+        double v = weatherHour.getSnow().getValue();
 
-        if (value != 0) {
-            tvSnow.setText(String.format(getString(R.string.rain_or_snow_home), value));
+        if (v != 0) {
+            tvSnow.setText(String.format(getString(R.string.rain_or_snow_home), v));
         } else {
             tvSnow.setText("-");
         }
@@ -60,7 +60,7 @@ public class WeatherDetailsActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
         setTitle(getString(R.string.additionally));
 
@@ -71,7 +71,7 @@ public class WeatherDetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();

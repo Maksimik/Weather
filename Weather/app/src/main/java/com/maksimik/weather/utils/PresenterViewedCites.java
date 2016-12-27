@@ -1,6 +1,5 @@
 package com.maksimik.weather.utils;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -28,11 +27,11 @@ import java.util.Date;
 
 public class PresenterViewedCites implements ContractViewedCites.Presenter {
 
-    private ContractViewedCites.View view;
-    private IDbOperations operations;
-    private Handler handler;
+    private final ContractViewedCites.View view;
+    private final IDbOperations operations;
+    private final Handler handler;
 
-    public PresenterViewedCites(Context context, @NonNull ContractViewedCites.View view) {
+    public PresenterViewedCites(final Context context, @NonNull final ContractViewedCites.View view) {
 
         this.view = view;
         operations = new DbHelper(context, 1);
@@ -43,10 +42,11 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
     @Override
     public void getListViewedCities(final int idCity) {
         new Thread() {
+
             @Override
             public void run() {
 
-                Cursor cursor = operations.query("SELECT * FROM "
+                final Cursor cursor = operations.query("SELECT * FROM "
                         + DbHelper.getTableName(ViewedCitesTable.class)
                         + " ORDER BY " + ViewedCitesTable.NAME);
 
@@ -54,13 +54,12 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
                 String image = null;
                 if (cursor.moveToFirst()) {
 
-
                     list = new ArrayList<>();
                     City city;
                     WeatherHour weatherHour;
                     do {
-                        String name = cursor.getString(cursor.getColumnIndex(ViewedCitesTable.NAME));
-                        Integer id = cursor.getInt(cursor.getColumnIndex(ViewedCitesTable.ID));
+                        final String name = cursor.getString(cursor.getColumnIndex(ViewedCitesTable.NAME));
+                        final Integer id = cursor.getInt(cursor.getColumnIndex(ViewedCitesTable.ID));
                         city = new City(id, name);
                         weatherHour = getDataDb(cursor.getInt(cursor.getColumnIndex(ViewedCitesTable.ID)));
 
@@ -82,28 +81,28 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
     }
 
     @Nullable
-    private WeatherHour getDataDb(int id) {
+    private WeatherHour getDataDb(final int id) {
 
-        Date temp = new Date();
+        final Date temp = new Date();
 
-        String[] arg = {Long.toString(temp.getTime()), Integer.toString(id)};
-        Cursor cursor = operations.query("SELECT * FROM "
+        final String[] arg = {Long.toString(temp.getTime()), Integer.toString(id)};
+        final Cursor cursor = operations.query("SELECT * FROM "
                 + DbHelper.getTableName(WeatherTable.class)
                 + " WHERE (" + WeatherTable.DATE + ">=?) AND ("
                 + WeatherTable.CITY_ID
                 + "=?) LIMIT 1", arg);
         if (cursor.moveToFirst()) {
-            WeatherHour weatherHour;
+            final WeatherHour weatherHour;
 
-            long date = cursor.getLong(cursor.getColumnIndex(WeatherTable.DATE));
+            final long date = cursor.getLong(cursor.getColumnIndex(WeatherTable.DATE));
 
-            Main main = new Main(cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP)),
+            final Main main = new Main(cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP)),
                     cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP_MIN)),
                     cursor.getDouble(cursor.getColumnIndex(WeatherTable.TEMP_MAX)),
                     cursor.getDouble(cursor.getColumnIndex(WeatherTable.PRESSURE)),
                     cursor.getDouble(cursor.getColumnIndex(WeatherTable.HUMIDITY)));
 
-            Weather weather = new Weather(cursor.getInt(cursor.getColumnIndex(WeatherTable.WEATHER_ID)),
+            final Weather weather = new Weather(cursor.getInt(cursor.getColumnIndex(WeatherTable.WEATHER_ID)),
                     cursor.getString(cursor.getColumnIndex(WeatherTable.MAIN)),
                     cursor.getString(cursor.getColumnIndex(WeatherTable.DESCRIPTION)),
                     cursor.getString(cursor.getColumnIndex(WeatherTable.ICON)));
@@ -123,10 +122,11 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
     public void addCites(final int id, final String name) {
 
         new Thread() {
+
             @Override
             public void run() {
 
-                Cursor cursor = operations.query("SELECT * FROM "
+                final Cursor cursor = operations.query("SELECT * FROM "
                         + DbHelper.getTableName(ViewedCitesTable.class)
                         + " WHERE "
                         + ViewedCitesTable.ID
@@ -134,7 +134,7 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
 
                 if (!cursor.moveToFirst()) {
 
-                    ContentValues values = new ContentValues();
+                    final ContentValues values = new ContentValues();
 
                     values.put(ViewedCitesTable.ID, id);
                     values.put(ViewedCitesTable.NAME, name);
@@ -147,19 +147,18 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
             }
         }.start();
 
-
     }
 
     @Override
     public void deleteCites(final int id) {
         new Thread() {
+
             @Override
             public void run() {
 
                 operations.delete(ViewedCitesTable.class, ViewedCitesTable.ID + "=?", String.valueOf(id));
 
                 operations.delete(WeatherTable.class, WeatherTable.ID + "=?", String.valueOf(id));
-
 
                 notifyResponse();
             }
