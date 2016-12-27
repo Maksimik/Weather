@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private final List<String> mFragmentTitleList = new ArrayList<>();
@@ -29,17 +28,15 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         final SimpleDateFormat format1 = new SimpleDateFormat("EEE MMM dd", Locale.getDefault());
         final SimpleDateFormat format2 = new SimpleDateFormat("EEE dd", Locale.getDefault());
-        //TODO make cycle
+
         mFragmentTitleList.add("Сегодня \n" + format1.format(new Date()));
+
         final Calendar c = Calendar.getInstance();
-        c.add(Calendar.DAY_OF_MONTH, 1);
-        mFragmentTitleList.add(format2.format(new Date(c.getTimeInMillis())));
-        c.add(Calendar.DAY_OF_MONTH, 1);
-        mFragmentTitleList.add(format2.format(new Date(c.getTimeInMillis())));
-        c.add(Calendar.DAY_OF_MONTH, 1);
-        mFragmentTitleList.add(format2.format(new Date(c.getTimeInMillis())));
-        c.add(Calendar.DAY_OF_MONTH, 1);
-        mFragmentTitleList.add(format2.format(new Date(c.getTimeInMillis())));
+
+        for (int i = 0; i < 4; i++) {
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            mFragmentTitleList.add(format2.format(new Date(c.getTimeInMillis())));
+        }
 
         this.dayWeathers = dayWeathers;
     }

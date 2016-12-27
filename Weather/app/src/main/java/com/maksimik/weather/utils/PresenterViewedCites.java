@@ -23,7 +23,6 @@ import com.maksimik.weather.model.WeatherHour;
 import com.maksimik.weather.model.Wind;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class PresenterViewedCites implements ContractViewedCites.Presenter {
 
@@ -83,14 +82,14 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
     @Nullable
     private WeatherHour getDataDb(final int id) {
 
-        final Date temp = new Date();
+        final String[] arg = {Integer.toString(id)};
 
-        final String[] arg = {Long.toString(temp.getTime()), Integer.toString(id)};
         final Cursor cursor = operations.query("SELECT * FROM "
                 + DbHelper.getTableName(WeatherTable.class)
-                + " WHERE (" + WeatherTable.DATE + ">=?) AND ("
+                + " WHERE "
                 + WeatherTable.CITY_ID
-                + "=?) LIMIT 1", arg);
+                + "=? LIMIT 1", arg);
+
         if (cursor.moveToFirst()) {
             final WeatherHour weatherHour;
 

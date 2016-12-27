@@ -34,7 +34,7 @@ public class ParseJsonForecast {
             dataJsonObj = new JSONObject(responce);
 
             final JSONObject city = dataJsonObj.getJSONObject("city");
-            //TODO name city
+
             mCity = new City(city.getInt("id"), "");
 
             forecast.setCity(mCity);
@@ -91,7 +91,7 @@ public class ParseJsonForecast {
                 date = listWeather.getLong("dt") * 1000;
 
                 weatherHour = new WeatherHour(date, mainWeather, weather, clouds, wind, rain, snow);
-//TODO deprecate
+
                 if ((new Date(date)).getDate() != temp.getDate()) {
                     temp = new Date(date);
                     dayWeather.add(weatherHour);

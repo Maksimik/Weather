@@ -1,9 +1,13 @@
 package com.maksimik.weather.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 
+import com.maksimik.weather.R;
 import com.maksimik.weather.backend.myApi.MyApi;
 import com.maksimik.weather.backend.myApi.model.MyBean;
 import com.maksimik.weather.parsers.ParseJsonCities;
@@ -26,6 +30,7 @@ public class PresenterCites implements ContractCites.Presenter {
 
     @Override
     public void getListCites(final String str) {
+        if(isNetworkAvailable()){
         new Thread() {
 
             @Override
@@ -39,12 +44,20 @@ public class PresenterCites implements ContractCites.Presenter {
                     notifyResponse(parseJsonCities.parseJsonCites(response));
 
                 } catch (final IOException e) {
-//                    notifyError("Нет подключения к интернету");
+
                 }
             }
         }.start();
+        }else {
+            notifyError(ContextHolder.getInstance().getContext().getString(R.string.no_internet_connection));
+        }
     }
 
+    private boolean isNetworkAvailable() {
+        final ConnectivityManager connectivityManager = (ConnectivityManager) ContextHolder.getInstance().getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
+    }
     private void notifyResponse(final HashMap<String, Integer> data) {
         handler.post(new Runnable() {
 
@@ -52,6 +65,16 @@ public class PresenterCites implements ContractCites.Presenter {
             public void run() {
                 view.showData(data);
 
+            }
+        });
+    }
+
+    private void notifyError(final String message) {
+        handler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                view.showError(message);
             }
         });
     }

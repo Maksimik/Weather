@@ -1,5 +1,6 @@
 package com.maksimik.weather.activites;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -159,7 +160,7 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
                     final String name = tv.getText().toString();
 
                     final int idCites = data.get(name);
-                    //TODO add to if or if(sh.name!=name)
+
                     if (sPref.getInt(Constants.HOME_CITY_ID_KEY, 0) == 0) {
                         sPref.edit().putInt(Constants.HOME_CITY_ID_KEY, idCites).apply();
                         sPref.edit().putString(Constants.HOME_CITY_NAME_KEY, name).apply();
@@ -184,7 +185,7 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
 
     @Override
     public void showError(final String message) {
-
+        new AlertDialog.Builder(this).setMessage(message).create().show();
     }
 
     @Override

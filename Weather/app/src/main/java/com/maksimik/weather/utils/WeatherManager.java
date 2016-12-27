@@ -3,11 +3,14 @@ package com.maksimik.weather.utils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.maksimik.weather.R;
 import com.maksimik.weather.backend.myApi.MyApi;
 import com.maksimik.weather.backend.myApi.model.MyBean;
 import com.maksimik.weather.db.DbHelper;
@@ -37,18 +40,11 @@ public class WeatherManager implements Contract.Presenter {
     private Forecast forecast;
 
     private final IDbOperations operations;
-    private static Contract.Presenter INSTANCE;
+    private final Context context;
 
-    public static Contract.Presenter getInstance(final Context context, final Contract.View view) {
-        if (INSTANCE == null) {
-            INSTANCE = new WeatherManager(context, view);
-        }
-        return INSTANCE;
-    }
-
-    //TODO переделать
-    public WeatherManager(final Context context, @NonNull final Contract.View view) {
+    public WeatherManager(@NonNull final Contract.View view) {
         this.view = view;
+        this.context = ContextHolder.getInstance().getContext();
         operations = new DbHelper(context, 1);
         handler = new Handler(Looper.getMainLooper());
 
@@ -58,14 +54,23 @@ public class WeatherManager implements Contract.Presenter {
     public void getWeather(final int id) {
 
         view.showProgress(true);
-        loadData(String.valueOf(id));
+        if (isNetworkAvailable()) {
+            loadData(String.valueOf(id));
+        } else {
+            notifyError(context.getString(R.string.no_internet_connection));
 
+        }
     }
 
     @Override
     public void getWeather(final double lat, final double lon) {
         view.showProgress(true);
-        loadData(String.valueOf(lat), String.valueOf(lon));
+        if (isNetworkAvailable()) {
+            loadData(String.valueOf(lat), String.valueOf(lon));
+        } else {
+            notifyError(context.getString(R.string.no_internet_connection));
+
+        }
     }
 
     @Override
@@ -73,6 +78,12 @@ public class WeatherManager implements Contract.Presenter {
 
         loadDataFromDb(id, limit);
 
+    }
+
+    private boolean isNetworkAvailable() {
+        final ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
     }
 
     private void loadData(final String lat, final String lon) {
@@ -87,11 +98,13 @@ public class WeatherManager implements Contract.Presenter {
                     final MyBean bean = call.execute();
                     final String response = bean.getData();
                     final ParseJsonForecast parseJsonForecast = new ParseJsonForecast();
+
                     forecast = parseJsonForecast.parseJsonForecast(response);
 
                     final MyApi.GetCity callCity = ApiManager.get().myApi().getCity(String.valueOf(forecast.getCity().getId()));
                     final MyBean myBeen = callCity.execute();
                     final String myResponse = myBeen.getData();
+
                     final ParseJsonCities parseJsonCities = new ParseJsonCities();
                     final String name = parseJsonCities.parseJsonCity(myResponse);
                     if (name != null) {
@@ -105,7 +118,6 @@ public class WeatherManager implements Contract.Presenter {
                     setDateDb(forecast);
 
                 } catch (final IOException e) {
-                    notifyError("Нет подключения к интернету");
                 }
             }
         }.start();
@@ -134,7 +146,7 @@ public class WeatherManager implements Contract.Presenter {
                     setDateDb(forecast);
 
                 } catch (final IOException e) {
-                    notifyError("Нет подключения к интернету");
+
                 }
             }
         }.start();
@@ -213,16 +225,18 @@ public class WeatherManager implements Contract.Presenter {
 
         Date temp = new Date();
 
-        final String[] arg = {Long.toString(temp.getTime()), Integer.toString(id)};
-//        TODO
+        final String[] arg = {Integer.toString(id)};
+
         String sql = "SELECT * FROM "
                 + DbHelper.getTableName(WeatherTable.class)
-                + " WHERE (" + WeatherTable.DATE + ">=?) AND ("
+                + " WHERE "
                 + WeatherTable.CITY_ID
-                + "=?)";
+                + "=?";
+
         if (limit) {
             sql = sql + " LIMIT 1";
         }
+
         final Cursor cursor = operations.query(sql, arg);
 
         if (cursor.moveToFirst()) {
@@ -254,7 +268,7 @@ public class WeatherManager implements Contract.Presenter {
                         new Snow(cursor.getDouble(cursor.getColumnIndex(WeatherTable.SNOW))));
 
                 dayWeather.add(weatherHour);
-//TODO deprecated
+
                 if ((new Date(date)).getDate() != temp.getDate() || ((new Date(date)) == temp && i == 0)) {
                     temp = new Date(date);
                     f.add(dayWeather);

@@ -4,21 +4,18 @@
     <string name="settings">Настройки</string>
     <string name="about_the_program">О программе</string>
 
-
     <string name="search_city">Поиск Города</string>
+    <string name="additionally">Дополнительно</string>
 
-
-    <!--ChangeLocationActivity-->
     <string name="temp_recicler">Температура: %d °C</string>
     <string name="wind_recicler">Ветер:  %.1f</string>
     <string name="humidity_recicler">Влажность:  %.1f</string>
+
     <string name="delete">Удалить</string>
     <string name="this_is_my_house">Это мой дом</string>
-    <string name="additionally">Дополнительно</string>
 
-    <!--HomeActivity-->
     <string name="temp">%.0f °C</string>
-    <!--<string name="temp_min_max">%d/%d</string>-->
+
     <string name="cloud">%.1f %</string>
     <string name="rain_or_snow_home">%.2f мм</string>
     <string name="pressure_home">%.1f</string>
@@ -56,5 +53,10 @@
     <string name="forecast_13n">снег</string>
     <string name="forecast_50d">туман</string>
     <string name="forecast_50n">туман</string>
+    <string name="no_internet_connection">Нет подключения к интернету</string>
+    <string name="enter_the_city">Введите город</string>
+    <string name="for_example_Minsk">Например, Минск</string>
+    <string name="Automatic_positioning">Автоматическое определение местоположения</string>
+    <string name="automatic_detection">Автоматически определите ваше текущее местоположения</string>
 
 </resources>

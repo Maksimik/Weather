@@ -25,7 +25,7 @@ import java.util.Locale;
 
 public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
 
-    private static final String SQL_TABLE_CREATE_TEMPLATE = "CREATE TABLE %s (%s);";
+    private static final String SQL_TABLE_CREATE_TEMPLATE = "CREATE TABLE IF NOT EXISTS %s (%s);";
     private static final String SQL_TABLE_CREATE_FIELD_TEMPLATE = "%s %s";
     private static final String SQL_NAME = "weatherForecast.db";
 
@@ -77,7 +77,6 @@ public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
                     }
                 }
 
-                //TODO // FIXME: 09.11.2016
                 if (type != null) {
 
                     builder.append(String.format(Locale.US, SQL_TABLE_CREATE_FIELD_TEMPLATE, value, type));

@@ -1,8 +1,11 @@
 package com.maksimik.weather.activites;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +20,10 @@ import android.widget.TextView;
 
 import com.maksimik.weather.R;
 import com.maksimik.weather.constants.Constants;
+import com.maksimik.weather.db.DbHelper;
+import com.maksimik.weather.db.IDbOperations;
+import com.maksimik.weather.db.ViewedCitesTable;
+import com.maksimik.weather.db.WeatherTable;
 import com.maksimik.weather.model.City;
 import com.maksimik.weather.model.CityWithWeatherHour;
 import com.maksimik.weather.model.Coord;
@@ -24,6 +31,8 @@ import com.maksimik.weather.model.Forecast;
 import com.maksimik.weather.utils.Contract;
 import com.maksimik.weather.utils.MyLocationListener;
 import com.maksimik.weather.utils.WeatherManager;
+
+import java.util.Date;
 
 public class HomeActivity extends AppCompatActivity implements Contract.View, SwipeRefreshLayout.OnRefreshListener {
 
@@ -88,7 +97,7 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
         tvCityName = (TextView) findViewById(R.id.cityNameHome);
         btnHome = (ImageView) findViewById(R.id.btnHome);
 
-        weatherManager = new WeatherManager(this, this);
+        weatherManager = new WeatherManager(this);
 
         if (id != 0) {
             cityWithWeatherHour.setCity(new City(id, name));
@@ -97,7 +106,6 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
             tvCityName.setText(name);
             btnHome.setVisibility(View.VISIBLE);
 
-//            WeatherManager.getInstance(HomeActivity.this, this).getWeatherFromDb(id);
             weatherManager.getWeatherFromDb(id, true);
         }
     }
@@ -140,15 +148,19 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
     }
 
     public void onClickOtherCities(final View view) {
-        final Intent intent = new Intent(this, ChangeLocationActivity.class);
-        startActivity(intent);
+        if (sPref.getInt(Constants.HOME_CITY_ID_KEY, 0) != 0) {
+            final Intent intent = new Intent(this, ChangeLocationActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void onClickDetails(final View view) {
+        if (cityWithWeatherHour.getWeatherHour() != null) {
 
-        final Intent intent = new Intent(this, WeatherEveryThreeHoursActivity.class);
-        intent.putExtra(Constants.CITY_ID_KEY, cityWithWeatherHour.getCity().getId());
-        startActivity(intent);
+            final Intent intent = new Intent(this, WeatherEveryThreeHoursActivity.class);
+            intent.putExtra(Constants.CITY_ID_KEY, cityWithWeatherHour.getCity().getId());
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -158,53 +170,74 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
             weatherManager.getWeather(coord.getLat(), coord.getLon());
         } else if (cityWithWeatherHour.getCity() != null) {
             weatherManager.getWeather(cityWithWeatherHour.getCity().getId());
+        } else {
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
     @Override
     public void showData(final Forecast forecast) {
         if (forecast != null) {
-            if (forecast.getCity() != null && cityWithWeatherHour.getCity().getId() != forecast.getCity().getId()) {
+            if (cityWithWeatherHour.getCity() == null) {
+
+                cityWithWeatherHour.setCity(forecast.getCity());
+                tvCityName.setText(cityWithWeatherHour.getCity().getName());
+
+                setTitle("");
+
+                btnHome.setVisibility(View.VISIBLE);
+
+                sPref.edit().putInt(Constants.HOME_CITY_ID_KEY, forecast.getCity().getId()).apply();
+                sPref.edit().putString(Constants.HOME_CITY_NAME_KEY, forecast.getCity().getName()).apply();
+
+                new AddCityFromDbAsyncTask().execute();
+
+            } else if (forecast.getCity() != null && cityWithWeatherHour.getCity().getId() != forecast.getCity().getId()) {
+
+                btnHome.setVisibility(View.VISIBLE);
+
+                setTitle("");
 
                 cityWithWeatherHour.setCity(forecast.getCity());
                 tvCityName.setText(cityWithWeatherHour.getCity().getName());
 
                 sPref.edit().putInt(Constants.HOME_CITY_ID_KEY, forecast.getCity().getId()).apply();
                 sPref.edit().putString(Constants.HOME_CITY_NAME_KEY, forecast.getCity().getName()).apply();
+
+                new AddCityFromDbAsyncTask().execute();
             }
-
-            cityWithWeatherHour.setWeatherHour(forecast.getDayWeather(0).getWeatherHour(0));
-
-            imageWeather.setBackgroundResource(getResources().getIdentifier(Constants.IMG + forecast.getListWeatherHours().get(0).getWeatherHour(0).getWeather().getIcon(), "drawable", getPackageName()));
-
-            if (cityWithWeatherHour.getWeatherHour() != null) {
-                tvTemp.setText(String.format(getString(R.string.temp), cityWithWeatherHour.getWeatherHour().getMain().getTemp()));
-                tvDescription.setText(getString(getResources().getIdentifier("forecast_" + forecast.getListWeatherHours().get(0).getWeatherHour(0).getWeather().getIcon(),
-                        "string", getPackageName())));
-
-                tvWindSpeed.setText(String.valueOf(cityWithWeatherHour.getWeatherHour().getWind().getSpeed() + "КМ/Ч"));
-                tvHumidity.setText(String.valueOf(cityWithWeatherHour.getWeatherHour().getMain().getHumidity() + "%"));
-                tvPressure.setText(String.valueOf(cityWithWeatherHour.getWeatherHour().getMain().getPressure()));
-                tvTempMinMax.setText(cityWithWeatherHour.getWeatherHour().getMain().getTempMin() + "/" + cityWithWeatherHour.getWeatherHour().getMain().getTempMax());
-                tvCloudStart.setText(String.valueOf(cityWithWeatherHour.getWeatherHour().getClouds().getAll() + "%"));
-
-                final double value = cityWithWeatherHour.getWeatherHour().getRain().getValue();
-                if (value != 0) {
-                    tvRain.setText(String.format(getString(R.string.rain_or_snow_home), value));
-                }
-                final double v = cityWithWeatherHour.getWeatherHour().getSnow().getValue();
-                if (v != 0) {
-                    tvSnow.setText(String.format(getString(R.string.rain_or_snow_home), v));
-                }
-            }
-
         }
+
+        cityWithWeatherHour.setWeatherHour(forecast.getDayWeather(0).getWeatherHour(0));
+
+        imageWeather.setBackgroundResource(getResources().getIdentifier(Constants.IMG + forecast.getListWeatherHours().get(0).getWeatherHour(0).getWeather().getIcon(), "drawable", getPackageName()));
+
+        if (cityWithWeatherHour.getWeatherHour() != null) {
+            tvTemp.setText(String.format(getString(R.string.temp), cityWithWeatherHour.getWeatherHour().getMain().getTemp()));
+            tvDescription.setText(getString(getResources().getIdentifier("forecast_" + forecast.getListWeatherHours().get(0).getWeatherHour(0).getWeather().getIcon(),
+                    "string", getPackageName())));
+
+            tvWindSpeed.setText(String.valueOf(cityWithWeatherHour.getWeatherHour().getWind().getSpeed() + "КМ/Ч"));
+            tvHumidity.setText(String.valueOf(cityWithWeatherHour.getWeatherHour().getMain().getHumidity() + "%"));
+            tvPressure.setText(String.valueOf(cityWithWeatherHour.getWeatherHour().getMain().getPressure()));
+            tvTempMinMax.setText(cityWithWeatherHour.getWeatherHour().getMain().getTempMin() + "/" + cityWithWeatherHour.getWeatherHour().getMain().getTempMax());
+            tvCloudStart.setText(String.valueOf(cityWithWeatherHour.getWeatherHour().getClouds().getAll() + "%"));
+
+            final double value = cityWithWeatherHour.getWeatherHour().getRain().getValue();
+            if (value != 0) {
+                tvRain.setText(String.format(getString(R.string.rain_or_snow_home), value));
+            }
+            final double v = cityWithWeatherHour.getWeatherHour().getSnow().getValue();
+            if (v != 0) {
+                tvSnow.setText(String.format(getString(R.string.rain_or_snow_home), v));
+            }
+        }
+
     }
 
     @Override
     public void showError(final String message) {
         new AlertDialog.Builder(this).setMessage(message).create().show();
-//        WeatherManager.getInstance(HomeActivity.this, this).getWeatherFromDb(forecast.getCity().getId());
         weatherManager.getWeatherFromDb(cityWithWeatherHour.getCity().getId(), true);
     }
 
@@ -238,7 +271,6 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
             }
             if ((cityWithWeatherHour.getCity() == null || cityWithWeatherHour.getCity().getId() != id) && id != 0) {
 
-//            WeatherManager.getInstance(HomeActivity.this, this).getWeather(id);
                 weatherManager.getWeather(id);
                 cityWithWeatherHour.setCity(new City(id, name));
                 if (homeCityId == id) {
@@ -249,6 +281,37 @@ public class HomeActivity extends AppCompatActivity implements Contract.View, Sw
                 tvCityName.setText(name);
                 setTitle("");
             }
+        }
+    }
+
+    private class AddCityFromDbAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(final Void... voids) {
+
+            final IDbOperations operations = new DbHelper(HomeActivity.this, 1);
+
+            final Cursor cursor = operations.query("SELECT * FROM "
+                    + DbHelper.getTableName(ViewedCitesTable.class)
+                    + " WHERE "
+                    + ViewedCitesTable.ID
+                    + "=?", Integer.toString(cityWithWeatherHour.getCity().getId()));
+
+            if (!cursor.moveToFirst()) {
+
+                final ContentValues values = new ContentValues();
+
+                values.put(ViewedCitesTable.ID, cityWithWeatherHour.getCity().getId());
+                values.put(ViewedCitesTable.NAME, cityWithWeatherHour.getCity().getName());
+
+                operations.insert(ViewedCitesTable.class, values);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final Void v) {
+
         }
     }
 }

@@ -17,7 +17,6 @@ import com.maksimik.weather.R;
 import com.maksimik.weather.loader.ImageLoader;
 import com.maksimik.weather.model.City;
 import com.maksimik.weather.model.CityWithWeatherHour;
-import com.maksimik.weather.utils.ContextHolder;
 
 import java.util.List;
 
@@ -29,8 +28,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
 
     private final ImageLoader imageLoader;
     private final Context context;
-    private final Context c;
-    private final OnMenuItemClickListener lis;
+    private final OnMenuItemClickListener listinerPopupMenu;
 
     public interface OnItemClickListener {
 
@@ -47,10 +45,9 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         this.listener = listener;
         this.cityWithWeatherHours = cityWithWeatherHours;
         this.imageLoader = imageLoader;
-        this.context = ContextHolder.getInstance().getContext();
+        this.context = context;
         //TODO context and listener
-        this.lis = lis;
-        c = context;
+        this.listinerPopupMenu = lis;
     }
 
     @Override
@@ -76,13 +73,13 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
 
     private void showPopup(final View v, final int position) {
 
-        final PopupMenu popup = new PopupMenu(c, v);
+        final PopupMenu popup = new PopupMenu(context, v);
         final MenuInflater inflater = popup.getMenuInflater();
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
             @Override
             public boolean onMenuItemClick(final MenuItem item) {
-                lis.onMenuItemClick(cityWithWeatherHours.get(position).getCity(), position, item);
+                listinerPopupMenu.onMenuItemClick(cityWithWeatherHours.get(position).getCity(), position, item);
 
                 return true;
             }
@@ -114,6 +111,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
             cityWind = (TextView) itemView.findViewById(R.id.cityWindRecycler);
             cityHumidity = (TextView) itemView.findViewById(R.id.cityHumidityRecycler);
             iv = (ImageButton) itemView.findViewById(R.id.btMenu);
+
             itemView.setOnClickListener(this);
 
         }
