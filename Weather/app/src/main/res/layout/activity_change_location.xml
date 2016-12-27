@@ -19,10 +19,12 @@
 
 
             <RelativeLayout
+                android:id="@+id/relativLayoutChangeLocation"
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
                 android:layout_marginLeft="@dimen/layout_marginLeftAndRight"
-                android:layout_marginRight="@dimen/layout_marginLeftAndRight">
+                android:layout_marginRight="@dimen/layout_marginLeftAndRight"
+                android:onClick="onClickSelectionCity">
 
                 <FrameLayout
                     android:id="@+id/frameLayout"
@@ -67,6 +69,7 @@
             </RelativeLayout>
 
             <View
+                android:id="@+id/hint"
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="@dimen/layout_marginLeftAndRight"

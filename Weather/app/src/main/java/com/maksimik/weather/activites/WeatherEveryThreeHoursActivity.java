@@ -37,7 +37,7 @@ public class WeatherEveryThreeHoursActivity extends AppCompatActivity implements
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        WeatherManager weatherManager = new WeatherManager(getBaseContext(), this);
+        WeatherManager weatherManager = new WeatherManager(WeatherEveryThreeHoursActivity.this, this);
         forecast = new Forecast();
         int id = getIntent().getIntExtra(Constants.CITY_ID_KEY, 0);
 

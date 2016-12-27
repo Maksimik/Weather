@@ -7,7 +7,7 @@ public class Constants {
 
     public static final String IMAGE = "image";
     public static final String WEATHER_KEY = "weather";
-    public static final String WEATHER_DETAILS_KEY = "weather_details";
+    public static final String WEATHER_DETAILS_KEY = "activity_weather_details";
 
     public static final String PREF = "pref";
 
@@ -20,4 +20,5 @@ public class Constants {
     public static final String DETERMINE_CURRENT_LOCATION_KEY = "determine_current_location";
 
     public static final String IMG = "img";
+
 }

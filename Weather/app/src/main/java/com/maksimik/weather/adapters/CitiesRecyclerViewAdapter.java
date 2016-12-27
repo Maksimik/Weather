@@ -125,7 +125,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
             listener.onItemClick(cityWithWeatherHours.get(position));
         }
 
-        public void bind(final CityWithWeatherHour cityWithWeatherHour) {
+        void bind(final CityWithWeatherHour cityWithWeatherHour) {
             Resources res = context.getResources();
             cityName.setText(cityWithWeatherHour.getCity().getName());
             if (cityWithWeatherHour.getWeatherHour() != null) {

@@ -7,13 +7,13 @@ import android.util.SparseArray;
 
 import com.maksimik.weather.fragments.PageFragment;
 import com.maksimik.weather.model.DayWeather;
-import com.maksimik.weather.model.WeatherHour;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -27,8 +27,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public ViewPagerAdapter(FragmentManager manager, ArrayList<DayWeather> dayWeathers) {
         super(manager);
 
-        SimpleDateFormat format1 = new SimpleDateFormat("EEE MMM dd");
-        SimpleDateFormat format2 = new SimpleDateFormat("EEE dd");
+        SimpleDateFormat format1 = new SimpleDateFormat("EEE MMM dd", Locale.getDefault());
+        SimpleDateFormat format2 = new SimpleDateFormat("EEE dd", Locale.getDefault());
         //TODO make cycle
         mFragmentTitleList.add("Сегодня \n" + format1.format(new Date()));
         Calendar c = Calendar.getInstance();
@@ -71,12 +71,14 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        // return mFragmentList.size();
+
         return mFragmentTitleList.size();
+
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
+
         return mFragmentTitleList.get(position);
 
     }

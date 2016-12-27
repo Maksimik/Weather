@@ -1,15 +1,12 @@
 package com.maksimik.weather.utils;
 
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import com.maksimik.weather.backend.myApi.MyApi;
 import com.maksimik.weather.backend.myApi.model.MyBean;
-import com.maksimik.weather.db.DbHelper;
-import com.maksimik.weather.db.IDbOperations;
 import com.maksimik.weather.parsers.ParseJsonCities;
 
 import java.io.IOException;
@@ -19,13 +16,11 @@ import java.util.HashMap;
 public class PresenterCites implements ContractCites.Presenter {
 
     private ContractCites.View view;
-    private IDbOperations operations;
     private Handler handler;
 
-    public PresenterCites(Context context, @NonNull ContractCites.View view) {
+    public PresenterCites(@NonNull ContractCites.View view) {
 
         this.view = view;
-        operations = new DbHelper(context, 1);
         handler = new Handler(Looper.getMainLooper());
 
     }

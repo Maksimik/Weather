@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.maksimik.weather.R;
 import com.maksimik.weather.constants.Constants;
+import com.maksimik.weather.fragments.PageFragment;
 import com.maksimik.weather.model.CityWithWeatherHour;
 import com.maksimik.weather.utils.ContractCites;
 import com.maksimik.weather.utils.ContractViewedCites;
@@ -28,6 +30,7 @@ import com.maksimik.weather.utils.PresenterViewedCites;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 
 public class SearchActivity extends AppCompatActivity implements ContractCites.View, ContractViewedCites.View {
@@ -56,7 +59,7 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
         toolbarInitialize();
 
         editText = (EditText) findViewById(R.id.search);
-        presenterCites = new PresenterCites(this, this);
+        presenterCites = new PresenterCites(this);
 
         lvSimple = (ListView) findViewById(R.id.lv);
 
@@ -131,24 +134,25 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
     @Override
     public void showData(final HashMap<String, Integer> data) {
         if (data != null) {
+
             final String ATTRIBUTE_NAME = "name";
+            final String ATTRIBUTE_ICON = "icon";
             Map<String, Object> m;
 
             final ArrayList<Map<String, Object>> list = new ArrayList<>();
             for (String key : data.keySet()) {
 
                 m = new HashMap<>();
-
                 m.put(ATTRIBUTE_NAME, key);
+
                 list.add(m);
             }
 
-            String[] from = {ATTRIBUTE_NAME};
+            String[] from = {ATTRIBUTE_NAME, ATTRIBUTE_ICON};
             int[] to = {R.id.tv};
 
 
             sAdapter = new SimpleAdapter(this, list, R.layout.list_item, from, to);
-
             lvSimple.setAdapter(sAdapter);
 
 
@@ -159,10 +163,9 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
                     TextView tv = (TextView) view.findViewById(R.id.tv);
                     String name = tv.getText().toString();
 
-
                     int idCites = data.get(name);
                     //TODO add to if or if(sh.name!=name)
-                    if (sPref.getString(Constants.HOME_CITY_NAME_KEY, "") == "") {
+                    if (sPref.getInt(Constants.HOME_CITY_ID_KEY, 0) == 0) {
                         sPref.edit().putInt(Constants.HOME_CITY_ID_KEY, idCites).apply();
                         sPref.edit().putString(Constants.HOME_CITY_NAME_KEY, name).apply();
                     } else {
@@ -174,16 +177,9 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
 
                 }
 
-//                    System.out.println("_f___" + name);
-
             });
             sAdapter.getFilter().filter(text);
         }
-    }
-
-    @Override
-    public void showListCites(ArrayList<Integer> id, ArrayList<String> name) {
-
     }
 
     @Override
@@ -207,6 +203,7 @@ public class SearchActivity extends AppCompatActivity implements ContractCites.V
     public void onClickClear(View view) {
         editText.setText("");
     }
+
 
 }
 

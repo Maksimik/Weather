@@ -63,7 +63,7 @@ public class WeatherHour implements Serializable {
         this.mWind = wind;
     }
 
-    /*public Rain getRain() {
+    public Rain getRain() {
         return mRain;
     }
 
@@ -77,5 +77,5 @@ public class WeatherHour implements Serializable {
 
     public void setSnow(Snow snow) {
         this.mSnow = snow;
-    }*/
+    }
 }

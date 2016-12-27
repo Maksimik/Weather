@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
-    //TODO if not exist
+
     private static final String SQL_TABLE_CREATE_TEMPLATE = "CREATE TABLE %s (%s);";
     private static final String SQL_TABLE_CREATE_FIELD_TEMPLATE = "%s %s";
     private static final String SQL_NAME = "weatherForecast.db";
@@ -41,7 +41,7 @@ public class DbHelper extends SQLiteOpenHelper implements IDbOperations {
         for (final Class<?> clazz : Contract.MODELS) {
             final String sql = getTableCreateQuery(clazz);
             if (sql != null) {
-                Log.i("TAG", "--- onCreate database ---");
+
                 db.execSQL(sql);
             }
         }

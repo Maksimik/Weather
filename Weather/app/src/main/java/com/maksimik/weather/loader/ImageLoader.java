@@ -35,8 +35,6 @@ public class ImageLoader {
     public void displayImage(String url, ImageView imageView) {
 
         imageView.setScaleType(ImageView.ScaleType.CENTER);
-        //TODO remove
-//        imageView.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_business_black_24dp));
 
         imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.getBitmap(url);
@@ -95,7 +93,6 @@ public class ImageLoader {
                 }
 
                 memoryCache.putBitmap(url, bmp);
-
 
                 BitmapDisplayer bd = new BitmapDisplayer(bmp, url);
                 handler.post(bd);

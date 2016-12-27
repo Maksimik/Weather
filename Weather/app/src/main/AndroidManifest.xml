@@ -26,7 +26,6 @@
         <activity
             android:name=".activites.HomeActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".activites.NewChangeLocationActivity" />
         <activity android:name=".activites.SettingsActivity" />
         <activity android:name=".activites.WeatherDetailsActivity" />
         <activity android:name=".activites.SearchActivity" />

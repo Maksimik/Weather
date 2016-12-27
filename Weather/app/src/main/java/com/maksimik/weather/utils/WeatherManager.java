@@ -189,12 +189,14 @@ public class WeatherManager implements Contract.Presenter {
                 values.put(WeatherTable.PRESSURE, weatherHour.getMain().getPressure());
                 values.put(WeatherTable.HUMIDITY, weatherHour.getMain().getHumidity());
                 values.put(WeatherTable.WEATHER_ID, weatherHour.getWeather().getId());
-                values.put(WeatherTable.Main, weatherHour.getWeather().getMain());
+                values.put(WeatherTable.MAIN, weatherHour.getWeather().getMain());
                 values.put(WeatherTable.DESCRIPTION, weatherHour.getWeather().getDescription());
                 values.put(WeatherTable.ICON, weatherHour.getWeather().getIcon());
                 values.put(WeatherTable.CLOUDS, weatherHour.getClouds().getAll());
                 values.put(WeatherTable.SPEED, weatherHour.getWind().getSpeed());
                 values.put(WeatherTable.DEG, weatherHour.getWind().getDeg());
+                values.put(WeatherTable.RAIN, weatherHour.getRain().getValue());
+                values.put(WeatherTable.DEG, weatherHour.getSnow().getValue());
 
                 listContantValues.add(values);
             }
@@ -208,13 +210,14 @@ public class WeatherManager implements Contract.Presenter {
         Date temp = new Date();
 
         String[] arg = {Long.toString(temp.getTime()), Integer.toString(id)};
+//        TODO
         String sql = "SELECT * FROM "
                 + DbHelper.getTableName(WeatherTable.class)
                 + " WHERE (" + WeatherTable.DATE + ">=?) AND ("
                 + WeatherTable.CITY_ID
                 + "=?)";
         if (limit) {
-            sql=sql+" LIMIT 1";
+            sql = sql + " LIMIT 1";
         }
         Cursor cursor = operations.query(sql, arg);
 
@@ -235,17 +238,20 @@ public class WeatherManager implements Contract.Presenter {
                         cursor.getDouble(cursor.getColumnIndex(WeatherTable.HUMIDITY)));
 
                 Weather weather = new Weather(cursor.getInt(cursor.getColumnIndex(WeatherTable.WEATHER_ID)),
-                        cursor.getString(cursor.getColumnIndex(WeatherTable.Main)),
+                        cursor.getString(cursor.getColumnIndex(WeatherTable.MAIN)),
                         cursor.getString(cursor.getColumnIndex(WeatherTable.DESCRIPTION)),
                         cursor.getString(cursor.getColumnIndex(WeatherTable.ICON)));
-//TODO Rain, Snow
-                weatherHour = new WeatherHour(date, main, weather, new Clouds(cursor.getDouble(cursor.getColumnIndex(WeatherTable.CLOUDS))),
+
+                weatherHour = new WeatherHour(date, main, weather,
+                        new Clouds(cursor.getDouble(cursor.getColumnIndex(WeatherTable.CLOUDS))),
                         new Wind(cursor.getDouble(cursor.getColumnIndex(WeatherTable.SPEED)),
-                                cursor.getDouble(cursor.getColumnIndex(WeatherTable.DEG))),new Rain(0), new Snow(0));
+                                cursor.getDouble(cursor.getColumnIndex(WeatherTable.DEG))),
+                        new Rain(cursor.getDouble(cursor.getColumnIndex(WeatherTable.RAIN))),
+                        new Snow(cursor.getDouble(cursor.getColumnIndex(WeatherTable.SNOW))));
 
                 dayWeather.add(weatherHour);
-
-                if ((new Date(date)).getDate() != temp.getDate() ||((new Date(date)).getDate() == temp.getDate() && i==0)) {
+//TODO deprecated
+                if ((new Date(date)).getDate() != temp.getDate() || ((new Date(date)) == temp && i == 0)) {
                     temp = new Date(date);
                     f.add(dayWeather);
                     dayWeather = new DayWeather();

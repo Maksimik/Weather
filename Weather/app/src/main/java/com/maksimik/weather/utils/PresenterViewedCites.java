@@ -16,8 +16,6 @@ import com.maksimik.weather.db.WeatherTable;
 import com.maksimik.weather.model.City;
 import com.maksimik.weather.model.CityWithWeatherHour;
 import com.maksimik.weather.model.Clouds;
-import com.maksimik.weather.model.DayWeather;
-import com.maksimik.weather.model.Forecast;
 import com.maksimik.weather.model.Main;
 import com.maksimik.weather.model.Rain;
 import com.maksimik.weather.model.Snow;
@@ -27,9 +25,6 @@ import com.maksimik.weather.model.Wind;
 
 import java.util.ArrayList;
 import java.util.Date;
-
-import static android.R.attr.id;
-import static android.R.attr.name;
 
 public class PresenterViewedCites implements ContractViewedCites.Presenter {
 
@@ -68,8 +63,9 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
                         Integer id = cursor.getInt(cursor.getColumnIndex(ViewedCitesTable.ID));
                         city = new City(id, name);
                         weatherHour = getDataDb(cursor.getInt(cursor.getColumnIndex(ViewedCitesTable.ID)));
-                        if(idCity==id){
-                            image=weatherHour.getWeather().getIcon();
+
+                        if (idCity == id && weatherHour != null) {
+                            image = weatherHour.getWeather().getIcon();
                         } else {
                             list.add(new CityWithWeatherHour(city, weatherHour));
                         }
@@ -79,38 +75,6 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
 
                 cursor.close();
                 notifyResponse(list, image);
-
-            }
-        }.start();
-
-    }
-
-    @Override
-    public void getListViewedCitesFromDb() {
-
-        new Thread() {
-            @Override
-            public void run() {
-
-                Cursor cursor = operations.query("SELECT * FROM "
-                        + DbHelper.getTableName(ViewedCitesTable.class));
-
-                ArrayList<String> name = null;
-                ArrayList<Integer> id = null;
-                if (cursor.moveToFirst()) {
-
-                    name = new ArrayList<>();
-                    id = new ArrayList<>();
-
-                    do {
-                        name.add(cursor.getString(cursor.getColumnIndex(ViewedCitesTable.NAME)));
-                        id.add(cursor.getInt(cursor.getColumnIndex(ViewedCitesTable.ID)));
-
-                    } while (cursor.moveToNext());
-                }
-
-                cursor.close();
-                notifyResponse(id, name);
 
             }
         }.start();
@@ -127,10 +91,9 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
                 + DbHelper.getTableName(WeatherTable.class)
                 + " WHERE (" + WeatherTable.DATE + ">=?) AND ("
                 + WeatherTable.CITY_ID
-                + "=?)", arg);
+                + "=?) LIMIT 1", arg);
         if (cursor.moveToFirst()) {
             WeatherHour weatherHour;
-            int i = 0;
 
             long date = cursor.getLong(cursor.getColumnIndex(WeatherTable.DATE));
 
@@ -141,13 +104,13 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
                     cursor.getDouble(cursor.getColumnIndex(WeatherTable.HUMIDITY)));
 
             Weather weather = new Weather(cursor.getInt(cursor.getColumnIndex(WeatherTable.WEATHER_ID)),
-                    cursor.getString(cursor.getColumnIndex(WeatherTable.Main)),
+                    cursor.getString(cursor.getColumnIndex(WeatherTable.MAIN)),
                     cursor.getString(cursor.getColumnIndex(WeatherTable.DESCRIPTION)),
                     cursor.getString(cursor.getColumnIndex(WeatherTable.ICON)));
-//TODO Rain, Snow
+
             weatherHour = new WeatherHour(date, main, weather, new Clouds(cursor.getDouble(cursor.getColumnIndex(WeatherTable.CLOUDS))),
                     new Wind(cursor.getDouble(cursor.getColumnIndex(WeatherTable.SPEED)),
-                            cursor.getDouble(cursor.getColumnIndex(WeatherTable.DEG))),new Rain(0), new Snow(0));
+                            cursor.getDouble(cursor.getColumnIndex(WeatherTable.DEG))), new Rain(0), new Snow(0));
 
             return weatherHour;
         }
@@ -209,17 +172,6 @@ public class PresenterViewedCites implements ContractViewedCites.Presenter {
             @Override
             public void run() {
                 view.showFinish();
-            }
-        });
-    }
-
-    private void notifyResponse(final ArrayList<Integer> id, final ArrayList<String> name) {
-        handler.post(new Runnable() {
-
-            @Override
-            public void run() {
-                view.showListCites(id, name);
-
             }
         });
     }

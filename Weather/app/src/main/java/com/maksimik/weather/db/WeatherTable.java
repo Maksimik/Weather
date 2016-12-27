@@ -37,9 +37,8 @@ public final class WeatherTable {
     @dbInteger
     public static final String WEATHER_ID = "weather_id";
 
-    //TODO // FIXME: 11.11.2016 Main replaced by MAIN
     @dbString
-    public static final String Main = "main";
+    public static final String MAIN = "main";
 
     @dbString
     public static final String DESCRIPTION = "description";
@@ -55,5 +54,11 @@ public final class WeatherTable {
 
     @dbDouble
     public static final String DEG = "deg";
+
+    @dbDouble
+    public static final String RAIN = "rain";
+
+    @dbDouble
+    public static final String SNOW = "snow";
 
 }

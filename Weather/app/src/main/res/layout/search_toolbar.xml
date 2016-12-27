@@ -18,11 +18,12 @@
     <EditText
         android:id="@+id/search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Поиск местоположения"
+        android:layout_height="match_parent"
+        android:hint="@string/search_locations"
         android:textColorHint="@color/colorBold"
         android:layout_marginRight="@dimen/default_icon_size"
         android:focusable="true"
+        android:maxLength="12"
         android:focusableInTouchMode="true">
 
     </EditText>

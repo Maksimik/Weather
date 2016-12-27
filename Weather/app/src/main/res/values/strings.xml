@@ -17,13 +17,13 @@
     <string name="additionally">Дополнительно</string>
 
     <!--HomeActivity-->
-    <string name="temp">%d °C</string>
+    <string name="temp">%.0f °C</string>
     <!--<string name="temp_min_max">%d/%d</string>-->
     <string name="cloud">%.1f %</string>
-    <string name="rain_home">%.1f мм</string>
+    <string name="rain_or_snow_home">%.2f мм</string>
     <string name="pressure_home">%.1f</string>
     <string name="humidity_home">%.1f </string>
-
+    <string name="wind_speed_value">%.1f км/ч </string>
 
 
     <string name="wind">Ветер</string>
@@ -31,11 +31,12 @@
     <string name="snow">Снег</string>
     <string name="wind_speed">Скорость ветра</string>
     <string name="humidity">Влажность</string>
-    <string name="wind_guest">Порывы ветра</string>
+    <string name="pressure">Давление</string>
     <string name="clouds">Осадки</string>
+
     <string name="change_location">Изменить местоположение</string>
     <string name="current_location">Текущее местоположение</string>
-    <string name="dew_point">Точка росы</string>
+    <string name="search_locations">Поиск местоположения</string>
 
     <string name="forecast_01d">ясно</string>
     <string name="forecast_01n">ясно</string>
@@ -55,6 +56,5 @@
     <string name="forecast_13n">снег</string>
     <string name="forecast_50d">туман</string>
     <string name="forecast_50n">туман</string>
-    <string name="Pressure">Давление</string>
 
 </resources>

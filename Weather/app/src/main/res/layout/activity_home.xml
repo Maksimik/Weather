@@ -25,10 +25,10 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/imageWeather"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:adjustViewBounds="true"
-                    android:background="@drawable/img10d"
                     android:orientation="horizontal"
                     android:scaleType="fitCenter"
                     android:theme="@style/PrintText">
@@ -47,6 +47,8 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
 
+                        android:layout_marginRight="@dimen/layout_marginLeftAndRight"
+
                         android:layout_weight="1"
                         android:orientation="vertical">
 
@@ -54,24 +56,24 @@
                             android:id="@+id/tvTempHome"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="right"
                             android:layout_marginTop="30dp"
                             android:text="-"
-
-
                             android:textSize="30dp" />
 
                         <TextView
                             android:id="@+id/tvDescriptionHome"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="right"
                             android:text="-"
-
                             android:textSize="18sp" />
 
                         <TextView
                             android:id="@+id/tvTempMinMaxHome"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="right"
                             android:text="-/-"
                             android:textSize="18sp" />
 
@@ -79,16 +81,15 @@
                             android:id="@+id/tvCloudHome"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="right"
                             android:text="-%"
                             android:textSize="18sp" />
-
 
                         <TextView
                             android:id="@+id/tvWindSpeedHome"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right"
-                            android:layout_marginRight="@dimen/layout_marginLeftAndRight"
                             android:text="-КМ/Ч"
                             android:textSize="30sp" />
 
@@ -118,18 +119,11 @@
                         android:text="@string/rain"
                         android:textAlignment="center" />
 
-                    <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:text="@string/wind"-->
-                    <!--android:textAlignment="center" />-->
-
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/Pressure"
+                        android:text="@string/pressure"
                         android:textAlignment="center" />
                 </LinearLayout>
 
@@ -144,15 +138,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-
                         android:textAlignment="center" />
-                    <!--android:text="1,0 мм"-->
-                    <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:text="3C3"-->
-                    <!--android:textAlignment="center" />-->
 
                     <TextView
                         android:id="@+id/tvPressureHome"
@@ -176,13 +162,6 @@
                         android:text="@string/snow"
                         android:textAlignment="center" />
 
-                    <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:text="@string/wind_speed"-->
-                    <!--android:textAlignment="center" />-->
-
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -202,15 +181,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="0,0 см"
                         android:textAlignment="center" />
-
-                    <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:text="13км/ч"-->
-                    <!--android:textAlignment="center" />-->
 
                     <TextView
                         android:id="@+id/tvHumidityHome"

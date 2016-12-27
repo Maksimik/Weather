@@ -30,14 +30,15 @@ public class ChangeLocationActivity extends AppCompatActivity implements Contrac
     private RecyclerView recyclerView;
     private SharedPreferences sPref;
     private ImageLoader imageLoader;
-    private TextView cityName;
     private ImageView cityImage;
     private RecyclerView.Adapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_change_location);
+        setContentView(R.layout.activity_change_location);
+
+        initToolbar();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -45,28 +46,21 @@ public class ChangeLocationActivity extends AppCompatActivity implements Contrac
         sPref = getSharedPreferences(Constants.PREF, MODE_PRIVATE);
         String name = sPref.getString(Constants.HOME_CITY_NAME_KEY, "");
         int id = sPref.getInt(Constants.HOME_CITY_ID_KEY, 0);
-        cityName = (TextView) findViewById(R.id.cityName);
+        TextView cityName = (TextView) findViewById(R.id.cityName);
         cityImage = (ImageView) findViewById(R.id.cityImage);
-        if (name != "") {
+
+        if (id != 0) {
+
             cityName.setText(name);
 
         }
 
-
-        presenterViewedCites = new PresenterViewedCites(this, this);
+        presenterViewedCites = new PresenterViewedCites(ChangeLocationActivity.this, this);
         presenterViewedCites.getListViewedCities(id);
 
         imageLoader = new ImageLoader();
 
-        initToolbar();
-
         setTitle("Местоположения");
-
-
-//
-//        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
-//                recyclerView.setItemAnimator(itemAnimator);
-
 
     }
 
@@ -99,15 +93,10 @@ public class ChangeLocationActivity extends AppCompatActivity implements Contrac
     }
 
     @Override
-    public void showListCites(ArrayList<Integer> id, ArrayList<String> name) {
-
-    }
-
-    @Override
     public void showListCitesWithWeather(final ArrayList<CityWithWeatherHour> list, String image) {
 
-        System.out.println("image " + image);
         imageLoader.displayImage(image, cityImage);
+
         if (list != null) {
             mAdapter = new CitiesRecyclerViewAdapter(list, this, imageLoader, new CitiesRecyclerViewAdapter.OnItemClickListener() {
                 @Override
@@ -139,10 +128,8 @@ public class ChangeLocationActivity extends AppCompatActivity implements Contrac
                     }
                 }
             });
-
             recyclerView.setAdapter(mAdapter);
         }
-
     }
 
     @Override
@@ -153,5 +140,11 @@ public class ChangeLocationActivity extends AppCompatActivity implements Contrac
     @Override
     public void showFinish() {
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void onClickSelectionCity(View view) {
+        sPref.edit().remove(Constants.CITY_ID_KEY).apply();
+        sPref.edit().remove(Constants.CITY_NAME_KEY).apply();
+        finish();
     }
 }

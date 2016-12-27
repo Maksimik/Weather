@@ -28,10 +28,11 @@ public class SplashActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
 
             IDbOperations operations = new DbHelper(SplashActivity.this, 1);
+
             String sql = WeatherTable.DATE + "<?";
-//            TODO delete
-            System.out.println(operations.delete(WeatherTable.class, sql, Long.toString((new Date()).getTime())));
-//            operations.delete(WeatherTable.class, sql, Long.toString((new Date()).getTime()));
+
+            operations.delete(WeatherTable.class, sql, Long.toString((new Date()).getTime()));
+
             return null;
         }
 

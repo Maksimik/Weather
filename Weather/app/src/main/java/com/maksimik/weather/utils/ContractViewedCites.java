@@ -11,8 +11,6 @@ public interface ContractViewedCites {
 
     interface View {
 
-        void showListCites(ArrayList<Integer> id, ArrayList<String> name);
-
         void showListCitesWithWeather(ArrayList<CityWithWeatherHour> list, String image);
 
         void showError(String message);
@@ -25,8 +23,6 @@ public interface ContractViewedCites {
     interface Presenter {
 
         void getListViewedCities(int id);
-
-        void getListViewedCitesFromDb();
 
         void addCites(int id, String name);
 

@@ -24,10 +24,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-
             android:layout_marginRight="@dimen/layout_marginLeftAndRight"
+            android:src="@drawable/ic_home_white_24dp"
 
-            android:src="@drawable/ic_home_white_24dp" />
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/cityNameHome"

@@ -19,6 +19,7 @@ import com.maksimik.weather.model.DayWeather;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -62,16 +63,16 @@ public class PageFragment extends Fragment {
             final String ATTRIBUTE_DESCRIPTION = "description";
             Map<String, Object> m;
             ListView lvSimple;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
             ArrayList<Map<String, Object>> data = new ArrayList<>();
 
             for (int i = 0; i < dayWeather.size(); i++) {
                 m = new HashMap<>();
 
-                if((i==dayWeather.size()-1 && i!=0) ||(dayWeather.size()==1)) {
+                if ((i == dayWeather.size() - 1 && i != 0) || (dayWeather.size() == 1)) {
                     m.put(ATTRIBUTE_TIME, "24:00");
-                }else{
+                } else {
                     m.put(ATTRIBUTE_TIME, dateFormat.format(dayWeather.getWeatherHour(i).getDate()));
                 }
                 m.put(ATTRIBUTE_ICON, dayWeather.getWeatherHour(i).getWeather().getIcon());
@@ -85,7 +86,7 @@ public class PageFragment extends Fragment {
             String[] from = {ATTRIBUTE_TIME, ATTRIBUTE_ICON, ATTRIBUTE_DESCRIPTION, ATTRIBUTE_TEMP};
             int[] to = {R.id.textViewTime, R.id.imageView, R.id.textViewDescription, R.id.textViewTemp};
             SimpleAdapter sAdapter = new SimpleAdapter(getActivity().getBaseContext(), data, R.layout.list_item_weather, from, to);
-            sAdapter.setViewBinder(new MyViewBinder());
+            sAdapter.setViewBinder(new ViewBinder());
             lvSimple = (ListView) view.findViewById(R.id.list);
 
             lvSimple.setAdapter(sAdapter);
@@ -102,7 +103,7 @@ public class PageFragment extends Fragment {
         }
     }
 
-    class MyViewBinder implements SimpleAdapter.ViewBinder {
+    private class ViewBinder implements SimpleAdapter.ViewBinder {
 
         @Override
         public boolean setViewValue(View view, Object data, String textRepresentation) {
